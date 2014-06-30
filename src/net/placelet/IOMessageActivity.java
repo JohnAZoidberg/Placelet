@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 public class IOMessageActivity extends Activity implements OnClickListener {
 
     private SharedPreferences prefs;
+    private SharedPreferences settingsPrefs;
     private IOMessageAdapter adapter;
     private List<Message> messageList = new ArrayList<Message>();
     private ListView list;
@@ -53,6 +55,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 	setContentView(R.layout.activity_io_message);
 	prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
+	settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 	getActionBar().setDisplayHomeAsUpEnabled(true);
 	getActionBar().setTitle(User.username);
 	Button b = (Button) findViewById(R.id.button1);
@@ -202,7 +205,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 			    Message msg = new Message();
 			    msg.message = messages.getString("message");
 			    msg.sent = messages.getLong("sent");
-			    msg.loadImage = prefs.getBoolean("downloadPermitted", false);
+			    msg.loadImage = settingsPrefs.getBoolean("pref_download_pics", false);
 			    // msg.sender =
 			    // messages.getJSONObject("sender").getString("name");
 			    msg.senderID = Integer.parseInt(messages.getJSONObject("sender").getString("id"));

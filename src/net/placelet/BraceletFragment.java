@@ -89,7 +89,7 @@ public class BraceletFragment extends Fragment {
 		picture.uploader = pictures.getString("user");
 		picture.date = pictures.getLong("date");
 		picture.id = pictures.getInt("id");
-		picture.loadImage = prefs.getBoolean("downloadPermitted", false);
+		picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", false);
 		pictureList.add(picture);
 	    } catch (JSONException e) {
 		e.printStackTrace();

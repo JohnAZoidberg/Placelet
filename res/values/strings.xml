@@ -52,6 +52,7 @@
     <string name="coords_captured">Position captured.</string>
     <string name="load_more">load more</string>
     <string name="activate_gps">Please activate GPS.\nIf you have already done so, please wait.</string>
+    <string name="download_pictures">download pictures</string>
     
     <string name="vor"> </string>
     <string name="today">today</string>
@@ -64,6 +65,7 @@
 
     <color name="logo_blue">#0092ff</color>
     <color name="logo_green">#b7d300</color>
+    <color name="logo_dark_green">#99b002</color>
     <color name="white">#FFFFFF</color>
 
     <string name="action_settings">Settings</string>

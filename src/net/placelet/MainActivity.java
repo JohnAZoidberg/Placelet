@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -24,6 +25,7 @@ public class MainActivity extends FragmentActivity implements
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     public SharedPreferences prefs;
+    public SharedPreferences settingsPrefs;
     static public boolean active = false;
     public String brid;
 
@@ -41,6 +43,7 @@ public class MainActivity extends FragmentActivity implements
 	requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 	setContentView(R.layout.activity_main);
 	prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
+	settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 	User.username = prefs.getString("username", User.NOT_LOGGED_IN);
 	User.dynPW = prefs.getString("dynPW", User.NOT_LOGGED_IN);
 	initializeFragments();

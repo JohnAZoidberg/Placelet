@@ -115,8 +115,7 @@ public class CommunityFragment extends Fragment {
 			    picture.uploader = pictures.getString("user");
 			    picture.date = Long.parseLong(pictures.getString("date"));
 			    picture.id = Integer.parseInt(pictures.getString("id"));
-			    picture.loadImage = prefs.getBoolean(
-				    "downloadPermitted", false);
+			    picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", false);
 			    boolean contains = pictureList.contains(picture);
 			    if(!contains) pictureList.add(picture);
 		    } catch (JSONException e) {

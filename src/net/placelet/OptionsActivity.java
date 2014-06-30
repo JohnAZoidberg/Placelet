@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,14 +22,27 @@ public class OptionsActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	setContentView(R.layout.activity_options);
+	/*setContentView(R.layout.activity_options);
 	prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
 	downloadPermitted = prefs.getBoolean("downloadPermitted", false);
 	toggleDownload = (Button) findViewById(R.id.toggleDownload);
-	setToggleDownloadText();
+	setToggleDownloadText();*/
+        getFragmentManager().beginTransaction()
+        .replace(android.R.id.content, new SettingsFragment())
+        .commit();
 	getActionBar().setTitle(R.string.options);
 	getActionBar().setDisplayHomeAsUpEnabled(true);
     }
+    
+    public static class SettingsFragment extends PreferenceFragment {
+	    @Override
+	    public void onCreate(Bundle savedInstanceState) {
+	        super.onCreate(savedInstanceState);
+
+	        // Load the preferences from an XML resource
+	        addPreferencesFromResource(R.xml.preferences);
+	    }
+	}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
