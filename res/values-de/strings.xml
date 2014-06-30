@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="username">Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="login_uc">Login</string>
+    <string name="logout_uc">Logout</string>
+    <string name="bracelet">Armband</string>
+    <string name="community_uc">Community</string>
+    <string name="profile">Profil</string>
+    <string name="message">Nachricht</string>
+    <string name="messages">Nachrichten</string>
+    <string name="send">Senden</string>
+    <string name="id">Armband-ID</string>
+    <string name="title">Titel</string>
+    <string name="city">Stadt</string>
+    <string name="country">Land</string>
+    <string name="description">Beschreibung</string>
+    <string name="select_picture">Bild auswählen</string>
+    <string name="upload">Hochladen</string>
+    <string name="current_position">Aktueller Standort</string>
+    <string name="picture_position">Geo-Tag von Bild</string>
+    <string name="name">Name</string>
+    <string name="loading">Lädt&#8230;</string>
+    <string name="date">Datum</string>
+    <string name="about">Über</string>
+    <string name="email">E-Mail</string>
+    <string name="about_text">\u00A9 Placelet, 2014\nplacelet.de, placelet.net\nDaniel Schäfer, ds@struckmeierfliesen.de</string>
+    <string name="choose_picture">Du musst ein Bild auswählen.</string>
+    <string name="incorrect_id">Bitte gib deine richtige Armband-ID ein.</string>
+    <string name="enter_title">Bitte gib einen Titel ein.</string>
+    <string name="enter_city">Bitte gib den Namen der Stadt ein.</string>
+    <string name="enter_country">Bitte gib den Namen des Landes ein.</string>
+    <string name="enter_desc">Bitte gib eine Beschreibung von mindestens 2 Zeichen ein.</string>
+    <string name="options">Einstellungen</string>
+    <string name="activate_download">Bilder-Download Aktivieren</string>
+    <string name="deactivate_download">Bilder-Download Deaktivieren</string>
+    <string name="messages_loading">Nachrichten werden geladen.</string>
+    <string name="bracelets_loading">Armbänder werden geladen.</string>
+    <string name="user_notextisting">Diesen Benutzer gibt es nicht.</string>
+    <string name="enter_message">Bitte gib eine Nachricht ein.</string>
+    <string name="account_not_verified">Dieser Account wurde noch nicht bestätigt.</string>
+    <string name="account_notextisting">Diesen Account gibt es nicht.</string>
+    <string name="wrong_pasword">Falsches Passwort.</string>
+    <string name="pic_download_activated">Bild download aktiviert.</string>
+    <string name="pic_download_deactivated">Bild download deaktiviert.</string>
+    <string name="profile_loading">Bitte warte, bis dein Profil geladen wird, </string>
+    <string name="cancel">Abbrechen</string>
+    <string name="take_photo">Bild aufnehmen</string>
+    <string name="choose_from_library">Von Galerie auswählen</string>
+    <string name="coords_captured">Deine Koordinaten wurden erfasst.</string>
+    <string name="load_more">Mehr laden</string>
+    <string name="activate_gps">Bitte aktiviere GPS, dass dein Standort auch auf Placelet.de erscheint.\nWenn du dies schon hast, habe ein bisschen Geduld.</string>
+    
+    <string name="vor">"vor "</string>
+    <string name="today">heute</string>
+    <string name="yesterday">gestern</string>
+    <string name="days_ago_pl">" Tagen"</string>
+    <string name="weeks_ago_pl">" Wochen"</string>
+    <string name="months_ago_pl">" Monaten"</string>
+    <string name="weeks_ago_sg">" Woche"</string>
+    <string name="months_ago_sg">" Monat"</string>
+
+    <color name="logo_blue">#0092ff</color>
+    <color name="logo_green">#b7d300</color>
+    <color name="white">#FFFFFF</color>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_iomessage">IOMessageActivity</string>
+    <string name="title_activity_upload">UploadActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_options">OptionsActivity</string>
+
+</resources>

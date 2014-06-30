@@ -1,0 +1,34 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_upload"
+        android:icon="@drawable/ic_action_upload"
+        android:showAsAction="always"
+        android:title="@string/upload">
+    </item>
+    <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/ic_action_user"
+        android:showAsAction="always"
+        android:title="@string/login_uc">
+    </item>
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:icon="@drawable/ic_action_refresh"
+        android:title="@string/logout_uc"/>
+    <item
+        android:id="@+id/action_options"
+        android:orderInCategory="200"
+        android:showAsAction="never"
+        android:icon="@drawable/ic_action_settings"
+        android:title="@string/options"/>
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="300"
+        android:showAsAction="never"
+        android:icon="@drawable/ic_action_about"
+        android:title="@string/about"/>
+
+</menu> 
