@@ -1,26 +1,26 @@
 package net.placelet;
 
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
 
-public class MainActivity extends FragmentActivity implements
-	ActionBar.TabListener {
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
@@ -47,6 +47,11 @@ public class MainActivity extends FragmentActivity implements
 	User.username = prefs.getString("username", User.NOT_LOGGED_IN);
 	User.dynPW = prefs.getString("dynPW", User.NOT_LOGGED_IN);
 	initializeFragments();
+	Display display = getWindowManager().getDefaultDisplay();
+	Point size = new Point();
+	display.getSize(size);
+	Util.width = size.x;
+	Util.height = size.y;
     }
 
     private void initializeFragments() {
@@ -59,12 +64,9 @@ public class MainActivity extends FragmentActivity implements
 	actionBar.setHomeButtonEnabled(false);
 	actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	// Add Tabs
-	actionBar.addTab(actionBar.newTab().setText(R.string.community_uc)
-		.setTabListener(this));
-	actionBar.addTab(actionBar.newTab().setText(R.string.bracelet)
-		.setTabListener(this));
-	actionBar.addTab(actionBar.newTab().setIcon(R.drawable.ic_action_mail)
-		.setTabListener(this));
+	actionBar.addTab(actionBar.newTab().setText(R.string.community_uc).setTabListener(this));
+	actionBar.addTab(actionBar.newTab().setText(R.string.bracelet).setTabListener(this));
+	actionBar.addTab(actionBar.newTab().setIcon(R.drawable.ic_action_mail).setTabListener(this));
 	// Set Action-Bar title
 	actionBar.setTitle(User.username);
 
@@ -148,7 +150,8 @@ public class MainActivity extends FragmentActivity implements
 	if (intent.hasExtra("MessagePush")) {
 	    switchToMessage(intent.getStringExtra("MessagePush"));
 	}
-	//Toast.makeText(this, User.getUsername() + "\n" + User.getDynPW(), Toast.LENGTH_LONG).show();
+	// Toast.makeText(this, User.getUsername() + "\n" + User.getDynPW(),
+	// Toast.LENGTH_LONG).show();
 	switchToLoginActivity(false);
 	super.onStart();
 	active = true;

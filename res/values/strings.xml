@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_version" translatable="false">1.1.3</string>
+	<string name="app_version" translatable="false">1.1.4</string>
     <string name="app_name" translatable="false">Placelet</string>
     <string name="username">username</string>
     <string name="password">password</string>
-    <string name="login_uc">Login</string>
-    <string name="logout_uc">Logout</string>
-    <string name="bracelet">Bracelet</string>
-    <string name="community_uc">Community</string>
+    <string name="login_uc">login</string>
+    <string name="logout_uc">logout</string>
+    <string name="bracelet">bracelet</string>
+    <string name="community_uc">community</string>
     <string name="profile">profile</string>
     <string name="message">message</string>
     <string name="messages">messages</string>
@@ -53,6 +53,9 @@
     <string name="load_more">load more</string>
     <string name="activate_gps">Please activate GPS.\nIf you have already done so, please wait.</string>
     <string name="download_pictures">download pictures</string>
+    <string name="download_pictures_summary">Download pictures from the internet.</string>
+    <string name="highdef_pictures">HD Pictures in popups</string>
+    <string name="highdef_pictures_summary">Download high definition pictures and display them in the popups.</string>
     
     <string name="vor"> </string>
     <string name="today">today</string>

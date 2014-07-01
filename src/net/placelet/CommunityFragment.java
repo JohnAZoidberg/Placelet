@@ -32,22 +32,21 @@ public class CommunityFragment extends Fragment {
     private List<Picture> pictureList = new ArrayList<Picture>();
     private ListView list;
     private final int PIC_COUNT = 5;
-    private int picnr = 0;
+    private int picnr = PIC_COUNT;
+    private boolean loading = false;
+    private Button btnLoadMore;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	    Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	mainActivity = (MainActivity) getActivity();
 	prefs = mainActivity.prefs;
-	View rootView = inflater.inflate(R.layout.fragment_community,
-		container, false);
+	View rootView = inflater.inflate(R.layout.fragment_community, container, false);
 	textView = (TextView) rootView.findViewById(R.id.textView1);
 	list = (ListView) rootView.findViewById(R.id.listView1);
 	list.setClickable(true);
 	list.setOnItemClickListener(new OnItemClickListener() {
 	    @Override
-	    public void onItemClick(AdapterView<?> parent, View view,
-		    int position, long id) {
+	    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Picture pic = (Picture) list.getItemAtPosition(position);
 		mainActivity.switchToBraceletFragment(pic);
 	    }
@@ -60,8 +59,9 @@ public class CommunityFragment extends Fragment {
     }
 
     private void loadPictures(int start) {
-	picnr += PIC_COUNT;
 	mainActivity.setProgressBarIndeterminateVisibility(true);
+	if(btnLoadMore != null) btnLoadMore.setText(getText(R.string.loading));
+	loading = true;
 	Pictures pics = new Pictures();
 	pics.start = start;
 	pics.execute();
@@ -81,20 +81,31 @@ public class CommunityFragment extends Fragment {
 	@Override
 	protected void onPostExecute(JSONObject result) {
 	    mainActivity.setProgressBarIndeterminateVisibility(false);
+	    loading = false;
 	    updateListView(result, start);
 	    textView.setVisibility(View.GONE);
-	    if(picnr == PIC_COUNT) {
-		Button btnLoadMore = new Button(mainActivity);
+	    if (picnr == PIC_COUNT) {
+		btnLoadMore = new Button(mainActivity);
 		btnLoadMore.setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View arg0) {
-			loadPictures(picnr);
+			loadMore();
 		    }
 		});
-		btnLoadMore.setText(getString(R.string.load_more));
+		//btnLoadMore.setText(getString(R.string.load_more));
 		list.addFooterView(btnLoadMore);
 	    }
+	    if(btnLoadMore != null) {
+		btnLoadMore.setEnabled(true);
+		btnLoadMore.setText(getString(R.string.load_more));
+	    }
 	}
+    }
+
+    private void loadMore() {
+	btnLoadMore.setEnabled(false);
+	picnr += PIC_COUNT;
+	loadPictures(picnr);
     }
 
     private void updateListView(JSONObject input, int start) {
@@ -103,26 +114,29 @@ public class CommunityFragment extends Fragment {
 	    String key = iter.next();
 	    try {
 		JSONObject pictures = input.getJSONObject(key);
-		/*for (Iterator<String> iter2 = pictures.keys(); iter2.hasNext();) {
-		    String key2 = iter2.next();*/
-		    try {
-			    Picture picture = new Picture();
-			    picture.brid = pictures.getString("brid");
-			    picture.title = pictures.getString("title");
-			    picture.description = pictures.getString("description");
-			    picture.city = pictures.getString("city");
-			    picture.country = pictures.getString("country");
-			    picture.uploader = pictures.getString("user");
-			    picture.date = Long.parseLong(pictures.getString("date"));
-			    picture.id = Integer.parseInt(pictures.getString("id"));
-			    picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", false);
-			    boolean contains = pictureList.contains(picture);
-			    if(!contains) pictureList.add(picture);
-		    } catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    }
-		//}
+		/*
+		 * for (Iterator<String> iter2 = pictures.keys();
+		 * iter2.hasNext();) { String key2 = iter2.next();
+		 */
+		try {
+		    Picture picture = new Picture();
+		    picture.brid = pictures.getString("brid");
+		    picture.title = pictures.getString("title");
+		    picture.description = pictures.getString("description");
+		    picture.city = pictures.getString("city");
+		    picture.country = pictures.getString("country");
+		    picture.uploader = pictures.getString("user");
+		    picture.date = Long.parseLong(pictures.getString("date"));
+		    picture.id = Integer.parseInt(pictures.getString("id"));
+		    picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", false);
+		    boolean contains = pictureList.contains(picture);
+		    if (!contains)
+			pictureList.add(picture);
+		} catch (JSONException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+		// }
 	    } catch (JSONException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

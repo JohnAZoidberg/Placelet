@@ -51,6 +51,9 @@
     <string name="load_more">Mehr laden</string>
     <string name="activate_gps">Bitte aktiviere GPS, dass dein Standort auch auf Placelet.de erscheint.\nWenn du dies schon hast, habe ein bisschen Geduld.</string>
     <string name="download_pictures">Bilder anzeigen</string>
+    <string name="download_pictures_summary">Vorschaubilder aus dem Internet runterladen.</string>
+    <string name="highdef_pictures">HD Bilder in Popups</string>
+    <string name="highdef_pictures_summary">Hochauflösende Bilder werden in den Popups runtergeladen und angezeigt.</string>
     
     <string name="vor">"vor "</string>
     <string name="today">heute</string>

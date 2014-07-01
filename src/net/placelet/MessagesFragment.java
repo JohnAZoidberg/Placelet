@@ -32,24 +32,20 @@ public class MessagesFragment extends Fragment implements OnClickListener {
     private EditText selectUser;
     private MainActivity mainActivity;
     private MessagesAdapter adapter;
-    private List<Message>
-    messageList = new ArrayList<Message>();
+    private List<Message> messageList = new ArrayList<Message>();
     private ListView list;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	    Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	// messageList = test();
 	mainActivity = (MainActivity) getActivity();
 	prefs = mainActivity.prefs;
-	View rootView = inflater.inflate(R.layout.fragment_messages, container,
-		false);
+	View rootView = inflater.inflate(R.layout.fragment_messages, container, false);
 	list = (ListView) rootView.findViewById(R.id.messagesList);
 	list.setClickable(true);
 	list.setOnItemClickListener(new OnItemClickListener() {
 	    @Override
-	    public void onItemClick(AdapterView<?> parent, View view,
-		    int position, long id) {
+	    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Message msg = (Message) list.getItemAtPosition(position);
 		switchToIOMessage(msg, true);
 	    }
@@ -58,18 +54,18 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 	adapter = new MessagesAdapter(mainActivity, 0, messageList);
 	selectUser = (EditText) rootView.findViewById(R.id.editText1);
 	selectUser.setOnKeyListener(new OnKeyListener() {
-	        public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
-	            //If the keyevent is a key-down event on the "enter" button
-	            if ((keyevent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-	        	Message msg = new Message();
-	        	msg.sender = selectUser.getText().toString();
-	        	switchToIOMessage(msg, false);
-	                return true;
-	            }
-	            return false;
-	        }
+	    public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+		// If the keyevent is a key-down event on the "enter" button
+		if ((keyevent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+		    Message msg = new Message();
+		    msg.sender = selectUser.getText().toString();
+		    switchToIOMessage(msg, false);
+		    return true;
+		}
+		return false;
+	    }
 	});
-        //Toast.makeText(mainActivity, "onCreate", Toast.LENGTH_LONG).show();
+	// Toast.makeText(mainActivity, "onCreate", Toast.LENGTH_LONG).show();
 	loadMessages();
 	return rootView;
     }
@@ -117,10 +113,8 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 
     public void sendMessage() {
 	mainActivity.setProgressBarIndeterminateVisibility(true);
-	EditText messageField = (EditText) getView().findViewById(
-		R.id.editText1);
-	EditText recipientField = (EditText) getView().findViewById(
-		R.id.editText2);
+	EditText messageField = (EditText) getView().findViewById(R.id.editText1);
+	EditText recipientField = (EditText) getView().findViewById(R.id.editText2);
 	String recipient = recipientField.getText().toString();
 	String message = messageField.getText().toString();
 	Messages login = new Messages();
@@ -143,15 +137,15 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 	    try {
 		JSONObject chat = input.getJSONObject(key);
 		Message msg = new Message();
-		    try {
-			if (msg == null || msg.sent < Long.valueOf(chat.getString("sent"))) {
-			    msg.message = chat.getString("message");
-			    msg.sent = chat.getLong("sent");
-			}
-		    } catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		try {
+		    if (msg == null || msg.sent < Long.valueOf(chat.getString("sent"))) {
+			msg.message = chat.getString("message");
+			msg.sent = chat.getLong("sent");
 		    }
+		} catch (JSONException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
 		msg.sender = key;
 		messageList.add(msg);
 	    } catch (JSONException e) {

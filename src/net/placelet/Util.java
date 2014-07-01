@@ -10,6 +10,8 @@ import java.util.TimeZone;
 
 @SuppressLint("SimpleDateFormat")
 public class Util {
+    public static int width;
+    public static int height;
     public static String timestampToDate(long timestamp) {
 	Date date = new Date(timestamp * 1000);
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy"); // the format of your date

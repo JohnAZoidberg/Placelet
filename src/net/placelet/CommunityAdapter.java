@@ -5,6 +5,8 @@ import java.util.List;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
+import android.graphics.Point;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,18 +30,15 @@ public class CommunityAdapter extends ArrayAdapter<Picture> {
 	Picture picture = communityList.get(position);
 	picture.html_entity_decode();
 	if (element == null) {
-	    LayoutInflater inflater = (LayoutInflater) context
-		    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    if (picture.loadImage) {
 		element = inflater.inflate(R.layout.community_element, null);
 	    } else {
-		element = inflater.inflate(R.layout.community_nopic_element,
-			null);
+		element = inflater.inflate(R.layout.community_nopic_element, null);
 	    }
 	}
 	TextView title = (TextView) element.findViewById(R.id.pic_title);
-	TextView description = (TextView) element
-		.findViewById(R.id.pic_description);
+	TextView description = (TextView) element.findViewById(R.id.pic_description);
 	TextView location = (TextView) element.findViewById(R.id.pic_location);
 	TextView user = (TextView) element.findViewById(R.id.pic_user);
 	TextView date = (TextView) element.findViewById(R.id.pic_date);
@@ -50,11 +49,8 @@ public class CommunityAdapter extends ArrayAdapter<Picture> {
 	user.setText(picture.uploader);
 	date.setText(Util.timestampToDate(picture.date));
 	if (picture.loadImage) {
-	    ImageView imgView = (ImageView) element
-		    .findViewById(R.id.imageView1);
-	    Picasso.with(context)
-		    .load("http://placelet.de/pictures/bracelets/thumb-"
-			    + picture.id + ".jpg").into(imgView);
+	    ImageView imgView = (ImageView) element.findViewById(R.id.imageView1);
+	    Picasso.with(context).load("http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg").resize((int) (Util.width*0.3), (int) (Util.height*0.15)).into(imgView);
 	}
 
 	return element;// super.getView(position, convertView, parent);

@@ -3,6 +3,10 @@
     <CheckBoxPreference
         android:key="pref_download_pics"
         android:title="@string/download_pictures"
-        android:summary="@string/download_pictures"
         android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="pref_highdef_pics"
+        android:title="@string/highdef_pictures"
+        android:defaultValue="false"
+        android:summary="@string/highdef_pictures_summary"/>
 </PreferenceScreen>

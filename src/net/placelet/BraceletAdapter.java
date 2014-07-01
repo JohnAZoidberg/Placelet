@@ -50,7 +50,7 @@ public class BraceletAdapter extends ArrayAdapter<Picture> {
 	date.setText(Util.timestampToDate(picture.date));
 	if (picture.loadImage) {
 	    ImageView imgView = (ImageView) element.findViewById(R.id.imageView1);
-	    Picasso.with(context).load("http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg").into(imgView);
+	    Picasso.with(context).load("http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg").resize((int) (Util.width*0.3), (int) (Util.height*0.15)).into(imgView);
 	}
 
 	return element;// super.getView(position, convertView, parent);

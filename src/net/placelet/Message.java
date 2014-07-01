@@ -2,6 +2,7 @@ package net.placelet;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+
 public class Message implements Comparable<Message>{
     public int senderID;
     public int recipientID;
