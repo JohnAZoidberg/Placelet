@@ -91,49 +91,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 	    super.onPreExecute();
 	}
     }
-    
-    private void switchToProfile() {
-	if(User.username != User.NOT_LOGGED_IN) {
-	    Intent profileIntent = new Intent(this, ProfileActivity.class);
-	    startActivity(profileIntent);
-	}
-    }
-    
-    private void switchToUpload() {
-	if(User.username != User.NOT_LOGGED_IN) {
-	    Intent uploadIntent = new Intent(this, UploadActivity.class);
-	    startActivity(uploadIntent);
-	}
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-	switch (item.getItemId()) {
-	case R.id.action_logout:
-	    User user = new User(prefs);
-	    user.logout();
-	    break;
-	case R.id.action_upload:
-	    switchToUpload();
-	    break;
-	case R.id.action_profile:
-	    switchToProfile();
-	    break;
-        case android.R.id.home:
-            switchToMainActivity();
-            return true;
-	case R.id.action_about:
-	    Intent aboutIntent;
-	    aboutIntent = new Intent(this, AboutActivity.class);
-	    startActivity(aboutIntent);
-	    break;
-	case R.id.action_options:
-	    switchToOptions();
-	    break;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-	return true;
+		return NavigateActivities.activitySwitchMenu(item, this);
     }
     
     private void switchToMainActivity() {
@@ -149,12 +110,5 @@ public class LoginActivity extends Activity implements OnClickListener {
 	    String pasword = pwField.getText().toString();
 	    Login login = new Login();
 	    login.execute(username, pasword);	
-    }
-
-    private void switchToOptions() {
-	if (User.username != User.NOT_LOGGED_IN) {
-	    Intent profileIntent = new Intent(this, OptionsActivity.class);
-	    startActivity(profileIntent);
-	}
     }
 }

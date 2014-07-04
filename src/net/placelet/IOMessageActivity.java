@@ -2,6 +2,7 @@ package net.placelet;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -130,50 +131,16 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	login.execute();
     }
 
-    private void switchToProfile() {
-	if (User.username != User.NOT_LOGGED_IN) {
-	    Intent profileIntent = new Intent(this, ProfileActivity.class);
-	    startActivity(profileIntent);
-	}
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 	switch (item.getItemId()) {
-	case R.id.action_logout:
-	    Intent loginIntent = new Intent(this, LoginActivity.class);
-	    loginIntent.putExtra("logout", "true");
-	    startActivity(loginIntent);
-	    break;
-	case R.id.action_profile:
-	    switchToProfile();
-	    break;
 	case android.R.id.home:
-	    Intent mainIntent = new Intent(this, MainActivity.class);
-	    mainIntent.putExtra("fragment", 2);
-	    startActivity(mainIntent);
+		HashMap<String, String> extras = new HashMap<String, String>();
+		extras.put("fragment", "2");
+		NavigateActivities.switchActivity(this, MainActivity.class, false, extras);
 	    return true;
-	case R.id.action_upload:
-	    switchToUpload();
-	    break;
-	case R.id.action_options:
-	    switchToOptions();
-	    break;
-	case R.id.action_about:
-	    Intent aboutIntent;
-	    aboutIntent = new Intent(this, AboutActivity.class);
-	    startActivity(aboutIntent);
-	    break;
 	default:
-	    return super.onOptionsItemSelected(item);
-	}
-	return true;
-    }
-
-    private void switchToUpload() {
-	if (User.username != User.NOT_LOGGED_IN) {
-	    Intent uploadIntent = new Intent(this, UploadActivity.class);
-	    startActivity(uploadIntent);
+		return NavigateActivities.activitySwitchMenu(item, this);
 	}
     }
 
@@ -243,12 +210,5 @@ public class IOMessageActivity extends Activity implements OnClickListener {
     
     private void setRecipient(String recip) {
 	this.recipient = recip;
-    }
-
-    private void switchToOptions() {
-	if (User.username != User.NOT_LOGGED_IN) {
-	    Intent profileIntent = new Intent(this, OptionsActivity.class);
-	    startActivity(profileIntent);
-	}
     }
 }

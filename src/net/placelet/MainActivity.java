@@ -87,39 +87,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     }
 
-    private void switchToUpload() {
-	if (User.username != User.NOT_LOGGED_IN) {
-	    Intent uploadIntent = new Intent(this, UploadActivity.class);
-	    startActivity(uploadIntent);
-	}
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-	switch (item.getItemId()) {
-	case R.id.action_logout:
-	    Intent intent = new Intent(this, LoginActivity.class);
-	    intent.putExtra("logout", "true");
-	    startActivity(intent);
-	    break;
-	case R.id.action_profile:
-	    switchToLoginActivity(true);
-	    break;
-	case R.id.action_upload:
-	    switchToUpload();
-	    break;
-	case R.id.action_about:
-	    Intent aboutIntent;
-	    aboutIntent = new Intent(this, AboutActivity.class);
-	    startActivity(aboutIntent);
-	    break;
-	case R.id.action_options:
-	    switchToOptions();
-	    break;
-	default:
-	    break;
-	}
-	return true;
+		return NavigateActivities.activitySwitchMenu(item, this);
     }
 
     @Override
@@ -141,7 +111,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     protected void onStart() {
 	Intent intent = getIntent();
 	if (intent.hasExtra("fragment")) {
-	    int fragmentNr = intent.getIntExtra("fragment", 0);
+	    int fragmentNr = Integer.valueOf(intent.getStringExtra("fragment"));
 	    switchFragments(fragmentNr);
 	}
 	if (intent.hasExtra("MessagePush")) {
@@ -188,13 +158,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     public void switchFragments(int number) {
 	actionBar.setSelectedNavigationItem(number);
-    }
-
-    private void switchToOptions() {
-	if (User.username != User.NOT_LOGGED_IN) {
-	    Intent profileIntent = new Intent(this, OptionsActivity.class);
-	    startActivity(profileIntent);
-	}
     }
 
     public void switchToBraceletFragment(Picture pic) {

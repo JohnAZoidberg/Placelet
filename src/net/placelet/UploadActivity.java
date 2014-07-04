@@ -247,48 +247,9 @@ public class UploadActivity extends Activity implements OnClickListener,
 	}
     }
 
-    private void switchToProfile() {
-	if (User.username != User.NOT_LOGGED_IN) {
-	    Intent profileIntent = new Intent(this, ProfileActivity.class);
-	    startActivity(profileIntent);
-	}
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-	switch (item.getItemId()) {
-	case R.id.action_logout:
-	    Intent intent = new Intent(this, LoginActivity.class);
-	    intent.putExtra("logout", "true");
-	    startActivity(intent);
-	    break;
-	case R.id.action_profile:
-	    switchToProfile();
-	    break;
-	case android.R.id.home:
-	    switchToMainActivity();
-	    return true;
-	case R.id.action_upload:
-	    switchToUpload();
-	    break;
-	case R.id.action_options:
-	    switchToOptions();
-	    break;
-	case R.id.action_about:
-	    Intent aboutIntent;
-	    aboutIntent = new Intent(this, AboutActivity.class);
-	    startActivity(aboutIntent);
-	    break;
-
-	default:
-	    return super.onOptionsItemSelected(item);
-	}
-	return true;
-    }
-
-    private void switchToMainActivity() {
-	Intent mainIntent = new Intent(this, MainActivity.class);
-	startActivity(mainIntent);
+		return NavigateActivities.activitySwitchMenu(item, this);
     }
 
     private void upload() {
@@ -330,13 +291,6 @@ public class UploadActivity extends Activity implements OnClickListener,
 	return inputsValid;
     }
 
-    private void switchToUpload() {
-	if (User.username != User.NOT_LOGGED_IN) {
-	    Intent uploadIntent = new Intent(this, UploadActivity.class);
-	    startActivity(uploadIntent);
-	}
-    }
-
     private void alert(String content) {
 	Toast.makeText(this, content, Toast.LENGTH_LONG).show();
     }
@@ -346,13 +300,6 @@ public class UploadActivity extends Activity implements OnClickListener,
 	intent.putExtra("fragment", 1);
 	intent.putExtra("brid", brid);
 	startActivity(intent);
-    }
-
-    private void switchToOptions() {
-	if (User.username != User.NOT_LOGGED_IN) {
-	    Intent profileIntent = new Intent(this, OptionsActivity.class);
-	    startActivity(profileIntent);
-	}
     }
 
     @Override

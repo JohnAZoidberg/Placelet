@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,30 +51,7 @@ public class ProfileActivity extends Activity implements OnClickListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-	switch (item.getItemId()) {
-	case R.id.action_logout:
-	    Intent intent = new Intent(this, LoginActivity.class);
-	    intent.putExtra("logout", "true");
-	    startActivity(intent);
-	    break;
-	case R.id.action_upload:
-	    switchToUpload();
-	    break;
-        case android.R.id.home:
-            NavUtils.navigateUpFromSameTask(this);
-            return true;
-	case R.id.action_about:
-	    Intent aboutIntent;
-	    aboutIntent = new Intent(this, AboutActivity.class);
-	    startActivity(aboutIntent);
-	    break;
-	case R.id.action_options:
-	    switchToOptions();
-	    break;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-	return true;
+		return NavigateActivities.activitySwitchMenu(item, this);
     }
 
     @Override
@@ -112,19 +88,5 @@ public class ProfileActivity extends Activity implements OnClickListener {
     private void displayProfileInfo() {
 	ProfileInfo login = new ProfileInfo();
 	login.execute(User.username);
-    }
-    
-    private void switchToUpload() {
-	if(User.username != User.NOT_LOGGED_IN) {
-	    Intent uploadIntent = new Intent(this, UploadActivity.class);
-	    startActivity(uploadIntent);
-	}
-    }
-
-    private void switchToOptions() {
-	if (User.username != User.NOT_LOGGED_IN) {
-	    Intent profileIntent = new Intent(this, OptionsActivity.class);
-	    startActivity(profileIntent);
-	}
     }
 }
