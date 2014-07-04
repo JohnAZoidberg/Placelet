@@ -57,7 +57,7 @@ public class BraceletFragment extends Fragment {
 			}
 		});
 		adapter = new BraceletAdapter(mainActivity, 0, pictureList);
-		loadPictures();
+		loadPictures(false);
 		return rootView;
 	}
 
@@ -91,14 +91,14 @@ public class BraceletFragment extends Fragment {
 		}
 	}
 
-	public void loadPictures() {
+	public void loadPictures(boolean reload) {
 		if (mainActivity.brid != null)
 			brid = mainActivity.brid;
 		else
 			brid = "588888";
 		mainActivity.setProgressBarIndeterminateVisibility(true);
 		String savedPics = mainActivity.prefs.getString("braceletPics-" + brid, "null");
-		if (!savedPics.equals("null")) {
+		if (!savedPics.equals("null") && !reload) {
 			loadSavedPics(savedPics);
 		}
 		Pictures pics = new Pictures();

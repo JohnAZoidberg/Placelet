@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,6 +46,9 @@ public class ProfileActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		if(item.getItemId() == R.id.action_reload) {
+			loadProfileInfo();
+		}
 		return NavigateActivities.activitySwitchMenu(item, this);
 	}
 

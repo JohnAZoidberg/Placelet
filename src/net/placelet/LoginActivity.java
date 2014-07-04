@@ -71,6 +71,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected void onPostExecute(Integer result) {
+			setProgressBarIndeterminateVisibility(false);
 			if (result == User.SUCCESS) {
 				switchToMainActivity();
 			} else if (result == 2) {
@@ -81,13 +82,12 @@ public class LoginActivity extends Activity implements OnClickListener {
 				textView.setText(getString(R.string.wrong_pasword));
 			} else {
 				textView.setText(result.toString());
-				LoginActivity.this.setProgressBarIndeterminateVisibility(false);
 			}
 		}
 
 		@Override
 		protected void onPreExecute() {
-			LoginActivity.this.setProgressBarIndeterminateVisibility(true);
+			setProgressBarIndeterminateVisibility(true);
 			super.onPreExecute();
 		}
 	}

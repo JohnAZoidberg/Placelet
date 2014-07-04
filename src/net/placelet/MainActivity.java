@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Display;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 	private ViewPager viewPager;
@@ -26,6 +28,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	static public boolean active = false;
 	public String brid;
 	public Display display;
+	public int currentTabId = 0;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,6 +93,20 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		if(item.getItemId() == R.id.action_reload) {
+			Fragment fragment = mAdapter.getFragment(currentTabId);
+			switch(currentTabId) {
+				case 0:
+					((CommunityFragment) fragment).loadPictures(0, true);
+					break;
+				case 1:
+					((BraceletFragment) fragment).loadPictures(true);
+					break;
+				case 2:
+					((MessagesFragment) fragment).loadMessages(true);
+					break;
+			}
+		}
 		return NavigateActivities.activitySwitchMenu(item, this);
 	}
 
@@ -99,9 +116,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		// on tab selected
-		// show respected fragment view
-		viewPager.setCurrentItem(tab.getPosition());
+		// on tab selected show respected fragment view
+		currentTabId = tab.getPosition();
+		viewPager.setCurrentItem(currentTabId);
 	}
 
 	@Override
@@ -166,7 +183,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		BraceletFragment fragment = (BraceletFragment) mAdapter.getFragment(1);
 		// TODO Fehler bei Drehen beheben!
 		if (fragment != null)
-			fragment.loadPictures();
+			fragment.loadPictures(false);
 		switchFragments(1);
 	}
 }

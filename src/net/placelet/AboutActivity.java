@@ -23,6 +23,9 @@ public class AboutActivity extends Activity {
 			// Inflate the menu items for use in the action bar
 			MenuInflater inflater = getMenuInflater();
 			inflater.inflate(R.menu.action_bar, menu);
+			MenuItem item = menu.findItem(R.id.action_reload);
+			item.setVisible(false);
+			invalidateOptionsMenu();
 		}
 		return super.onCreateOptionsMenu(menu);
 	}

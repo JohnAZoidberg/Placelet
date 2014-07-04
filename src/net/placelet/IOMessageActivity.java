@@ -155,6 +155,8 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 				extras.put("fragment", "2");
 				NavigateActivities.switchActivity(this, MainActivity.class, false, extras);
 				return true;
+			case R.id.action_reload:
+				loadMessages();
 			default:
 				return NavigateActivities.activitySwitchMenu(item, this);
 		}

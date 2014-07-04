@@ -46,18 +46,20 @@ public class CommunityFragment extends Fragment {
 		});
 		adapter = new CommunityAdapter(mainActivity, 0, pictureList);
 		list.setAdapter(adapter);
-		loadPictures(0, true);
+		loadPictures(0, false);
 
 		return rootView;
 	}
 
-	private void loadPictures(int start, boolean reload) {
+	public void loadPictures(int start, boolean reload) {
 		mainActivity.setProgressBarIndeterminateVisibility(true);
 		if (btnLoadMore != null)
 			btnLoadMore.setText(getText(R.string.loading));
 		String savedPics = mainActivity.prefs.getString("communityPics", "null");
-		if (!savedPics.equals("null")) {
+		if (!savedPics.equals("null") && !reload) {
 			loadSavedPics(savedPics);
+		} else {
+			start = picnr;
 		}
 		Pictures pics = new Pictures();
 		pics.start = start;
@@ -87,12 +89,12 @@ public class CommunityFragment extends Fragment {
 			updateListView(result, start);
 			String jsonString = result.toString();
 			Util.saveData(mainActivity.prefs, "communityPics", jsonString);
-			if (picnr == PIC_COUNT) {
+			if (btnLoadMore == null) {
 				btnLoadMore = new Button(mainActivity);
 				btnLoadMore.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
-						loadMore();
+						loadMore(false);
 					}
 				});
 				list.addFooterView(btnLoadMore);
@@ -104,9 +106,11 @@ public class CommunityFragment extends Fragment {
 		}
 	}
 
-	private void loadMore() {
-		btnLoadMore.setEnabled(false);
-		picnr += PIC_COUNT;
+	private void loadMore(boolean reload) {
+		if (btnLoadMore != null)
+			btnLoadMore.setEnabled(false);
+		if (!reload)
+			picnr += PIC_COUNT;
 		loadPictures(picnr, true);
 	}
 

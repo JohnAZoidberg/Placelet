@@ -63,7 +63,7 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 			}
 		});
 		// Toast.makeText(mainActivity, "onCreate", Toast.LENGTH_LONG).show();
-		loadMessages();
+		loadMessages(false);
 		return rootView;
 	}
 
@@ -105,10 +105,10 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 		}
 	}
 
-	private void loadMessages() {
+	public void loadMessages(boolean reload) {
 		mainActivity.setProgressBarIndeterminateVisibility(true);
 		String savedMessages = mainActivity.prefs.getString("messages", "null");
-		if (!savedMessages.equals("null")) {
+		if (!savedMessages.equals("null") && !reload) {
 			loadSavedMessages(savedMessages);
 		}
 		Messages login = new Messages();

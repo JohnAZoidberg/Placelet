@@ -20,13 +20,6 @@ public class OptionsActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		/*
-		 * setContentView(R.layout.activity_options); prefs =
-		 * this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
-		 * downloadPermitted = prefs.getBoolean("downloadPermitted", false);
-		 * toggleDownload = (Button) findViewById(R.id.toggleDownload);
-		 * setToggleDownloadText();
-		 */
 		getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
 		getActionBar().setTitle(R.string.options);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -48,6 +41,9 @@ public class OptionsActivity extends Activity implements OnClickListener {
 			// Inflate the menu items for use in the action bar
 			MenuInflater inflater = getMenuInflater();
 			inflater.inflate(R.menu.action_bar, menu);
+			MenuItem item = menu.findItem(R.id.action_reload);
+			item.setVisible(false);
+			invalidateOptionsMenu();
 		}
 		return super.onCreateOptionsMenu(menu);
 	}
