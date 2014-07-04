@@ -3,6 +3,7 @@ package net.placelet;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.Display;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.TimeZone;
 public class Util {
 	public static int width;
 	public static int height;
+	public static Display display;
 
 	public static String timestampToDate(long timestamp) {
 		Date date = new Date(timestamp * 1000);

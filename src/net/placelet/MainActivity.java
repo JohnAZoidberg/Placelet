@@ -25,6 +25,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	public SharedPreferences settingsPrefs;
 	static public boolean active = false;
 	public String brid;
+	public Display display;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,9 +45,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		User.username = prefs.getString("username", User.NOT_LOGGED_IN);
 		User.dynPW = prefs.getString("dynPW", User.NOT_LOGGED_IN);
 		initializeFragments();
-		Display display = getWindowManager().getDefaultDisplay();
+		Util.display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
-		display.getSize(size);
+		Util.display.getSize(size);
 		Util.width = size.x;
 		Util.height = size.y;
 	}

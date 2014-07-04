@@ -5,6 +5,7 @@ import java.util.List;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -50,13 +51,19 @@ public class CommunityAdapter extends ArrayAdapter<Picture> {
 		date.setText(Util.timestampToDate(picture.date));
 		if (picture.loadImage) {
 			ImageView imgView = (ImageView) element.findViewById(R.id.imageView1);
+			int orientation = Util.display.getRotation();
+			int picWidth = (int) (Util.width * 0.3);
+			int picHeight = (int) (Util.height * 0.15);
+			if (orientation == 1 || orientation == 3) {
+				picWidth = (int) (Util.width * 0.15);
+				picHeight = (int) (Util.height * 0.3);
+			}
 			Picasso picasso = Picasso.with(context);
-			//picasso.setIndicatorsEnabled(true);
-			picasso.load("http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg")
-					.resize((int) (Util.width * 0.3), (int) (Util.height * 0.15)).into(imgView);
+			// picasso.setIndicatorsEnabled(true);
+			picasso.load("http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg").resize(picWidth, picHeight).into(imgView);
 		}
 
-		return element;// super.getView(position, convertView, parent);
+		return element;
 	}
 
 	@Override
