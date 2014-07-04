@@ -104,9 +104,8 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	    setProgressBarIndeterminateVisibility(false);
 	    Boolean exists = false;
 	    try {
-		exists = result.getBoolean("exists");
+		if(result != null) exists = result.getBoolean("exists");
 	    } catch (JSONException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
 	    if (recipientVerified || exists) {
@@ -114,7 +113,6 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	    } else {
 		displayErrorAtMessageFragment(getString(R.string.user_notextisting));
 	    }
-	    // textView.setText(result);
 	}
     }
 

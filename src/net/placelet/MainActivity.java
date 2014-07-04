@@ -9,16 +9,13 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
     private ViewPager viewPager;
@@ -203,7 +200,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public void switchToBraceletFragment(Picture pic) {
 	brid = pic.brid;
 	BraceletFragment fragment = (BraceletFragment) mAdapter.getFragment(1);
-	fragment.loadPictures();
+	// TODO Fehler bei Drehen beheben!
+	if(fragment != null) fragment.loadPictures();
 	switchFragments(1);
     }
 }

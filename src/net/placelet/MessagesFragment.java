@@ -8,7 +8,6 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import net.placelet.R;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;

@@ -4,42 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <!--
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-		    <TextView
-		        android:id="@id/textView1"
-		        android:layout_width="fill_parent"
-		        android:layout_height="wrap_content"
-		        android:layout_alignParentLeft="true"
-		        android:layout_alignParentTop="true"
-		        android:gravity="center"
-		        android:text="@string/messages"
-		        android:textSize="20dp" />
-        </LinearLayout>
-    </ScrollView>
-    -->
-
     <ListView
-        style="@style/thickDivider"
         android:id="@+id/messagesList"
+        style="@style/thickDivider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/editText1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" >
-
     </ListView>
 
     <TextView
