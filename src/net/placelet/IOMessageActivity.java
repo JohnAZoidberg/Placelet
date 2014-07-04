@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -102,7 +103,6 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
-			setProgressBarIndeterminateVisibility(false);
 			Boolean exists = false;
 			try {
 				if (result != null)
@@ -111,6 +111,10 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 				e.printStackTrace();
 			}
 			if (recipientVerified || exists) {
+				String jsonString = result.toString();
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putString("messages-" + recipient, jsonString);
+				editor.commit();
 				updateListView(result);
 			} else {
 				displayErrorAtMessageFragment(getString(R.string.user_notextisting));
@@ -128,8 +132,13 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 	private void loadMessages() {
 		setProgressBarIndeterminateVisibility(true);
-		Messages login = new Messages();
-		login.execute();
+		String savedMessages = prefs.getString("messages-" + recipient, "null");
+		if (!savedMessages.equals("null")) {
+			loadSavedMessages(savedMessages);
+		} else {
+			Messages login = new Messages();
+			login.execute();
+		}
 	}
 
 	@Override
@@ -192,6 +201,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		Collections.sort(messageList);
 		list.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
+		setProgressBarIndeterminateVisibility(false);
 	}
 
 	private void displayErrorAtMessageFragment(String err) {
@@ -211,5 +221,17 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 	private void setRecipient(String recip) {
 		this.recipient = recip;
+	}
+
+	private void loadSavedMessages(String result) {
+		JSONObject jArray = null;
+		try {
+			jArray = new JSONObject(result);
+		} catch (JSONException e) {
+			// TODO hier was hinmachen
+			Log.e("log_tag", "Error parsing data " + e.toString());
+		}
+		if (jArray != null)
+			updateListView(jArray);
 	}
 }

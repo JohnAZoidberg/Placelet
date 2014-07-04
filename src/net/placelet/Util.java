@@ -2,12 +2,10 @@ package net.placelet;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.Display;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 @SuppressLint("SimpleDateFormat")
 public class Util {

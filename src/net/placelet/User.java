@@ -76,11 +76,8 @@ public class User {
 						return NOT_EXISTING;
 					case WRONG_PW:
 						return WRONG_PW;
-
 				}
-
 			}
-
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -206,7 +203,6 @@ public class User {
 				String key = iter.next();
 				resultString += key + " : " + result.getString(key) + "\n";
 			}
-
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,6 @@ import android.widget.Toast;
 
 public class CommunityFragment extends Fragment {
 	private MainActivity mainActivity;
-	private SharedPreferences prefs;
-	private TextView textView;
 	private CommunityAdapter adapter;
 	private List<Picture> pictureList = new ArrayList<Picture>();
 	private ListView list;
@@ -39,9 +38,7 @@ public class CommunityFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mainActivity = (MainActivity) getActivity();
-		prefs = mainActivity.prefs;
 		View rootView = inflater.inflate(R.layout.fragment_community, container, false);
-		textView = (TextView) rootView.findViewById(R.id.textView1);
 		list = (ListView) rootView.findViewById(R.id.listView1);
 		list.setClickable(true);
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -53,16 +50,20 @@ public class CommunityFragment extends Fragment {
 		});
 		adapter = new CommunityAdapter(mainActivity, 0, pictureList);
 		list.setAdapter(adapter);
-		loadPictures(0);
+		loadPictures(0, true);
 
 		return rootView;
 	}
 
-	private void loadPictures(int start) {
+	private void loadPictures(int start, boolean reload) {
 		mainActivity.setProgressBarIndeterminateVisibility(true);
 		if (btnLoadMore != null)
 			btnLoadMore.setText(getText(R.string.loading));
 		loading = true;
+		String savedPics = mainActivity.prefs.getString("communityPics", "null");
+		if (!savedPics.equals("null")) {
+			loadSavedPics(savedPics);
+		}
 		Pictures pics = new Pictures();
 		pics.start = start;
 		pics.execute();
@@ -74,17 +75,26 @@ public class CommunityFragment extends Fragment {
 		@Override
 		protected JSONObject doInBackground(String... params) {
 			JSONObject content;
-			User user = new User(prefs);
+			User user = new User(mainActivity.prefs);
 			content = user.getCommunityPictures(picnr);
 			return content;
 		}
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
-			mainActivity.setProgressBarIndeterminateVisibility(false);
 			loading = false;
+			try {
+				if (result.getString("error").equals("no_internet")) {
+					return;
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 			updateListView(result, start);
-			textView.setVisibility(View.GONE);
+			String jsonString = result.toString();
+			SharedPreferences.Editor editor = mainActivity.prefs.edit();
+			editor.putString("communityPics", jsonString);
+			editor.commit();
 			if (picnr == PIC_COUNT) {
 				btnLoadMore = new Button(mainActivity);
 				btnLoadMore.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +116,7 @@ public class CommunityFragment extends Fragment {
 	private void loadMore() {
 		btnLoadMore.setEnabled(false);
 		picnr += PIC_COUNT;
-		loadPictures(picnr);
+		loadPictures(picnr, true);
 	}
 
 	private void updateListView(JSONObject input, int start) {
@@ -116,8 +126,8 @@ public class CommunityFragment extends Fragment {
 			try {
 				JSONObject pictures = input.getJSONObject(key);
 				/*
-				 * for (Iterator<String> iter2 = pictures.keys();
-				 * iter2.hasNext();) { String key2 = iter2.next();
+				 * for (Iterator<String> iter2 = pictures.keys(); iter2.hasNext();) {
+				 * String key2 = iter2.next();
 				 */
 				try {
 					Picture picture = new Picture();
@@ -134,21 +144,31 @@ public class CommunityFragment extends Fragment {
 					if (!contains)
 						pictureList.add(picture);
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				// }
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		Collections.sort(pictureList);
 		adapter.notifyDataSetChanged();
+		mainActivity.setProgressBarIndeterminateVisibility(false);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+	}
+
+	private void loadSavedPics(String result) {
+		JSONObject jArray = null;
+		try {
+			jArray = new JSONObject(result);
+		} catch (JSONException e) {
+			// TODO hier was hinmachen
+			Log.e("log_tag", "Error parsing data " + e.toString());
+		}
+		if (jArray != null)
+			updateListView(jArray, 0);
 	}
 }

@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,6 @@ import android.widget.TextView;
 
 public class MessagesFragment extends Fragment implements OnClickListener {
 	private SharedPreferences prefs;
-	private TextView textView;
 	private EditText selectUser;
 	private MainActivity mainActivity;
 	private MessagesAdapter adapter;
@@ -36,7 +36,6 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// messageList = test();
 		mainActivity = (MainActivity) getActivity();
 		prefs = mainActivity.prefs;
 		View rootView = inflater.inflate(R.layout.fragment_messages, container, false);
@@ -49,7 +48,6 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 				switchToIOMessage(msg, true);
 			}
 		});
-		textView = (TextView) rootView.findViewById(R.id.textView1);
 		adapter = new MessagesAdapter(mainActivity, 0, messageList);
 		selectUser = (EditText) rootView.findViewById(R.id.editText1);
 		selectUser.setOnKeyListener(new OnKeyListener() {
@@ -92,17 +90,23 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
-			mainActivity.setProgressBarIndeterminateVisibility(false);
+			String jsonString = result.toString();
+			SharedPreferences.Editor editor = mainActivity.prefs.edit();
+			editor.putString("messages", jsonString);
+			editor.commit();
 			updateListView(result);
-			textView.setVisibility(View.GONE);
 		}
 	}
 
 	private void loadMessages() {
 		mainActivity.setProgressBarIndeterminateVisibility(true);
-		textView.setText(getString(R.string.messages_loading));
-		Messages login = new Messages();
-		login.execute(User.username);
+		String savedMessages = mainActivity.prefs.getString("messages", "null");
+		if (!savedMessages.equals("null")) {
+			loadSavedMessages(savedMessages);
+		} else {
+			Messages login = new Messages();
+			login.execute(User.username);
+		}
 	}
 
 	public void setText(String text) {
@@ -156,5 +160,18 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 		Collections.sort(messageList);
 		list.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
+		mainActivity.setProgressBarIndeterminateVisibility(false);
+	}
+
+	private void loadSavedMessages(String result) {
+		JSONObject jArray = null;
+		try {
+			jArray = new JSONObject(result);
+		} catch (JSONException e) {
+			// TODO hier was hinmachen
+			Log.e("log_tag", "Error parsing data " + e.toString());
+		}
+		if (jArray != null)
+			updateListView(jArray);
 	}
 }

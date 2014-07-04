@@ -16,14 +16,4 @@
 
     </ListView>
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/bracelets_loading"
-        android:nextFocusUp="@id/textView1"
-        android:nextFocusLeft="@id/textView1" />
-
 </RelativeLayout>

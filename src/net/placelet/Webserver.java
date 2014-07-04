@@ -36,48 +36,8 @@ public class Webserver {
 	HttpPost httpPost = new HttpPost(connectionURL);
 
 	public JSONObject postRequest(HashMap<String, String> args) {
-		InputStream is = null;
-		String result = "";
 		JSONObject jArray = null;
-		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(args.size());
-		Iterator<String> iter = args.keySet().iterator();
-
-		while (iter.hasNext()) {
-			String key = (String) iter.next();
-			String val = (String) args.get(key);
-			nameValuePair.add(new BasicNameValuePair(key, val));
-		}
-
-		try {
-			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
-			HttpResponse response = httpClient.execute(httpPost);
-			HttpEntity entity = response.getEntity();
-			is = entity.getContent();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// Convert response to string
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"), 8);
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			is.close();
-			result = sb.toString();
-			if (true)
-				;
-		} catch (Exception e) {
-			Log.e("log_tag", "Error converting result " + e.toString());
-			result = "{error: no_internet}";
-		}
+		String result = stringPostRequest(args);
 		try {
 			jArray = new JSONObject(result);
 		} catch (JSONException e) {
@@ -125,6 +85,7 @@ public class Webserver {
 			result = sb.toString();
 		} catch (Exception e) {
 			Log.e("log_tag", "Error converting result " + e.toString());
+			result = "{error: no_internet}";
 		}
 		return result;
 	}
@@ -201,7 +162,7 @@ public class Webserver {
 			outputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
 
 			inputStream = connection.getInputStream();
-			result = this.convertStreamToString(inputStream);
+			result = convertStreamToString(inputStream);
 
 			fileInputStream.close();
 			inputStream.close();

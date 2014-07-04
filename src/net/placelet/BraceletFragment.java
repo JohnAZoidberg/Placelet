@@ -18,6 +18,7 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,7 +36,6 @@ public class BraceletFragment extends Fragment {
 
 	private MainActivity mainActivity;
 	private SharedPreferences prefs;
-	private TextView textView;
 	private String brid;
 	private BraceletAdapter adapter;
 	private List<Picture> pictureList = new ArrayList<Picture>();
@@ -47,7 +47,6 @@ public class BraceletFragment extends Fragment {
 		prefs = mainActivity.prefs;
 		View rootView = inflater.inflate(R.layout.fragment_bracelet, container, false);
 		// Toast.makeText(mainActivity, "Whatsup?", Toast.LENGTH_LONG).show();
-		textView = (TextView) rootView.findViewById(R.id.textView1);
 		list = (ListView) rootView.findViewById(R.id.listView1);
 		list.setClickable(true);
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -77,7 +76,10 @@ public class BraceletFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
-			mainActivity.setProgressBarIndeterminateVisibility(false);
+			String jsonString = result.toString();
+			SharedPreferences.Editor editor = mainActivity.prefs.edit();
+			editor.putString("braceletPics-" + brid, jsonString);
+			editor.commit();
 			updateListView(result);
 		}
 	}
@@ -88,10 +90,13 @@ public class BraceletFragment extends Fragment {
 		else
 			brid = "588888";
 		mainActivity.setProgressBarIndeterminateVisibility(true);
-		Pictures pics = new Pictures();
-		pics.execute();
-		list.setAdapter(adapter);
-		adapter.notifyDataSetChanged();
+		String savedPics = mainActivity.prefs.getString("braceletPics-" + brid, "null");
+		if (!savedPics.equals("null")) {
+			loadSavedPics(savedPics);
+		} else {
+			Pictures pics = new Pictures();
+			pics.execute();
+		}
 	}
 
 	private void updateListView(JSONObject input) {
@@ -120,6 +125,7 @@ public class BraceletFragment extends Fragment {
 		Collections.sort(pictureList);
 		list.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
+		mainActivity.setProgressBarIndeterminateVisibility(false);
 	}
 
 	@Override
@@ -148,6 +154,7 @@ public class BraceletFragment extends Fragment {
 			Picasso.with(mainActivity).load(picUrl).into(imgView, new Callback() {
 				@Override
 				public void onError() {
+					mainActivity.setProgressBarIndeterminateVisibility(false);
 					pw.dismiss();
 				}
 
@@ -164,5 +171,17 @@ public class BraceletFragment extends Fragment {
 			});
 			pw.showAtLocation(mainActivity.findViewById(R.id.listView1), Gravity.CENTER, 0, 0);
 		}
+	}
+
+	private void loadSavedPics(String result) {
+		JSONObject jArray = null;
+		try {
+			jArray = new JSONObject(result);
+		} catch (JSONException e) {
+			// TODO hier was hinmachen
+			Log.e("log_tag", "Error parsing data " + e.toString());
+		}
+		if (jArray != null)
+			updateListView(jArray);
 	}
 }

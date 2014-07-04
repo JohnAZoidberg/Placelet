@@ -5,10 +5,10 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,7 +17,7 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-public class ProfileActivity extends Activity implements OnClickListener {
+public class ProfileActivity extends Activity {
 
 	private TextView textView;
 	private SharedPreferences prefs;
@@ -38,27 +38,14 @@ public class ProfileActivity extends Activity implements OnClickListener {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setTitle(User.username);
 		prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
-		// switchToProfile();
 		textView = (TextView) findViewById(R.id.email);
-		displayProfileInfo();
-	}
-
-	@Override
-	public void onClick(View arg0) {
-		// TODO Auto-generated method stub
-
+		textView.setText(getString(R.string.profile_loading) + User.username + ".");
+		loadProfileInfo();
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		return NavigateActivities.activitySwitchMenu(item, this);
-	}
-
-	@Override
-	protected void onStart() {
-		textView.setText(getString(R.string.profile_loading) + User.username + ".");
-		ProfileActivity.this.setProgressBarIndeterminateVisibility(true);
-		super.onStart();
 	}
 
 	private class ProfileInfo extends AsyncTask<String, String, JSONObject> {
@@ -72,21 +59,47 @@ public class ProfileActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
-			ProfileActivity.this.setProgressBarIndeterminateVisibility(false);
-			String email = "";
-			try {
-				email = result.getString("email");
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			textView.setText(email);
+			String jsonString = result.toString();
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putString("profile", jsonString);
+			editor.commit();
+			displayProfileInfo(result);
 		}
 
 	}
 
-	private void displayProfileInfo() {
-		ProfileInfo login = new ProfileInfo();
-		login.execute(User.username);
+	private void displayProfileInfo(JSONObject result) {
+		String email = "";
+		try {
+			email = result.getString("email");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		textView.setText(email);
+		setProgressBarIndeterminateVisibility(false);
+	}
+
+	private void loadProfileInfo() {
+		setProgressBarIndeterminateVisibility(true);
+		String savedProfile = prefs.getString("profile", "null");
+		if (!savedProfile.equals("null")) {
+			loadSavedProfile(savedProfile);
+		} else {
+			ProfileInfo login = new ProfileInfo();
+			login.execute(User.username);
+		}
+	}
+
+	private void loadSavedProfile(String result) {
+		JSONObject jArray = null;
+		try {
+			jArray = new JSONObject(result);
+		} catch (JSONException e) {
+			// TODO hier was hinmachen
+			Log.e("log_tag", "Error parsing data " + e.toString());
+		}
+		if (jArray != null)
+			displayProfileInfo(jArray);
 	}
 }
