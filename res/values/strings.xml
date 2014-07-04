@@ -56,6 +56,7 @@
     <string name="download_pictures_summary">Download pictures from the internet.</string>
     <string name="highdef_pictures">HD Pictures in popups</string>
     <string name="highdef_pictures_summary">Download high definition pictures and display them in the popups.</string>
+    <string name="refresh">refresh</string>
     
     <string name="vor"> </string>
     <string name="today">today</string>

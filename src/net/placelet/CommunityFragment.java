@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import net.placelet.R;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,9 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Toast;
 
 public class CommunityFragment extends Fragment {
 	private MainActivity mainActivity;
@@ -32,7 +29,6 @@ public class CommunityFragment extends Fragment {
 	private ListView list;
 	private final int PIC_COUNT = 5;
 	private int picnr = PIC_COUNT;
-	private boolean loading = false;
 	private Button btnLoadMore;
 
 	@Override
@@ -59,7 +55,6 @@ public class CommunityFragment extends Fragment {
 		mainActivity.setProgressBarIndeterminateVisibility(true);
 		if (btnLoadMore != null)
 			btnLoadMore.setText(getText(R.string.loading));
-		loading = true;
 		String savedPics = mainActivity.prefs.getString("communityPics", "null");
 		if (!savedPics.equals("null")) {
 			loadSavedPics(savedPics);
@@ -82,7 +77,6 @@ public class CommunityFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
-			loading = false;
 			try {
 				if (result.getString("error").equals("no_internet")) {
 					return;
@@ -92,9 +86,7 @@ public class CommunityFragment extends Fragment {
 			}
 			updateListView(result, start);
 			String jsonString = result.toString();
-			SharedPreferences.Editor editor = mainActivity.prefs.edit();
-			editor.putString("communityPics", jsonString);
-			editor.commit();
+			Util.saveData(mainActivity.prefs, "communityPics", jsonString);
 			if (picnr == PIC_COUNT) {
 				btnLoadMore = new Button(mainActivity);
 				btnLoadMore.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +95,6 @@ public class CommunityFragment extends Fragment {
 						loadMore();
 					}
 				});
-				// btnLoadMore.setText(getString(R.string.load_more));
 				list.addFooterView(btnLoadMore);
 			}
 			if (btnLoadMore != null) {

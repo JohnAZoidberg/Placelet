@@ -103,6 +103,13 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
+			try {
+				if (result.getString("error").equals("no_internet")) {
+					return;
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 			Boolean exists = false;
 			try {
 				if (result != null)
@@ -135,10 +142,9 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		String savedMessages = prefs.getString("messages-" + recipient, "null");
 		if (!savedMessages.equals("null")) {
 			loadSavedMessages(savedMessages);
-		} else {
-			Messages login = new Messages();
-			login.execute();
 		}
+		Messages login = new Messages();
+		login.execute();
 	}
 
 	@Override

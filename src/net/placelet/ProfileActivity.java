@@ -59,6 +59,13 @@ public class ProfileActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
+			try {
+				if (result.getString("error").equals("no_internet")) {
+					return;
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 			String jsonString = result.toString();
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString("profile", jsonString);
@@ -85,10 +92,9 @@ public class ProfileActivity extends Activity {
 		String savedProfile = prefs.getString("profile", "null");
 		if (!savedProfile.equals("null")) {
 			loadSavedProfile(savedProfile);
-		} else {
-			ProfileInfo login = new ProfileInfo();
-			login.execute(User.username);
 		}
+		ProfileInfo login = new ProfileInfo();
+		login.execute(User.username);
 	}
 
 	private void loadSavedProfile(String result) {

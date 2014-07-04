@@ -2,6 +2,7 @@ package net.placelet;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.Display;
 
 import java.text.SimpleDateFormat;
@@ -57,6 +58,14 @@ public class Util {
 				return context.getString(R.string.vor) + diff / 30 + context.getString(R.string.months_ago_pl);
 		} else {
 			return context.getString(R.string.vor) + diff + context.getString(R.string.days_ago_pl);
+		}
+	}
+	
+	public static void saveData(SharedPreferences prefs, String key, String value) {
+		if(!value.equals("{error: no_internet}")) {
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putString(key, value);
+			editor.commit();
 		}
 	}
 }

@@ -76,6 +76,13 @@ public class BraceletFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
+			try {
+				if (result.getString("error").equals("no_internet")) {
+					return;
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 			String jsonString = result.toString();
 			SharedPreferences.Editor editor = mainActivity.prefs.edit();
 			editor.putString("braceletPics-" + brid, jsonString);
@@ -93,10 +100,9 @@ public class BraceletFragment extends Fragment {
 		String savedPics = mainActivity.prefs.getString("braceletPics-" + brid, "null");
 		if (!savedPics.equals("null")) {
 			loadSavedPics(savedPics);
-		} else {
-			Pictures pics = new Pictures();
-			pics.execute();
 		}
+		Pictures pics = new Pictures();
+		pics.execute();
 	}
 
 	private void updateListView(JSONObject input) {

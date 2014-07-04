@@ -90,6 +90,13 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
+			try {
+				if (result.getString("error").equals("no_internet")) {
+					return;
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 			String jsonString = result.toString();
 			SharedPreferences.Editor editor = mainActivity.prefs.edit();
 			editor.putString("messages", jsonString);
@@ -103,10 +110,9 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 		String savedMessages = mainActivity.prefs.getString("messages", "null");
 		if (!savedMessages.equals("null")) {
 			loadSavedMessages(savedMessages);
-		} else {
-			Messages login = new Messages();
-			login.execute(User.username);
 		}
+		Messages login = new Messages();
+		login.execute(User.username);
 	}
 
 	public void setText(String text) {
