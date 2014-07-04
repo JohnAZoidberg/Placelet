@@ -50,11 +50,11 @@ public class NavigateActivities {
 
 			Iterator<String> iter = extras.keySet().iterator();
 			while (iter.hasNext()) {
-			    String key = (String) iter.next();
-			    String val = (String) extras.get(key);
+				String key = (String) iter.next();
+				String val = (String) extras.get(key);
 				intent.putExtra(key, val);
 			}
-			
+
 			context.startActivity(intent);
 		}
 	}
