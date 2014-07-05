@@ -78,6 +78,7 @@ public class BraceletFragment extends Fragment {
 		protected void onPostExecute(JSONObject result) {
 			try {
 				if (result.getString("error").equals("no_internet")) {
+					mainActivity.setProgressBarIndeterminateVisibility(false);
 					return;
 				}
 			} catch (JSONException e) {

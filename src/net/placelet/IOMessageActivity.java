@@ -105,6 +105,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		protected void onPostExecute(JSONObject result) {
 			try {
 				if (result.getString("error").equals("no_internet")) {
+					setProgressBarIndeterminateVisibility(false);
 					return;
 				}
 			} catch (JSONException e) {

@@ -81,6 +81,11 @@ public class CommunityFragment extends Fragment {
 		protected void onPostExecute(JSONObject result) {
 			try {
 				if (result.getString("error").equals("no_internet")) {
+					mainActivity.setProgressBarIndeterminateVisibility(false);
+					if(btnLoadMore != null) {
+						btnLoadMore.setEnabled(true);
+						btnLoadMore.setText(getString(R.string.load_more));
+					}
 					return;
 				}
 			} catch (JSONException e) {
