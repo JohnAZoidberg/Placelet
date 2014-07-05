@@ -55,6 +55,7 @@
     <string name="highdef_pictures">HD Bilder in Popups</string>
     <string name="highdef_pictures_summary">Hochauflösende Bilder werden in den Popups runtergeladen und angezeigt.</string>
     <string name="refresh">Neuladen</string>
+    <string name="preview_picture">Vorschaubild</string>
     
     <string name="vor">"vor "</string>
     <string name="today">heute</string>

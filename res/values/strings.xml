@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_version" translatable="false">1.1.4</string>
+	<string name="app_version" translatable="false">1.1.5</string>
     <string name="app_name" translatable="false">Placelet</string>
     <string name="username">username</string>
     <string name="password">password</string>
@@ -57,6 +57,7 @@
     <string name="highdef_pictures">HD Pictures in popups</string>
     <string name="highdef_pictures_summary">Download high definition pictures and display them in the popups.</string>
     <string name="refresh">refresh</string>
+    <string name="preview_picture">preview picture</string>
     
     <string name="vor"> </string>
     <string name="today">today</string>

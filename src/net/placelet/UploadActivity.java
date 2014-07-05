@@ -114,19 +114,19 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 	}
 
 	private void selectImage() {
-		final CharSequence[] items = { getString(R.string.take_photo), getString(R.string.choose_from_library), getString(R.string.cancel) };
+		final CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(UploadActivity.this);
-		builder.setTitle(getString(R.string.select_picture));
+		builder.setTitle("Add Photo!");
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int item) {
-				if (items[item].equals(getString(R.string.take_photo))) {
+				if (items[item].equals("Take Photo")) {
 					Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 					File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
 					intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 					startActivityForResult(intent, REQUEST_CAMERA);
-				} else if (items[item].equals(R.string.choose_from_library)) {
+				} else if (items[item].equals("Choose from Library")) {
 					Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 					intent.setType("image/*");
 					startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
@@ -157,9 +157,10 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 					bm = BitmapFactory.decodeFile(f.getAbsolutePath(), btmapOptions);
 
 					// bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
-					// ivImage.setImageBitmap(bm);
+					ivImage.setImageBitmap(bm);
 
-					String path = android.os.Environment.getExternalStorageDirectory() + File.separator + "Phoenix" + File.separator + "default";
+					//String path = android.os.Environment.getExternalStorageDirectory() + File.separator + "Phoenix" + File.separator + "default";
+					String path = getExternalCacheDir().getPath();
 					f.delete();
 					OutputStream fOut = null;
 					File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
@@ -168,6 +169,7 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 						bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
 						fOut.flush();
 						fOut.close();
+						imgPath = file.getPath();
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
 					} catch (IOException e) {
@@ -182,12 +184,11 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 				Uri selectedImageUri = data.getData();
 
 				String tempPath = getPath(selectedImageUri, UploadActivity.this);
+				imgPath = tempPath;
 				Bitmap bm;
 				BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
 				bm = BitmapFactory.decodeFile(tempPath, btmapOptions);
-				imgPath = tempPath;
-				Toast.makeText(this, imgPath, Toast.LENGTH_LONG).show();
-				// ivImage.setImageBitmap(bm);
+				ivImage.setImageBitmap(bm);
 			}
 		}
 	}
@@ -299,25 +300,20 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 			latitude = location.getLatitude();
 			longitude = location.getLongitude();
 		}
-		// alert("Latitude:" + latitude + ", Longitude:" + longitude);
-
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
 
 	}
 

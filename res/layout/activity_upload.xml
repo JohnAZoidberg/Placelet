@@ -100,13 +100,16 @@
             android:text="@string/picture_position" />
     </RadioGroup>-->
 
-    <!--<ImageView
+    <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/uploadFile"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/textView1"
-        android:src="@drawable/abc_ab_bottom_solid_dark_holo" />-->
+        android:src="@android:color/transparent"
+        android:contentDescription="@string/preview_picture"/>
 
     <TextView
         android:id="@+id/textView1"
