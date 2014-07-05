@@ -106,6 +106,9 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 			try {
 				if (result.getString("error").equals("no_internet")) {
 					setProgressBarIndeterminateVisibility(false);
+					if(!recipientVerified) {
+						displayErrorAtMessageFragment(getString(R.string.user_notextisting));
+					}
 					return;
 				}
 			} catch (JSONException e) {
@@ -216,7 +219,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	private void displayErrorAtMessageFragment(String err) {
 		Toast.makeText(this, err, Toast.LENGTH_LONG).show();
 		Intent intent = new Intent(this, MainActivity.class);
-		intent.putExtra("fragment", 2);
+		intent.putExtra("fragment", "2");
 		startActivity(intent);
 	}
 
