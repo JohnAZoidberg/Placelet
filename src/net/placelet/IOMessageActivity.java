@@ -78,7 +78,6 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		}
 		if (intent.hasExtra("recipientVerified")) {
 			recipientVerified = intent.getBooleanExtra("recipientVerified", false);
-			// Toast.makeText(this, recipient, Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -192,9 +191,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 							Message msg = new Message();
 							msg.message = messages.getString("message");
 							msg.sent = messages.getLong("sent");
-							msg.loadImage = settingsPrefs.getBoolean("pref_download_pics", false);
-							// msg.sender =
-							// messages.getJSONObject("sender").getString("name");
+							msg.loadImage = settingsPrefs.getBoolean("pref_download_pics", true);
 							msg.senderID = Integer.parseInt(messages.getJSONObject("sender").getString("id"));
 							msg.sender = messages.getJSONObject("sender").getString("name");
 							messageList.add(msg);
@@ -211,6 +208,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		}
 
 		Collections.sort(messageList);
+		Collections.reverse(messageList);
 		list.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		setProgressBarIndeterminateVisibility(false);

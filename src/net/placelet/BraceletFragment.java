@@ -122,7 +122,7 @@ public class BraceletFragment extends Fragment {
 				picture.date = pictures.getLong("date");
 				picture.id = pictures.getInt("id");
 				picture.fileext = pictures.getString("fileext");
-				picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", false);
+				picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
 				pictureList.add(picture);
 			} catch (JSONException e) {
 				e.printStackTrace();
