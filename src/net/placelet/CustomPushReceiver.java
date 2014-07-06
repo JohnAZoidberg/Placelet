@@ -32,7 +32,9 @@ public class CustomPushReceiver extends BroadcastReceiver {
 				String message = (String) PushdataOpen.get("message");
 				String[] splitMessage = message.split(" ");
 				String sender = splitMessage[0];
-				launch.putExtra("MessagePush", "" + sender);
+				// Only if first word isn't "nomsg" will you be redirected to the IOMessageActivity
+				if (!sender.equals("nomsg"))
+					launch.putExtra("MessagePush", sender);
 				Pushbots.getInstance().appContext.startActivity(launch);
 			}
 			// Handle Push Message when received

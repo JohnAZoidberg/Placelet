@@ -34,10 +34,9 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
 
 		sender.setText(message.sender);
 		messageContent.setText(message.message);
-		java.util.Date time = new java.util.Date((long) message.sent * 1000);
 		date.setText(Util.timestampToTime(message.sent));
 
-		return element;// super.getView(position, convertView, parent);
+		return element;
 	}
 
 	@Override

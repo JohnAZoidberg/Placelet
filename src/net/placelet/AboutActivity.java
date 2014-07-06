@@ -1,7 +1,6 @@
 package net.placelet;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +12,7 @@ public class AboutActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
+		// initiate ActionBar
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setTitle(R.string.app_name);
 	}
@@ -24,7 +24,9 @@ public class AboutActivity extends Activity {
 			MenuInflater inflater = getMenuInflater();
 			inflater.inflate(R.menu.action_bar, menu);
 			MenuItem item = menu.findItem(R.id.action_reload);
+			// disable reload button
 			item.setVisible(false);
+			item.setEnabled(false);
 			invalidateOptionsMenu();
 		}
 		return super.onCreateOptionsMenu(menu);

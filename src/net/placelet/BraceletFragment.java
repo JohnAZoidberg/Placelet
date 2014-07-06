@@ -13,13 +13,10 @@ import com.squareup.picasso.Picasso;
 
 import net.placelet.R;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,13 +26,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class BraceletFragment extends Fragment {
-
 	private MainActivity mainActivity;
-	private SharedPreferences prefs;
 	private String brid;
 	private BraceletAdapter adapter;
 	private List<Picture> pictureList = new ArrayList<Picture>();
@@ -44,9 +38,8 @@ public class BraceletFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mainActivity = (MainActivity) getActivity();
-		prefs = mainActivity.prefs;
 		View rootView = inflater.inflate(R.layout.fragment_bracelet, container, false);
-		// Toast.makeText(mainActivity, "Whatsup?", Toast.LENGTH_LONG).show();
+		// initiate listview
 		list = (ListView) rootView.findViewById(R.id.listView1);
 		list.setClickable(true);
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -61,21 +54,17 @@ public class BraceletFragment extends Fragment {
 		return rootView;
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
-	}
-
 	private class Pictures extends AsyncTask<String, String, JSONObject> {
 		@Override
 		protected JSONObject doInBackground(String... params) {
-			User user = new User(prefs);
+			User user = new User(mainActivity.prefs);
 			JSONObject content = user.getBraceletPictures(brid);
 			return content;
 		}
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
+			// check if connected to the internet
 			try {
 				if (result.getString("error").equals("no_internet")) {
 					mainActivity.setProgressBarIndeterminateVisibility(false);
@@ -85,9 +74,7 @@ public class BraceletFragment extends Fragment {
 				e.printStackTrace();
 			}
 			String jsonString = result.toString();
-			SharedPreferences.Editor editor = mainActivity.prefs.edit();
-			editor.putString("braceletPics-" + brid, jsonString);
-			editor.commit();
+			Util.saveData(mainActivity.prefs, "braceletPics-" + brid, jsonString);
 			updateListView(result);
 		}
 	}
@@ -98,18 +85,20 @@ public class BraceletFragment extends Fragment {
 		else
 			brid = "588888";
 		mainActivity.setProgressBarIndeterminateVisibility(true);
+		// display saved pics if it shouldn't reload and if there are pics saved
 		String savedPics = mainActivity.prefs.getString("braceletPics-" + brid, "null");
 		if (!savedPics.equals("null") && !reload) {
 			loadSavedPics(savedPics);
 		}
+		// load new pics from the internet
 		Pictures pics = new Pictures();
 		pics.execute();
 	}
 
 	private void updateListView(JSONObject input) {
 		pictureList.clear();
-		for (Iterator<String> iter = input.keys(); iter.hasNext();) {
-			String key = iter.next();
+		for (Iterator<?> iter =  input.keys(); iter.hasNext();) {
+			String key = (String) iter.next();
 			try {
 				JSONObject pictures = input.getJSONObject(key);
 				Picture picture = new Picture();
@@ -142,22 +131,18 @@ public class BraceletFragment extends Fragment {
 
 	private void showPopup(Picture picture) {
 		if (picture.loadImage) {
+			mainActivity.setProgressBarIndeterminateVisibility(true);
 			LayoutInflater inflater = (LayoutInflater) mainActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View popupView = inflater.inflate(R.layout.popup_lightbox, null, false);
-			Display display = mainActivity.getWindowManager().getDefaultDisplay();
-			Point size = new Point();
-			display.getSize(size);
-			int width = size.x;
-			int height = size.y;
-			final PopupWindow pw = new PopupWindow(popupView, width, (int) (height), true);
+			final PopupWindow pw = new PopupWindow(popupView, Util.width, (int) (Util.height), true);
 			ImageView imgView = (ImageView) popupView.findViewById(R.id.imageView1);
+			// Display high res picture if preferred
 			String picUrl;
 			if (mainActivity.settingsPrefs.getBoolean("pref_highdef_pics", false)) {
 				picUrl = "http://placelet.de/pictures/bracelets/pic-" + picture.id + "." + picture.fileext;
 			} else {
 				picUrl = "http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg";
 			}
-			mainActivity.setProgressBarIndeterminateVisibility(true);
 			Picasso.with(mainActivity).load(picUrl).into(imgView, new Callback() {
 				@Override
 				public void onError() {
@@ -185,7 +170,6 @@ public class BraceletFragment extends Fragment {
 		try {
 			jArray = new JSONObject(result);
 		} catch (JSONException e) {
-			// TODO hier was hinmachen
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 		if (jArray != null)

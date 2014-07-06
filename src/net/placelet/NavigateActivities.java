@@ -3,9 +3,6 @@ package net.placelet;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.apache.http.message.BasicNameValuePair;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;

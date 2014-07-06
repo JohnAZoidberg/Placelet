@@ -23,7 +23,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.MediaStore.MediaColumns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -73,7 +72,6 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_upload);
-		// getActionBar().setDisplayHomeAsUpEnabled(true);
 		prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setTitle(User.username);
@@ -114,23 +112,23 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 	}
 
 	private void selectImage() {
-		final CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
+		final CharSequence[] items = { getString(R.string.take_photo), getString(R.string.choose_from_library), getString(R.string.cancel)};
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(UploadActivity.this);
-		builder.setTitle("Add Photo!");
+		builder.setTitle(getString(R.string.add_photo));
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int item) {
-				if (items[item].equals("Take Photo")) {
+				if (items[item].equals(getString(R.string.take_photo))) {
 					Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 					File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
 					intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 					startActivityForResult(intent, REQUEST_CAMERA);
-				} else if (items[item].equals("Choose from Library")) {
+				} else if (items[item].equals(getString(R.string.choose_from_library))) {
 					Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 					intent.setType("image/*");
-					startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
-				} else if (items[item].equals("Cancel")) {
+					startActivityForResult(Intent.createChooser(intent, getString(R.string.select_file)), SELECT_FILE);
+				} else if (items[item].equals(getString(R.string.cancel))) {
 					dialog.dismiss();
 				}
 			}
@@ -155,11 +153,8 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 					BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
 
 					bm = BitmapFactory.decodeFile(f.getAbsolutePath(), btmapOptions);
-
-					// bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
 					ivImage.setImageBitmap(bm);
 
-					//String path = android.os.Environment.getExternalStorageDirectory() + File.separator + "Phoenix" + File.separator + "default";
 					String path = getExternalCacheDir().getPath();
 					f.delete();
 					OutputStream fOut = null;
@@ -183,7 +178,7 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 			} else if (requestCode == SELECT_FILE) {
 				Uri selectedImageUri = data.getData();
 
-				String tempPath = getPath(selectedImageUri, UploadActivity.this);
+				String tempPath = getPath(selectedImageUri);
 				imgPath = tempPath;
 				Bitmap bm;
 				BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
@@ -193,12 +188,16 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 		}
 	}
 
-	public String getPath(Uri uri, Activity activity) {
-		String[] projection = { MediaColumns.DATA };
-		Cursor cursor = activity.managedQuery(uri, projection, null, null, null);
-		int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
-		cursor.moveToFirst();
-		return cursor.getString(column_index);
+	public String getPath(Uri uri) {
+    String res = null;
+    String[] proj = { MediaStore.Images.Media.DATA };
+    Cursor cursor = getContentResolver().query(uri, proj, null, null, null);
+    if(cursor.moveToFirst()){;
+       int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+       res = cursor.getString(column_index);
+    }
+    cursor.close();
+    return res;
 	}
 
 	private class Upload extends AsyncTask<String, String, Integer> {

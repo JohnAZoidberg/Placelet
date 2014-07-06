@@ -48,7 +48,7 @@ public class IOMessageAdapter extends ArrayAdapter<Message> {
 			Picasso.with(context).load("http://placelet.de/pictures/profiles/" + message.senderID + ".jpg").into(imgView);
 		}
 
-		return element;// super.getView(position, convertView, parent);
+		return element;
 	}
 
 	@Override

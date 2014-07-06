@@ -47,8 +47,8 @@
     <string name="pic_download_deactivated">Picture download deactivated.</string>
     <string name="profile_loading">Loading your profile, </string>
     <string name="cancel">Cancel</string>
-    <string name="take_photo">take photo</string>
-    <string name="choose_from_library">pick from galery</string>
+    <string name="take_photo">Take photo</string>
+    <string name="choose_from_library">Pick from gallery</string>
     <string name="coords_captured">Position captured.</string>
     <string name="load_more">load more</string>
     <string name="activate_gps">Please activate GPS.\nIf you have already done so, please wait.</string>
@@ -58,6 +58,8 @@
     <string name="highdef_pictures_summary">Download high definition pictures and display them in the popups.</string>
     <string name="refresh">refresh</string>
     <string name="preview_picture">preview picture</string>
+    <string name="add_photo">Add photo!</string>
+    <string name="select_file">Select File</string>
     
     <string name="vor"> </string>
     <string name="today">today</string>

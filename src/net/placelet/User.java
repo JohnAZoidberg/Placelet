@@ -79,7 +79,6 @@ public class User {
 				}
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;
@@ -92,15 +91,6 @@ public class User {
 		args.put("user", user);
 		args.put("androidProfileInfo", "true");
 		result = server.postRequest(args);
-		/*
-		 * String resultString = ""; try { result = server.postRequest(args);
-		 * for (Iterator<String> iter = result.keys(); iter.hasNext();) { String
-		 * key = iter.next(); resultString += key + " : " +
-		 * result.getString(key) + "\n"; }
-		 * 
-		 * } catch (JSONException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
 		return result;
 	}
 
@@ -164,17 +154,14 @@ public class User {
 		try {
 			resultString = server.multipartRequest(post, filepath, filefield);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			result = new JSONObject(resultString);
 			error = result.getInt("upload");
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return error;
@@ -199,12 +186,11 @@ public class User {
 		String resultString = "";
 		try {
 			result = server.postRequest(args);
-			for (Iterator<String> iter = result.keys(); iter.hasNext();) {
-				String key = iter.next();
+			for (Iterator<?> iter = result.keys(); iter.hasNext();) {
+				String key = (String) iter.next();
 				resultString += key + " : " + result.getString(key) + "\n";
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return resultString;

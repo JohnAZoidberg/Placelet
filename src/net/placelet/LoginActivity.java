@@ -32,8 +32,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_login);
-		// getActionBar().setDisplayHomeAsUpEnabled(true);
-		prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
+		prefs = getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
 		textView = (TextView) findViewById(R.id.textView1);
 	}
 
@@ -98,10 +97,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
 	private void switchToMainActivity() {
-		/*
-		 * Intent mainIntent = new Intent(this, MainActivity.class);
-		 * startActivity(mainIntent);
-		 */
 		if (!User.username.equals(User.NOT_LOGGED_IN))
 			NavUtils.navigateUpFromSameTask(this);
 	}

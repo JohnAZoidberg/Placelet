@@ -5,9 +5,6 @@ import java.util.List;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
-import android.content.res.Configuration;
-import android.graphics.Point;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +27,7 @@ public class CommunityAdapter extends ArrayAdapter<Picture> {
 		View element = convertView;
 		Picture picture = communityList.get(position);
 		picture.html_entity_decode();
+		// Load different layout if no pictures should be displayed
 		if (element == null) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			if (picture.loadImage) {
@@ -49,11 +47,13 @@ public class CommunityAdapter extends ArrayAdapter<Picture> {
 		location.setText(picture.city + ", " + picture.country);
 		user.setText(picture.uploader);
 		date.setText(Util.timestampToDate(picture.date));
+		// load image
 		if (picture.loadImage) {
 			ImageView imgView = (ImageView) element.findViewById(R.id.imageView1);
 			int orientation = Util.display.getRotation();
 			int picWidth = (int) (Util.width * 0.3);
 			int picHeight = (int) (Util.height * 0.15);
+			// different width and height ratio if in landscape orientation
 			if (orientation == 1 || orientation == 3) {
 				picWidth = (int) (Util.width * 0.15);
 				picHeight = (int) (Util.height * 0.3);

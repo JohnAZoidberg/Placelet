@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 	private ViewPager viewPager;
@@ -75,8 +74,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 			@Override
 			public void onPageSelected(int position) {
-				// on changing the page
-				// make respected tab selected
+				// on changing the page make respected tab selected
 				actionBar.setSelectedNavigationItem(position);
 			}
 
@@ -93,9 +91,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == R.id.action_reload) {
+		// Reload content of current fragment
+		if (item.getItemId() == R.id.action_reload) {
 			Fragment fragment = mAdapter.getFragment(currentTabId);
-			switch(currentTabId) {
+			switch (currentTabId) {
 				case 0:
 					((CommunityFragment) fragment).loadPictures(0, true);
 					break;
@@ -129,14 +128,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	protected void onStart() {
 		Intent intent = getIntent();
 		if (intent.hasExtra("fragment")) {
+			// switch to specific fragment
 			int fragmentNr = Integer.valueOf(intent.getStringExtra("fragment"));
 			switchFragments(fragmentNr);
 		}
 		if (intent.hasExtra("MessagePush")) {
+			// switch to chat with specific user
 			switchToMessage(intent.getStringExtra("MessagePush"));
 		}
-		// Toast.makeText(this, User.getUsername() + "\n" + User.getDynPW(),
-		// Toast.LENGTH_LONG).show();
 		switchToLoginActivity(false);
 		super.onStart();
 		active = true;

@@ -5,7 +5,6 @@ import java.util.List;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +29,7 @@ public class BraceletAdapter extends ArrayAdapter<Picture> {
 		picture.html_entity_decode();
 		if (element == null) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			// Load different layout if no pictures should be displayed
 			if (picture.loadImage) {
 				element = inflater.inflate(R.layout.bracelet_element, null);
 			} else {
@@ -47,11 +47,13 @@ public class BraceletAdapter extends ArrayAdapter<Picture> {
 		location.setText(picture.city + ", " + picture.country);
 		user.setText(picture.uploader);
 		date.setText(Util.timestampToDate(picture.date));
+		// load image
 		if (picture.loadImage) {
 			ImageView imgView = (ImageView) element.findViewById(R.id.imageView1);
-			int orientation = Util.display.getRotation();
 			int picWidth = (int) (Util.width * 0.3);
 			int picHeight = (int) (Util.height * 0.15);
+			// different width and height ratio if in landscape orientation
+			int orientation = Util.display.getRotation();
 			if (orientation == 1 || orientation == 3) {
 				picWidth = (int) (Util.width * 0.15);
 				picHeight = (int) (Util.height * 0.3);
@@ -59,7 +61,7 @@ public class BraceletAdapter extends ArrayAdapter<Picture> {
 			Picasso.with(context).load("http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg").resize(picWidth, picHeight).into(imgView);
 		}
 
-		return element;// super.getView(position, convertView, parent);
+		return element;
 	}
 
 	@Override

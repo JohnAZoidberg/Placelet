@@ -56,17 +56,18 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_io_message);
-		prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
+		prefs = getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
 		settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		// set up Action Bar
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setTitle(User.username);
 		Button b = (Button) findViewById(R.id.button1);
 		b.setOnClickListener(this);
 		list = (ListView) findViewById(R.id.messagesList);
 		messageField = (EditText) findViewById(R.id.editText1);
-		adapter = new IOMessageAdapter(this, 0, messageList);
 		recipientDisplay = (TextView) findViewById(R.id.username);
 		getIntents();
+		adapter = new IOMessageAdapter(this, 0, messageList);
 		loadMessages();
 	}
 
@@ -102,10 +103,11 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
+			// check if connected to the internet
 			try {
 				if (result.getString("error").equals("no_internet")) {
 					setProgressBarIndeterminateVisibility(false);
-					if(!recipientVerified) {
+					if (!recipientVerified) {
 						displayErrorAtMessageFragment(getString(R.string.user_notextisting));
 					}
 					return;
@@ -179,13 +181,13 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 	private void updateListView(JSONObject input) {
 		messageList.clear();
-		for (Iterator<String> iter = input.keys(); iter.hasNext();) {
-			String key = iter.next();
+		for (Iterator<?> iter = input.keys(); iter.hasNext();) {
+			String key = (String) iter.next();
 			try {
 				JSONObject chat = input.getJSONObject(key);
 				if (recipient.equals(chat.getJSONObject("recipient").getString("name"))) {
-					for (Iterator<String> iter2 = chat.keys(); iter2.hasNext();) {
-						String key2 = iter2.next();
+					for (Iterator<?> iter2 = chat.keys(); iter2.hasNext();) {
+						String key2 = (String) iter2.next();
 						try {
 							JSONObject messages = chat.getJSONObject(key2);
 							Message msg = new Message();
@@ -196,13 +198,11 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 							msg.sender = messages.getJSONObject("sender").getString("name");
 							messageList.add(msg);
 						} catch (JSONException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
 				}
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -238,7 +238,6 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		try {
 			jArray = new JSONObject(result);
 		} catch (JSONException e) {
-			// TODO hier was hinmachen
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 		if (jArray != null)

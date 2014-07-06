@@ -17,16 +17,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
-public class MessagesFragment extends Fragment implements OnClickListener {
+public class MessagesFragment extends Fragment {
 	private SharedPreferences prefs;
 	private EditText selectUser;
 	private MainActivity mainActivity;
@@ -62,7 +60,6 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 				return false;
 			}
 		});
-		// Toast.makeText(mainActivity, "onCreate", Toast.LENGTH_LONG).show();
 		loadMessages(false);
 		return rootView;
 	}
@@ -116,34 +113,10 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 		login.execute(User.username);
 	}
 
-	public void setText(String text) {
-		TextView textView = (TextView) getView().findViewById(R.id.textView1);
-		textView.setText(text);
-	}
-
-	public void sendMessage() {
-		mainActivity.setProgressBarIndeterminateVisibility(true);
-		EditText messageField = (EditText) getView().findViewById(R.id.editText1);
-		EditText recipientField = (EditText) getView().findViewById(R.id.editText2);
-		String recipient = recipientField.getText().toString();
-		String message = messageField.getText().toString();
-		Messages login = new Messages();
-		login.execute(recipient, message);
-	}
-
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.button1:
-				sendMessage();
-				break;
-		}
-	}
-
 	private void updateListView(JSONObject input) {
 		messageList.clear();
-		for (Iterator<String> iter = input.keys(); iter.hasNext();) {
-			String key = iter.next();
+		for (Iterator<?> iter = input.keys(); iter.hasNext();) {
+			String key = (String) iter.next();
 			try {
 				JSONObject chat = input.getJSONObject(key);
 				Message msg = new Message();
@@ -153,13 +126,11 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 						msg.sent = chat.getLong("sent");
 					}
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				msg.sender = key;
 				messageList.add(msg);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -175,7 +146,6 @@ public class MessagesFragment extends Fragment implements OnClickListener {
 		try {
 			jArray = new JSONObject(result);
 		} catch (JSONException e) {
-			// TODO hier was hinmachen
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 		if (jArray != null)

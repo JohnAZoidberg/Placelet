@@ -14,7 +14,6 @@ public class Placelet extends Application {
 		super.onCreate();
 		Pushbots.init(this, SENDER_ID, PUSHBOTS_APPLICATION_ID);
 		Pushbots.getInstance().setMsgReceiver(CustomPushReceiver.class);
-
 	}
 
 }

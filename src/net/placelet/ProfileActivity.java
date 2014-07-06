@@ -8,14 +8,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 public class ProfileActivity extends Activity {
@@ -72,9 +69,7 @@ public class ProfileActivity extends Activity {
 				e.printStackTrace();
 			}
 			String jsonString = result.toString();
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putString("profile", jsonString);
-			editor.commit();
+			Util.saveData(prefs, "profile", jsonString);
 			displayProfileInfo(result);
 		}
 
@@ -85,7 +80,6 @@ public class ProfileActivity extends Activity {
 		try {
 			email = result.getString("email");
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		textView.setText(email);
@@ -107,7 +101,6 @@ public class ProfileActivity extends Activity {
 		try {
 			jArray = new JSONObject(result);
 		} catch (JSONException e) {
-			// TODO hier was hinmachen
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 		if (jArray != null)

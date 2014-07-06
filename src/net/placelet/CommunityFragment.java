@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import net.placelet.R;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,6 +34,7 @@ public class CommunityFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mainActivity = (MainActivity) getActivity();
 		View rootView = inflater.inflate(R.layout.fragment_community, container, false);
+		// Initiate ListView
 		list = (ListView) rootView.findViewById(R.id.listView1);
 		list.setClickable(true);
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -53,14 +53,18 @@ public class CommunityFragment extends Fragment {
 
 	public void loadPictures(int start, boolean reload) {
 		mainActivity.setProgressBarIndeterminateVisibility(true);
-		if (btnLoadMore != null)
+		if (btnLoadMore != null) {
 			btnLoadMore.setText(getText(R.string.loading));
+			btnLoadMore.setEnabled(false);
+		}
+		// display saved pics if it shouldn't reload and if there are pics saved
 		String savedPics = mainActivity.prefs.getString("communityPics", "null");
 		if (!savedPics.equals("null") && !reload) {
 			loadSavedPics(savedPics);
 		} else {
 			start = picnr;
 		}
+		// load new pics from the internet
 		Pictures pics = new Pictures();
 		pics.start = start;
 		pics.execute();
@@ -79,6 +83,7 @@ public class CommunityFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
+			// check if connected to the internet
 			try {
 				if (result.getString("error").equals("no_internet")) {
 					mainActivity.setProgressBarIndeterminateVisibility(false);
@@ -121,14 +126,10 @@ public class CommunityFragment extends Fragment {
 
 	private void updateListView(JSONObject input, int start) {
 		pictureList.clear();
-		for (Iterator<String> iter = input.keys(); iter.hasNext();) {
-			String key = iter.next();
+		for (Iterator<?> iter = input.keys(); iter.hasNext();) {
+			String key = (String) iter.next();
 			try {
 				JSONObject pictures = input.getJSONObject(key);
-				/*
-				 * for (Iterator<String> iter2 = pictures.keys(); iter2.hasNext();) {
-				 * String key2 = iter2.next();
-				 */
 				try {
 					Picture picture = new Picture();
 					picture.brid = pictures.getString("brid");
@@ -140,9 +141,7 @@ public class CommunityFragment extends Fragment {
 					picture.date = Long.parseLong(pictures.getString("date"));
 					picture.id = Integer.parseInt(pictures.getString("id"));
 					picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
-					boolean contains = pictureList.contains(picture);
-					if (!contains)
-						pictureList.add(picture);
+					pictureList.add(picture);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -165,7 +164,6 @@ public class CommunityFragment extends Fragment {
 		try {
 			jArray = new JSONObject(result);
 		} catch (JSONException e) {
-			// TODO hier was hinmachen
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 		if (jArray != null)

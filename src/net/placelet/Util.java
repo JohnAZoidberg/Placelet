@@ -16,10 +16,7 @@ public class Util {
 
 	public static String timestampToDate(long timestamp) {
 		Date date = new Date(timestamp * 1000);
-		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy"); // the format
-		// of your
-		// date
-		// sdf.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 		String formattedDate = sdf.format(date);
 		return formattedDate;
 	}
@@ -33,9 +30,7 @@ public class Util {
 			format = "dd.MM.yy HH:mm";
 		}
 		Date date = new Date(timestamp * 1000);
-		SimpleDateFormat sdf = new SimpleDateFormat(format); // the format of
-		// your date
-		// sdf.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		String formattedDate = sdf.format(date);
 		return formattedDate;
 	}
@@ -60,9 +55,9 @@ public class Util {
 			return context.getString(R.string.vor) + diff + context.getString(R.string.days_ago_pl);
 		}
 	}
-	
+
 	public static void saveData(SharedPreferences prefs, String key, String value) {
-		if(!value.equals("{error: no_internet}")) {
+		if (!value.equals("{error: no_internet}")) {
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString(key, value);
 			editor.commit();
