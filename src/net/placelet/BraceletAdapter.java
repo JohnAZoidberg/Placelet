@@ -45,7 +45,11 @@ public class BraceletAdapter extends ArrayAdapter<Picture> {
 		title.setText(picture.title);
 		description.setText(picture.description);
 		location.setText(picture.city + ", " + picture.country);
-		user.setText(picture.uploader);
+		if(picture.uploader.equals("null")) {
+			user.setText("");
+		}else {
+			user.setText(picture.uploader);
+		}
 		date.setText(Util.timestampToDate(picture.date));
 		// load image
 		if (picture.loadImage) {
