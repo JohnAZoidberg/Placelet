@@ -68,7 +68,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		recipientDisplay = (TextView) findViewById(R.id.username);
 		getIntents();
 		adapter = new IOMessageAdapter(this, 0, messageList);
-		loadMessages();
+		loadMessages(false);
 	}
 
 	private void getIntents() {
@@ -142,10 +142,10 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		login.execute(message);
 	}
 
-	private void loadMessages() {
+	private void loadMessages(boolean reload) {
 		setProgressBarIndeterminateVisibility(true);
 		String savedMessages = prefs.getString("messages-" + recipient, "null");
-		if (!savedMessages.equals("null")) {
+		if (!savedMessages.equals("null") && !reload) {
 			loadSavedMessages(savedMessages);
 		}
 		Messages login = new Messages();
@@ -161,7 +161,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 				NavigateActivities.switchActivity(this, MainActivity.class, false, extras);
 				return true;
 			case R.id.action_reload:
-				loadMessages();
+				loadMessages(true);
 			default:
 				return NavigateActivities.activitySwitchMenu(item, this);
 		}

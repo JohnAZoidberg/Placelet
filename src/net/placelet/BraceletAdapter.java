@@ -58,7 +58,9 @@ public class BraceletAdapter extends ArrayAdapter<Picture> {
 				picWidth = (int) (Util.width * 0.15);
 				picHeight = (int) (Util.height * 0.3);
 			}
-			Picasso.with(context).load("http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg").resize(picWidth, picHeight).into(imgView);
+			imgView.setMaxHeight(picWidth);
+			imgView.setMaxWidth(picHeight);
+			Picasso.with(context).load("http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg").placeholder(R.drawable.no_pic).resize(picWidth, picHeight).into(imgView);
 		}
 
 		return element;

@@ -38,13 +38,13 @@ public class ProfileActivity extends Activity {
 		prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
 		textView = (TextView) findViewById(R.id.email);
 		textView.setText(getString(R.string.profile_loading) + User.username + ".");
-		loadProfileInfo();
+		loadProfileInfo(false);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == R.id.action_reload) {
-			loadProfileInfo();
+			loadProfileInfo(true);
 		}
 		return NavigateActivities.activitySwitchMenu(item, this);
 	}
@@ -86,10 +86,10 @@ public class ProfileActivity extends Activity {
 		setProgressBarIndeterminateVisibility(false);
 	}
 
-	private void loadProfileInfo() {
+	private void loadProfileInfo(boolean reload) {
 		setProgressBarIndeterminateVisibility(true);
 		String savedProfile = prefs.getString("profile", "null");
-		if (!savedProfile.equals("null")) {
+		if (!savedProfile.equals("null") && !reload) {
 			loadSavedProfile(savedProfile);
 		}
 		ProfileInfo login = new ProfileInfo();

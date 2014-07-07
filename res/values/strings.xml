@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_version" translatable="false">1.1.5</string>
+	<string name="app_version" translatable="false">1.1.6</string>
     <string name="app_name" translatable="false">Placelet</string>
-    <string name="username">username</string>
-    <string name="password">password</string>
-    <string name="login_uc">login</string>
-    <string name="logout_uc">logout</string>
-    <string name="bracelet">bracelet</string>
-    <string name="community_uc">community</string>
-    <string name="profile">profile</string>
-    <string name="message">message</string>
-    <string name="messages">messages</string>
-    <string name="send">send</string>
-    <string name="id">bracelet-ID</string>
-    <string name="title">title</string>
-    <string name="city">city</string>
-    <string name="country">country</string>
-    <string name="description">description</string>
-    <string name="select_picture">select picture</string>
-    <string name="upload">upload</string>
-    <string name="current_position">current location</string>
-    <string name="picture_position">geo-tag of picture</string>
-    <string name="name">name</string>
-    <string name="loading">loading&#8230;</string>
-    <string name="date">date</string>
-    <string name="about">about</string>
-    <string name="email">email</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login_uc">Login</string>
+    <string name="logout_uc">Logout</string>
+    <string name="bracelet">Bracelet</string>
+    <string name="community_uc">Community</string>
+    <string name="profile">Profile</string>
+    <string name="message">Message</string>
+    <string name="messages">Messages</string>
+    <string name="send">Send</string>
+    <string name="id">Bracelet-ID</string>
+    <string name="title">Title</string>
+    <string name="city">City</string>
+    <string name="country">Country</string>
+    <string name="description">Description</string>
+    <string name="select_picture">Select picture</string>
+    <string name="upload">Upload</string>
+    <string name="current_position">Current location</string>
+    <string name="picture_position">Geo-Tag of picture</string>
+    <string name="name">Name</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="date">Date</string>
+    <string name="about">About</string>
+    <string name="email">Email</string>
     <string name="about_text">\u00A9 Placelet, 2014\nplacelet.de, placelet.net\nDaniel Schäfer, ds@struckmeierfliesen.de</string>
     <string name="choose_picture">Choose a picture.</string>
     <string name="incorrect_id">Enter correct bracelet-ID.</string>
@@ -33,11 +33,11 @@
     <string name="enter_city">Enter city.</string>
     <string name="enter_country">Enter country.</string>
     <string name="enter_desc">Enter longer description.</string>
-    <string name="options">settings</string>
-    <string name="activate_download">activate picture download</string>
-    <string name="deactivate_download">deactivate picture download</string>
-    <string name="messages_loading">loading messages</string>
-    <string name="bracelets_loading">loading bracelets</string>
+    <string name="options">Settings</string>
+    <string name="activate_download">Activate picture download</string>
+    <string name="deactivate_download">Deactivate picture download</string>
+    <string name="messages_loading">Loading messages</string>
+    <string name="bracelets_loading">Loading bracelets</string>
     <string name="user_notextisting">User doesn\'t exist.</string>
     <string name="enter_message">Enter message.</string>
     <string name="account_not_verified">Account not verified.</string>
@@ -50,14 +50,14 @@
     <string name="take_photo">Take photo</string>
     <string name="choose_from_library">Pick from gallery</string>
     <string name="coords_captured">Position captured.</string>
-    <string name="load_more">load more</string>
+    <string name="load_more">Load more</string>
     <string name="activate_gps">Please activate GPS.\nIf you have already done so, please wait.</string>
-    <string name="download_pictures">download pictures</string>
+    <string name="download_pictures">Download pictures</string>
     <string name="download_pictures_summary">Download pictures from the internet.</string>
     <string name="highdef_pictures">HD Pictures in popups</string>
     <string name="highdef_pictures_summary">Download high definition pictures and display them in the popups.</string>
-    <string name="refresh">refresh</string>
-    <string name="preview_picture">preview picture</string>
+    <string name="refresh">Refresh</string>
+    <string name="preview_picture">Preview picture</string>
     <string name="add_photo">Add photo!</string>
     <string name="select_file">Select File</string>
     
