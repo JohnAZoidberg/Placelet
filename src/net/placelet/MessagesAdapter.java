@@ -32,8 +32,9 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
 		TextView messageContent = (TextView) element.findViewById(R.id.message);
 		TextView date = (TextView) element.findViewById(R.id.date);
 
+		String displayMessage = message.message.length() > 20 ? message.message.replaceAll("\n", " ").substring(0, 20).trim()  + "..." : message.message;
 		sender.setText(message.sender);
-		messageContent.setText(message.message);
+		messageContent.setText(displayMessage);
 		date.setText(Util.timestampToTime(message.sent));
 
 		return element;

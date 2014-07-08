@@ -94,8 +94,9 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 			User user = new User(prefs);
 			if (params.length == 1) {
 				String content = params[0];
-				login = user.sendMessage(recipient, content);
+				user.sendMessage(recipient, content);
 			}
+			login = user.getIOMessages(recipient);
 			return login;
 		}
 
