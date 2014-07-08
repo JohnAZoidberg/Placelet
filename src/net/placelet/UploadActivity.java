@@ -112,7 +112,7 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 	}
 
 	private void selectImage() {
-		final CharSequence[] items = { getString(R.string.take_photo), getString(R.string.choose_from_library), getString(R.string.cancel)};
+		final CharSequence[] items = { getString(R.string.take_photo), getString(R.string.choose_from_library), getString(R.string.cancel) };
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(UploadActivity.this);
 		builder.setTitle(getString(R.string.add_photo));
@@ -189,15 +189,16 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 	}
 
 	public String getPath(Uri uri) {
-    String res = null;
-    String[] proj = { MediaStore.Images.Media.DATA };
-    Cursor cursor = getContentResolver().query(uri, proj, null, null, null);
-    if(cursor.moveToFirst()){;
-       int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-       res = cursor.getString(column_index);
-    }
-    cursor.close();
-    return res;
+		String res = null;
+		String[] proj = { MediaStore.Images.Media.DATA };
+		Cursor cursor = getContentResolver().query(uri, proj, null, null, null);
+		if (cursor.moveToFirst()) {
+			;
+			int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+			res = cursor.getString(column_index);
+		}
+		cursor.close();
+		return res;
 	}
 
 	private class Upload extends AsyncTask<String, String, Integer> {
@@ -219,13 +220,7 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 		@Override
 		protected void onPostExecute(Integer result) {
 			UploadActivity.this.setProgressBarIndeterminateVisibility(false);
-			switch (result) {
-				case 7:
-					switchToBracelet(picture.brid);
-					break;
-				default:
-					alert("" + result);
-			}
+			handleUploadError(result, picture.brid);
 		}
 
 		@Override
@@ -238,6 +233,46 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		return NavigateActivities.activitySwitchMenu(item, this);
+	}
+
+	public void handleUploadError(Integer error, String brid) {
+		switch (error) {
+		// Country name too short - min 2 chars
+			case 0:
+				alert(getString(R.string.country_short));
+				break;
+			// City name too short - min 2 chars
+			case 1:
+				alert(getString(R.string.description_short));
+				break;
+			// Wrong format - only JPEG, PNG and GIF permitted
+			case 2:
+				alert(getString(R.string.wrong_format));
+				break;
+			// No pic uploaded
+			case 3:
+				alert(getString(R.string.choose_picture));
+				break;
+			// Bracelet is not registered
+			case 4:
+				alert(getString(R.string.not_registered));
+				break;
+			// Bracelet does not exist
+			case 5:
+				alert(getString(R.string.bracelet_not_existing));
+				break;
+			//Picture is to big - max 8 MB
+			case 6:
+				alert(getString(R.string.too_big));
+				break;
+			// Success
+			case 7:
+				switchToBracelet(brid);
+				break;
+			default:
+				alert(error + "");
+				break;
+		}
 	}
 
 	private void upload() {
@@ -265,15 +300,15 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 		}
 		if (cityField.getText().toString().trim().length() == 0) {
 			inputsValid = false;
-			errors += getString(R.string.enter_city) + "\n";
+			errors += getString(R.string.city_short) + "\n";
 		}
 		if (countryField.getText().toString().trim().length() == 0) {
 			inputsValid = false;
-			errors += getString(R.string.enter_country) + "\n";
+			errors += getString(R.string.country_short) + "\n";
 		}
 		if (descField.getText().toString().trim().length() < 2) {
 			inputsValid = false;
-			errors += getString(R.string.enter_desc) + "\n";
+			errors += getString(R.string.description_short) + "\n";
 		}
 		if (!errors.equals(""))
 			alert(errors);

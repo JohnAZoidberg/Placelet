@@ -25,12 +25,6 @@
     <string name="about">Über</string>
     <string name="email">E-Mail</string>
     <string name="about_text">\u00A9 Placelet, 2014\nplacelet.de, placelet.net\nDaniel Schäfer, ds@struckmeierfliesen.de</string>
-    <string name="choose_picture">Du musst ein Bild auswählen.</string>
-    <string name="incorrect_id">Bitte gib deine richtige Armband-ID ein.</string>
-    <string name="enter_title">Bitte gib einen Titel ein.</string>
-    <string name="enter_city">Bitte gib den Namen der Stadt ein.</string>
-    <string name="enter_country">Bitte gib den Namen des Landes ein.</string>
-    <string name="enter_desc">Bitte gib eine Beschreibung von mindestens 2 Zeichen ein.</string>
     <string name="options">Einstellungen</string>
     <string name="activate_download">Bilder-Download Aktivieren</string>
     <string name="deactivate_download">Bilder-Download Deaktivieren</string>
@@ -58,6 +52,18 @@
     <string name="preview_picture">Vorschaubild</string>
     <string name="add_photo">Photo hinzufügen!</string>
     <string name="select_file">Datei auswählen</string>
+    
+    <!-- Picture upload error messages -->
+    <string name="city_short">Stadt zu kurz!</string>
+    <string name="country_short">Land zu kurz!</string>
+    <string name="description_short">Beschreibung zu kurz!</string>
+    <string name="wrong_format">Falsches Format!(JPEG, PNG und GIF zugelassen)</string>
+    <string name="choose_picture">Wähle ein Bild aus!</string>
+    <string name="not_registered">Armband nicht registriert!</string>
+    <string name="bracelet_not_existing">Armband gibt es nicht!</string>
+    <string name="too_big">Max Bildgröße: 8MB!</string>
+    <string name="incorrect_id">Bitte gib deine richtige Armband-ID ein!</string>
+    <string name="enter_title">Bitte gib einen Titel ein!</string>
     
     <string name="vor">"vor "</string>
     <string name="today">heute</string>
