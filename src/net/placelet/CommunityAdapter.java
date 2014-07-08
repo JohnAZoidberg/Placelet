@@ -2,8 +2,6 @@ package net.placelet;
 
 import java.util.List;
 
-import com.squareup.picasso.Picasso;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,17 +52,7 @@ public class CommunityAdapter extends ArrayAdapter<Picture> {
 		// load image
 		if (picture.loadImage) {
 			ImageView imgView = (ImageView) element.findViewById(R.id.imageView1);
-			int picWidth = (int) (Util.width * 0.3);
-			int picHeight = (int) (Util.height * 0.15);
-			// different width and height ratio if in landscape orientation
-			int orientation = Util.display.getRotation();
-			if (orientation == 1 || orientation == 3) {
-				picWidth = (int) (Util.width * 0.15);
-				picHeight = (int) (Util.height * 0.3);
-			}
-			imgView.setMaxHeight(picWidth);
-			imgView.setMaxWidth(picHeight);
-			Picasso.with(context).load("http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg").placeholder(R.drawable.no_pic).resize(picWidth, picHeight).into(imgView);
+			Util.loadThumbnail(context, imgView, picture.id);
 		}
 
 		return element;

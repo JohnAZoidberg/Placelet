@@ -4,9 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.Display;
+import android.widget.ImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.squareup.picasso.Picasso;
 
 @SuppressLint("SimpleDateFormat")
 public class Util {
@@ -62,5 +65,20 @@ public class Util {
 			editor.putString(key, value);
 			editor.commit();
 		}
+	}
+
+	public static void loadThumbnail(Context context, ImageView imgView, int picid) {
+		int picWidth = (int) (Util.width * 0.3);
+		int picHeight = (int) (Util.height * 0.15);
+		// different width and height ratio if in landscape orientation
+		int orientation = Util.display.getRotation();
+		if (orientation == 1 || orientation == 3) {
+			picWidth = (int) (Util.width * 0.15);
+			picHeight = (int) (Util.height * 0.3);
+		}
+		imgView.setMaxHeight(picWidth);
+		imgView.setMaxWidth(picHeight);
+		Picasso.with(context).load("http://placelet.de/pictures/bracelets/thumb-" + picid + ".jpg").placeholder(R.drawable.no_pic).resize(picWidth, picHeight).into(imgView);
+		
 	}
 }

@@ -117,7 +117,7 @@ public class User {
 		return result;
 	}
 
-	public String sendMessage(String recipient, String content) {
+	public JSONObject sendMessage(String recipient, String content) {
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
 		// Login-Variables
@@ -127,7 +127,7 @@ public class User {
 		args.put("recipient", recipient);
 		args.put("content", content);
 		args.put("androidSendMessages", "true");
-		return server.stringPostRequest(args);
+		return server.postRequest(args);
 	}
 
 	public JSONObject getCommunityPictures(int picCount) {

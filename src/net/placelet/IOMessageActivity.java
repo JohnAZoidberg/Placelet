@@ -74,7 +74,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	private void getIntents() {
 		Intent intent = getIntent();
 		if (intent.hasExtra("recipient")) {
-			setRecipient(intent.getStringExtra("recipient"));
+			recipient = intent.getStringExtra("recipient");
 			recipientDisplay.setText(recipient);
 		}
 		if (intent.hasExtra("recipientVerified")) {
@@ -90,14 +90,12 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	private class Messages extends AsyncTask<String, String, JSONObject> {
 		@Override
 		protected JSONObject doInBackground(String... params) {
-			JSONObject login;
+			JSONObject login = null;
 			User user = new User(prefs);
-			String recip = getRecipient();
 			if (params.length == 1) {
 				String content = params[0];
-				user.sendMessage(recipient, content);
+				login = user.sendMessage(recipient, content);
 			}
-			login = user.getIOMessages(recip);
 			return login;
 		}
 
@@ -223,14 +221,6 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 	private void alert(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-	}
-
-	private String getRecipient() {
-		return recipient;
-	}
-
-	private void setRecipient(String recip) {
-		this.recipient = recip;
 	}
 
 	private void loadSavedMessages(String result) {
