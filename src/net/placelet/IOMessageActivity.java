@@ -1,5 +1,7 @@
 package net.placelet;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -94,7 +96,11 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 			User user = new User(prefs);
 			if (params.length == 1) {
 				String content = params[0];
-				user.sendMessage(recipient, content);
+				try {
+					user.sendMessage(recipient, URLEncoder.encode(content, "utf-8"));
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
 			}
 			login = user.getIOMessages(recipient);
 			return login;
