@@ -124,6 +124,7 @@ public class MessagesFragment extends Fragment {
 					if (msg == null || msg.sent < Long.valueOf(chat.getString("sent"))) {
 						msg.message = chat.getString("message");
 						msg.sent = chat.getLong("sent");
+						msg.seen = chat.getLong("seen");
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();

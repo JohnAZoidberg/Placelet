@@ -14,16 +14,25 @@
         <TextView
             android:id="@+id/name"
             android:layout_height="wrap_content"
-        android:layout_width="0dip"
-        android:layout_weight=".5"
+	        android:layout_width="0dip"
+	        android:layout_weight="0.40"
             android:text="@string/name" />
+
+        <ImageView
+            android:id="@+id/status_image"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:src="@android:color/white"
+            android:contentDescription="Message Status"/>
 
         <TextView
             android:id="@+id/message"
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
-        android:layout_width="0dip"
-        android:layout_weight=".5"
+            android:layout_weight="0.50"
             android:text="@string/message" />
+
     </LinearLayout>
 
     <TextView

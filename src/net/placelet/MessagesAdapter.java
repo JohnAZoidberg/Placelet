@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MessagesAdapter extends ArrayAdapter<Message> {
@@ -31,7 +32,9 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
 		TextView sender = (TextView) element.findViewById(R.id.name);
 		TextView messageContent = (TextView) element.findViewById(R.id.message);
 		TextView date = (TextView) element.findViewById(R.id.date);
-
+		ImageView imgView = (ImageView) element.findViewById(R.id.status_image);
+		if(message.seen != 0) imgView.setImageResource(R.drawable.tick);
+		
 		String displayMessage = message.message.length() > 20 ? message.message.replaceAll("\n", " ").substring(0, 20).trim()  + "..." : message.message;
 		sender.setText(message.sender);
 		messageContent.setText(displayMessage);
