@@ -141,6 +141,7 @@ public class User {
 	}
 
 	public int uploadPicture(Picture picture, String filepath) {
+		picture.urlencode();
 		int error = 8;
 		picture.date = System.currentTimeMillis() / 1000L;
 		JSONObject result = null;

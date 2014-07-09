@@ -30,7 +30,7 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class Webserver {
-	String androidVersion = "1.1.2";
+	String androidVersion = "1.1.7";
 	private String connectionURL = "http://placelet.de/android/android" + androidVersion + ".php";
 	HttpClient httpClient = new DefaultHttpClient();
 	HttpPost httpPost = new HttpPost(connectionURL);
