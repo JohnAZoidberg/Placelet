@@ -88,8 +88,9 @@ public class CommunityFragment extends Fragment {
 				if (result.getString("error").equals("no_internet")) {
 					mainActivity.setProgressBarIndeterminateVisibility(false);
 					if(btnLoadMore != null) {
-						btnLoadMore.setEnabled(true);
-						btnLoadMore.setText(getString(R.string.load_more));
+						ViewGroup layout = (ViewGroup) btnLoadMore.getParent();
+						layout.removeView(btnLoadMore);
+						btnLoadMore = null;
 					}
 					return;
 				}
