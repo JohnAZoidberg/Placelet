@@ -52,6 +52,10 @@
     <string name="preview_picture">Vorschaubild</string>
     <string name="add_photo">Photo hinzufügen!</string>
     <string name="select_file">Datei auswählen</string>
+    <string name="repeat_pw">Passwort wiederholen</string>
+    <string name="register">Registrieren</string>
+    <string name="show_register_form">Registrierungsformular anzeigen</string>
+    <string name="show_login_form">Loginformular anzeigen</string>
     
     <!-- Picture upload error messages -->
     <string name="city_short">Stadt zu kurz!</string>
@@ -64,6 +68,18 @@
     <string name="too_big">Max Bildgröße: 8MB!</string>
     <string name="incorrect_id">Bitte gib deine richtige Armband-ID ein!</string>
     <string name="enter_title">Bitte gib einen Titel ein!</string>
+    
+    <!-- Register error messages -->
+    <string name="different_pws">Passwörter stimmen nicht überein!</string>
+    <string name="name_exists">Benutzername gibt es schon!</string>
+    <string name="email_exists">Email wurde schon auf jemand anderes registriert!</string>
+    <string name="username_too_short">Benutzername min. 4 Buchstaben!</string>
+    <string name="username_too_long">Benutzername max. 15 Buchstaben!</string>
+    <string name="password_too_short">Passwort min. 6 Zeichen!</string>
+    <string name="password_too_long">Passwort max. 30 Zeichen!</string>
+    <string name="invalid_email">Gib eine richtige Email ein!</string>
+    <string name="noinput">Gib etwas ein!</string>
+    <string name="register_success">Registration erfolgreich!\nDu wirst eine E-Mail von uns erhalten.</string>
     
     <string name="vor">"vor "</string>
     <string name="today">heute</string>

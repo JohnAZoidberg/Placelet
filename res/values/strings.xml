@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_version" translatable="false">#1.1.7</string>
+	<string name="app_version" translatable="false">1.1.7</string>
     <string name="app_name" translatable="false">Placelet</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -54,6 +54,10 @@
     <string name="preview_picture">Preview picture</string>
     <string name="add_photo">Add photo!</string>
     <string name="select_file">Select File</string>
+    <string name="repeat_pw">Repeat password</string>
+    <string name="register">Register</string>
+    <string name="show_register_form">Show register form</string>
+    <string name="show_login_form">Show login form</string>
     
     <!-- Picture upload error messages -->
     <string name="city_short">City too short!</string>
@@ -66,6 +70,18 @@
     <string name="too_big">Max picture size: 8MB!</string>
     <string name="enter_title">Enter title!</string>
     <string name="incorrect_id">Enter correct bracelet-ID!</string>
+    
+    <!-- Register error messages -->
+    <string name="different_pws">Passwords don\'t match!</string>
+    <string name="name_exists">Username already exists!</string>
+    <string name="email_exists">Another user is registered to this email!</string>
+    <string name="username_too_short">Username min. 4 letters!</string>
+    <string name="username_too_long">Username max. 15 letters!</string>
+    <string name="password_too_short">Password min. 6 chars!</string>
+    <string name="password_too_long">Password max. 30 chars!</string>
+    <string name="invalid_email">Enter correct email!</string>
+    <string name="noinput">Enter something!</string>
+    <string name="register_success">Registry successful!\nYou\'ll shortly receive an email.</string>
     
     <string name="vor"> </string>
     <string name="today">today</string>

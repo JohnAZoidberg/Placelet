@@ -12,13 +12,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
 public class LoginActivity extends Activity implements OnClickListener {
 
-	private TextView textView;
 	private SharedPreferences prefs;
+	private boolean showRegister = false;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -33,7 +34,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_login);
 		prefs = getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
-		textView = (TextView) findViewById(R.id.textView1);
 	}
 
 	@Override
@@ -52,35 +52,77 @@ public class LoginActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
-			case R.id.button2:
-				login();
+			case R.id.loginButton:
+				if (showRegister) {
+					register();
+				} else {
+					login();
+				}
 				break;
+			case R.id.registerButton:
+				toggleRegister();
+				break;
+		}
+	}
+
+	private void toggleRegister() {
+		showRegister = !showRegister;
+		EditText repeatPwField = (EditText) findViewById(R.id.repeatPwField);
+		EditText emailField = (EditText) findViewById(R.id.emailField);
+		Button loginButton = (Button) findViewById(R.id.loginButton);
+		Button toggleButton = (Button) findViewById(R.id.registerButton);
+		if (showRegister) {
+			emailField.setVisibility(View.VISIBLE);
+			repeatPwField.setVisibility(View.VISIBLE);
+			toggleButton.setText(getString(R.string.show_login_form));
+			loginButton.setText(getString(R.string.register));
+
+		} else {
+			emailField.setVisibility(View.GONE);
+			repeatPwField.setVisibility(View.GONE);
+			loginButton.setText(getString(R.string.login_uc));
+			toggleButton.setText(getString(R.string.show_register_form));
 		}
 	}
 
 	private class Login extends AsyncTask<String, String, Integer> {
 		@Override
 		protected Integer doInBackground(String... params) {
+			User user = new User(prefs);
+			int login;
 			String username = params[0];
 			String pw = params[1];
-			User user = new User(prefs);
-			Integer login = user.login(username, pw);
+			if (params[2] != null) {
+				String email = params[2];
+				login = user.register(username, pw, email);
+			} else {
+				login = user.login(username, pw);
+			}
 			return login;
 		}
 
 		@Override
 		protected void onPostExecute(Integer result) {
 			setProgressBarIndeterminateVisibility(false);
-			if (result == User.SUCCESS) {
-				switchToMainActivity();
-			} else if (result == 2) {
-				textView.setText(getString(R.string.account_not_verified));
-			} else if (result == 0) {
-				textView.setText(getString(R.string.account_notextisting));
-			} else if (result == 1) {
-				textView.setText(getString(R.string.wrong_pasword));
+			if (showRegister) {
+				handleRegisterError(result);
 			} else {
-				textView.setText(result.toString());
+				switch (result) {
+					case 0:
+						alert(getString(R.string.account_notextisting));
+						break;
+					case 1:
+						alert(getString(R.string.wrong_pasword));
+						break;
+					case 2:
+						alert(getString(R.string.account_not_verified));
+						break;
+					case User.SUCCESS:
+						switchToMainActivity();
+						break;
+					default:
+						alert(result.toString());
+				}
 			}
 		}
 
@@ -96,17 +138,75 @@ public class LoginActivity extends Activity implements OnClickListener {
 		return NavigateActivities.activitySwitchMenu(item, this);
 	}
 
+	public void alert(String string) {
+		Toast.makeText(this, string, Toast.LENGTH_LONG).show();		
+	}
+
 	private void switchToMainActivity() {
 		if (!User.username.equals(User.NOT_LOGGED_IN))
 			NavUtils.navigateUpFromSameTask(this);
 	}
 
 	private void login() {
-		EditText usernameField = (EditText) findViewById(R.id.editText2);
-		EditText pwField = (EditText) findViewById(R.id.editText3);
+		EditText usernameField = (EditText) findViewById(R.id.usernameField);
+		EditText passwordField = (EditText) findViewById(R.id.passwordField);
 		String username = usernameField.getText().toString();
-		String pasword = pwField.getText().toString();
+		String pasword = passwordField.getText().toString();
 		Login login = new Login();
-		login.execute(username, pasword);
+		login.execute(username, pasword, null);
+	}
+
+	private void register() {
+		EditText usernameField = (EditText) findViewById(R.id.usernameField);
+		EditText passwordField = (EditText) findViewById(R.id.passwordField);
+		EditText repeatPwField = (EditText) findViewById(R.id.repeatPwField);
+		EditText emailField = (EditText) findViewById(R.id.emailField);
+		String username = usernameField.getText().toString();
+		String password = passwordField.getText().toString();
+		String repeatPassword = repeatPwField.getText().toString();
+		String email = emailField.getText().toString();
+		if (password.equals(repeatPassword)) {
+			Login login = new Login();
+			login.execute(username, password, email);
+		} else {
+			handleRegisterError(2);
+		}
+	}
+
+	private void handleRegisterError(int error) {
+		switch (error) {
+			case 0:
+				alert(getString(R.string.noinput));
+				break;
+			case 1:
+				alert(getString(R.string.register_success));
+				break;
+			case 2:
+				alert(getString(R.string.different_pws));
+				break;
+			case 3:
+				alert(getString(R.string.name_exists));
+				break;
+			case 4:
+				alert(getString(R.string.email_exists));
+				break;
+			case 5:
+				alert(getString(R.string.username_too_short));
+				break;
+			case 6:
+				alert(getString(R.string.username_too_long));
+				break;
+			case 7:
+				alert(getString(R.string.password_too_short));
+				break;
+			case 8:
+				alert(getString(R.string.password_too_long));
+				break;
+			case 9:
+				alert(getString(R.string.invalid_email));
+				break;
+				default:
+					alert(error + "");
+		}
 	}
 }

@@ -45,14 +45,14 @@ public class User {
 		editor.commit();
 	}
 
-	public int login(String user, String pasword) {
+	public int login(String user, String password) {
 		String deviceToken = Pushbots.getInstance().getSharedPrefs().getRegistrationID();
 		SharedPreferences.Editor editor = prefs.edit();
 		JSONObject result;
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
 		args.put("user", user);
-		args.put("pasword", pasword);
+		args.put("password", password);
 		args.put("androidLogin", "true");
 		args.put("deviceToken", deviceToken);
 		try {
@@ -78,6 +78,23 @@ public class User {
 						return WRONG_PW;
 				}
 			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	public int register(String user, String password, String email) {
+		JSONObject result;
+		Webserver server = new Webserver();
+		HashMap<String, String> args = new HashMap<String, String>();
+		args.put("reg_login", user);
+		args.put("reg_password", password);
+		args.put("reg_email", email);
+		args.put("androidRegister", "true");
+		try {
+			result = server.postRequest(args);
+			return result.getInt("registered");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

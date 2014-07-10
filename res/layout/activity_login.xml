@@ -1,49 +1,72 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    tools:context="${packageName}.${activityClass}" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
     <EditText
-        android:id="@+id/editText3"
-        android:layout_width="match_parent"
+        android:id="@+id/usernameField"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button2"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="72dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:ems="10"
-        android:hint="@string/password"
-        android:inputType="textPassword" >
+        android:hint="@string/username"
+        android:inputType="textPersonName" >
 
         <requestFocus />
     </EditText>
 
     <EditText
-        android:id="@+id/editText2"
-        android:layout_width="match_parent"
+        android:id="@+id/passwordField"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/editText3"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/usernameField"
         android:ems="10"
-        android:hint="@string/username"
-        android:inputType="textPersonName" />
+        android:hint="@string/password"
+        android:inputType="textPassword" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/repeatPwField"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/editText2"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/passwordField"
+        android:ems="10"
+        android:hint="@string/repeat_pw"
+        android:inputType="textPassword"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/emailField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/repeatPwField"
+        android:ems="10"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:visibility="gone"  />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/loginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/emailField"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClick"
+        android:text="@string/login_uc" />
+
+    <Button
+        android:id="@+id/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="167dp"
         android:onClick="onClick"
-        android:text="@string/login_uc" />
+        android:text="@string/show_register_form" />
 
 </RelativeLayout>
