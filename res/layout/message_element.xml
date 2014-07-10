@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
             android:src="@android:color/white"
-            android:contentDescription="Message Status"/>
+            android:contentDescription="@string/message_status"/>
 
         <TextView
             android:id="@+id/message"

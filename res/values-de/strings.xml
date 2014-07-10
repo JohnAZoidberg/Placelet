@@ -56,6 +56,7 @@
     <string name="register">Registrieren</string>
     <string name="show_register_form">Registrierungsformular anzeigen</string>
     <string name="show_login_form">Loginformular anzeigen</string>
+    <string name="message_status">Nachrichten Status</string>
     
     <!-- Picture upload error messages -->
     <string name="city_short">Stadt zu kurz!</string>
