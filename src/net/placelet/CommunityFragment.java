@@ -87,9 +87,9 @@ public class CommunityFragment extends Fragment {
 			try {
 				if (result.getString("error").equals("no_internet")) {
 					mainActivity.setProgressBarIndeterminateVisibility(false);
+					picnr = PIC_COUNT;
 					if(btnLoadMore != null) {
-						ViewGroup layout = (ViewGroup) btnLoadMore.getParent();
-						layout.removeView(btnLoadMore);
+						list.removeFooterView(btnLoadMore);
 						btnLoadMore = null;
 					}
 					return;
@@ -122,7 +122,7 @@ public class CommunityFragment extends Fragment {
 			btnLoadMore.setEnabled(false);
 		if (!reload)
 			picnr += PIC_COUNT;
-		loadPictures(picnr, true);
+		loadPictures(picnr, false);
 	}
 
 	private void updateListView(JSONObject input, int start) {
