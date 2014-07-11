@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class OptionsActivity extends Activity {
@@ -27,15 +26,7 @@ public class OptionsActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (!User.username.equals(User.NOT_LOGGED_IN)) {
-			// Inflate the menu items for use in the action bar
-			MenuInflater inflater = getMenuInflater();
-			inflater.inflate(R.menu.action_bar, menu);
-			// Deaktivate reload button
-			MenuItem item = menu.findItem(R.id.action_reload);
-			item.setVisible(false);
-			invalidateOptionsMenu();
-		}
+		Util.inflateActionBar(this, menu, true);
 		return super.onCreateOptionsMenu(menu);
 	}
 

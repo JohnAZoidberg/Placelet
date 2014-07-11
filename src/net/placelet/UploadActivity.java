@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,14 +55,7 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (!User.username.equals(User.NOT_LOGGED_IN)) {
-			// Inflate the menu items for use in the action bar
-			MenuInflater inflater = getMenuInflater();
-			inflater.inflate(R.menu.action_bar, menu);
-			MenuItem item = menu.findItem(R.id.action_reload);
-			item.setVisible(false);
-			invalidateOptionsMenu();
-		}
+		Util.inflateActionBar(this, menu, true);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -72,9 +64,14 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_upload);
-		prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
+		prefs = getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setTitle(User.username);
+		// Set Action-Bar title
+		if (User.getStatus()) {
+			getActionBar().setTitle(User.username);
+		} else {
+			getActionBar().setTitle(R.string.app_name);
+		}
 		idField = (EditText) findViewById(R.id.uploadID);
 		descField = (EditText) findViewById(R.id.uploadDescription);
 		titleField = (EditText) findViewById(R.id.uploadTitle);

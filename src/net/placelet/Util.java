@@ -1,9 +1,13 @@
 package net.placelet;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 import java.text.SimpleDateFormat;
@@ -79,6 +83,28 @@ public class Util {
 		imgView.setMaxHeight(picWidth);
 		imgView.setMaxWidth(picHeight);
 		Picasso.with(context).load("http://placelet.de/pictures/bracelets/thumb-" + picid + ".jpg").placeholder(R.drawable.no_pic).resize(picWidth, picHeight).into(imgView);
-		
+	}
+
+	public static void inflateActionBar(Activity activity, Menu menu, boolean noReload) {
+		// Inflate the menu items for use in the action bar
+		MenuInflater inflater = activity.getMenuInflater();
+		inflater.inflate(R.menu.action_bar, menu);
+		if (noReload) {
+			MenuItem item = menu.findItem(R.id.action_reload);
+			item.setVisible(false);
+		}
+		if (!User.getStatus()) {
+			// disable profile button
+			MenuItem profileItem = menu.findItem(R.id.action_profile);
+			profileItem.setTitle(R.string.login_uc);
+			profileItem.setVisible(false);
+			profileItem.setEnabled(false);
+			// change logout to login
+			MenuItem logoutItem = menu.findItem(R.id.action_logout);
+			logoutItem.setTitle(R.string.login_uc);
+		}
+		if (noReload || !User.getStatus()) {
+			activity.invalidateOptionsMenu();
+		}
 	}
 }

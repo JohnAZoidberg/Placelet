@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,17 +44,18 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (!User.username.equals(User.NOT_LOGGED_IN)) {
-			// Inflate the menu items for use in the action bar
-			MenuInflater inflater = getMenuInflater();
-			inflater.inflate(R.menu.action_bar, menu);
-		}
+		Util.inflateActionBar(this, menu, false);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if(!User.getStatus()) {
+			HashMap<String, String> extras = new HashMap<String, String>();
+			extras.put("fragment", "2");
+			NavigateActivities.switchActivity(this, MainActivity.class, false, extras);
+		}
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_io_message);
 		prefs = getSharedPreferences("net.placelet", Context.MODE_PRIVATE);

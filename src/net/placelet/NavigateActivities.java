@@ -12,7 +12,9 @@ public class NavigateActivities {
 		switch (item.getItemId()) {
 			case R.id.action_logout:
 				HashMap<String, String> extras = new HashMap<String, String>();
-				extras.put("logout", "true");
+				if(User.getStatus()) {
+					extras.put("logout", "true");
+				}
 				switchActivity(context, LoginActivity.class, false, extras);
 				break;
 			case R.id.action_profile:
@@ -25,7 +27,7 @@ public class NavigateActivities {
 				switchActivity(context, UploadActivity.class, false);
 				break;
 			case R.id.action_options:
-				switchActivity(context, OptionsActivity.class, true);
+				switchActivity(context, OptionsActivity.class, false);
 				break;
 			case R.id.action_about:
 				switchActivity(context, AboutActivity.class, false);
@@ -35,14 +37,14 @@ public class NavigateActivities {
 	}
 
 	public static void switchActivity(Context context, Class<?> cls, boolean onlyLogin) {
-		if ((onlyLogin && User.username != User.NOT_LOGGED_IN) || !onlyLogin) {
+		if ((onlyLogin && User.getStatus()) || !onlyLogin) {
 			Intent intent = new Intent(context, cls);
 			context.startActivity(intent);
 		}
 	}
 
 	public static void switchActivity(Context context, Class<?> cls, boolean onlyLogin, HashMap<String, String> extras) {
-		if ((onlyLogin && User.username != User.NOT_LOGGED_IN) || !onlyLogin) {
+		if ((onlyLogin && User.getStatus()) || !onlyLogin) {
 			Intent intent = new Intent(context, cls);
 
 			Iterator<String> iter = extras.keySet().iterator();

@@ -49,7 +49,7 @@
         android:ems="10"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        android:visibility="gone"  />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/loginButton"
@@ -62,11 +62,22 @@
 
     <Button
         android:id="@+id/registerButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loginButton"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClick"
+        android:text="@string/show_register_form" />
+
+    <Button
+        android:id="@+id/noLoginButton"
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="onClick"
-        android:text="@string/show_register_form" />
+        android:text="@string/no_login" />
 
 </RelativeLayout>

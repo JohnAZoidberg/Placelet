@@ -1,12 +1,13 @@
 package net.placelet;
 
+import java.util.HashMap;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,6 +62,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 				break;
 			case R.id.registerButton:
 				toggleRegister();
+				break;
+			case R.id.noLoginButton:
+				switchToMainActivity();
 				break;
 		}
 	}
@@ -143,8 +147,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
 	private void switchToMainActivity() {
-		if (!User.username.equals(User.NOT_LOGGED_IN))
-			NavUtils.navigateUpFromSameTask(this);
+		HashMap<String, String> extras = new HashMap<String, String>();
+		extras.put("stay", "true");
+		NavigateActivities.switchActivity(this, MainActivity.class, false, extras);
 	}
 
 	private void login() {

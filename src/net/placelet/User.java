@@ -22,6 +22,8 @@ public class User {
 
 	public static String username;
 	public static String dynPW;
+	
+	public static boolean trial = false;
 
 	public User(SharedPreferences preferences) {
 		prefs = preferences;
@@ -212,5 +214,14 @@ public class User {
 			e.printStackTrace();
 		}
 		return resultString;
+	}
+	
+	// returns true if logged in and false if logged out
+	public static boolean getStatus() {
+		if (User.username.equals(User.NOT_LOGGED_IN)) {
+			return false;
+		}else {
+			return true;
+		}
 	}
 }

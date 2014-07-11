@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Display;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 
@@ -28,12 +27,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	public String brid;
 	public Display display;
 	public int currentTabId = 0;
+	private static boolean trial = false;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu items for use in the action bar
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.action_bar, menu);
+		Util.inflateActionBar(this, menu, false);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -52,6 +50,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		Util.display.getSize(size);
 		Util.width = size.x;
 		Util.height = size.y;
+		// Switch to LoginActivity on first creation
+		if (!trial) {
+			trial = true;
+			if (!User.getStatus()) {
+				NavigateActivities.switchActivity(this, LoginActivity.class, false);
+			}
+		}
 	}
 
 	private void initializeFragments() {
@@ -66,9 +71,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		// Add Tabs
 		actionBar.addTab(actionBar.newTab().setText(R.string.community_uc).setTabListener(this));
 		actionBar.addTab(actionBar.newTab().setText(R.string.bracelet).setTabListener(this));
-		actionBar.addTab(actionBar.newTab().setIcon(R.drawable.ic_action_mail).setTabListener(this));
 		// Set Action-Bar title
-		actionBar.setTitle(User.username);
+		if (User.getStatus()) {
+			actionBar.setTitle(User.username);
+			actionBar.addTab(actionBar.newTab().setIcon(R.drawable.ic_action_mail).setTabListener(this));
+		} else {
+			actionBar.setTitle(R.string.app_name);
+		}
 
 		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -136,7 +145,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			// switch to chat with specific user
 			switchToMessage(intent.getStringExtra("MessagePush"));
 		}
-		switchToLoginActivity(false);
 		super.onStart();
 		active = true;
 	}
@@ -155,18 +163,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	protected void onStop() {
 		super.onStop();
 		active = false;
-	}
-
-	private void switchToLoginActivity(boolean toProfile) {
-		if (User.username.equals(User.NOT_LOGGED_IN)) {
-			Intent intent;
-			intent = new Intent(this, LoginActivity.class);
-			startActivity(intent);
-		} else if (toProfile) {
-			Intent intent;
-			intent = new Intent(this, ProfileActivity.class);
-			startActivity(intent);
-		}
 	}
 
 	public static boolean isActive() {
