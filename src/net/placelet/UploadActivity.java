@@ -273,7 +273,7 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 	}
 
 	private void upload() {
-		if (checkInput()) {
+		if (checkInput() && Util.notifyIfOffline(this)) {
 			Upload login = new Upload();
 			login.execute();
 		}

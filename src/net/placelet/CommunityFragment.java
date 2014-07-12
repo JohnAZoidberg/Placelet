@@ -52,11 +52,7 @@ public class CommunityFragment extends Fragment {
 	}
 
 	public void loadPictures(int start, boolean reload) {
-		mainActivity.setProgressBarIndeterminateVisibility(true);
-		if (btnLoadMore != null) {
-			btnLoadMore.setText(getText(R.string.loading));
-			btnLoadMore.setEnabled(false);
-		}
+		//toggleLoading(true);
 		// display saved pics if it shouldn't reload and if there are pics saved
 		String savedPics = mainActivity.prefs.getString("communityPics", "null");
 		if (!savedPics.equals("null") && !reload) {
@@ -65,9 +61,13 @@ public class CommunityFragment extends Fragment {
 			start = picnr;
 		}
 		// load new pics from the internet
-		Pictures pics = new Pictures();
-		pics.start = start;
-		pics.execute();
+		if (Util.notifyIfOffline(mainActivity)) {
+			Pictures pics = new Pictures();
+			pics.start = start;
+			pics.execute();
+		}else {
+			toggleLoading(false);
+		}
 	}
 
 	private class Pictures extends AsyncTask<String, String, JSONObject> {
@@ -86,9 +86,9 @@ public class CommunityFragment extends Fragment {
 			// check if connected to the internet
 			try {
 				if (result.getString("error").equals("no_internet")) {
-					mainActivity.setProgressBarIndeterminateVisibility(false);
+					toggleLoading(false);
 					picnr = PIC_COUNT;
-					if(btnLoadMore != null) {
+					if (btnLoadMore != null) {
 						list.removeFooterView(btnLoadMore);
 						btnLoadMore = null;
 					}
@@ -100,20 +100,6 @@ public class CommunityFragment extends Fragment {
 			updateListView(result, start);
 			String jsonString = result.toString();
 			Util.saveData(mainActivity.prefs, "communityPics", jsonString);
-			if (btnLoadMore == null) {
-				btnLoadMore = new Button(mainActivity);
-				btnLoadMore.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View arg0) {
-						loadMore(false);
-					}
-				});
-				list.addFooterView(btnLoadMore);
-			}
-			if (btnLoadMore != null) {
-				btnLoadMore.setEnabled(true);
-				btnLoadMore.setText(getString(R.string.load_more));
-			}
 		}
 	}
 
@@ -151,8 +137,18 @@ public class CommunityFragment extends Fragment {
 			}
 		}
 		Collections.sort(pictureList);
+		if (btnLoadMore == null) {
+			btnLoadMore = new Button(mainActivity);
+			btnLoadMore.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					loadMore(false);
+				}
+			});
+			list.addFooterView(btnLoadMore);
+		}
 		adapter.notifyDataSetChanged();
-		mainActivity.setProgressBarIndeterminateVisibility(false);
+		toggleLoading(false);
 	}
 
 	@Override
@@ -169,5 +165,21 @@ public class CommunityFragment extends Fragment {
 		}
 		if (jArray != null)
 			updateListView(jArray, 0);
+	}
+	
+	private void toggleLoading(boolean start) {
+		if(start) {
+			mainActivity.setProgressBarIndeterminateVisibility(true);
+			if (btnLoadMore != null) {
+				btnLoadMore.setText(getText(R.string.loading));
+				btnLoadMore.setEnabled(false);
+			}
+		}else {
+			mainActivity.setProgressBarIndeterminateVisibility(false);
+			if (btnLoadMore != null) {
+				btnLoadMore.setEnabled(true);
+				btnLoadMore.setText(getString(R.string.load_more));
+			}
+		}
 	}
 }

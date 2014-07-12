@@ -109,8 +109,12 @@ public class MessagesFragment extends Fragment {
 		if (!savedMessages.equals("null") && !reload) {
 			loadSavedMessages(savedMessages);
 		}
-		Messages login = new Messages();
-		login.execute(User.username);
+		if (Util.notifyIfOffline(mainActivity)) {
+			Messages login = new Messages();
+			login.execute(User.username);
+		} else {
+			mainActivity.setProgressBarIndeterminateVisibility(false);
+		}
 	}
 
 	private void updateListView(JSONObject input) {

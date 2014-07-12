@@ -153,28 +153,32 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
 	private void login() {
-		EditText usernameField = (EditText) findViewById(R.id.usernameField);
-		EditText passwordField = (EditText) findViewById(R.id.passwordField);
-		String username = usernameField.getText().toString();
-		String pasword = passwordField.getText().toString();
-		Login login = new Login();
-		login.execute(username, pasword, null);
+		if (Util.notifyIfOffline(this)) {
+			EditText usernameField = (EditText) findViewById(R.id.usernameField);
+			EditText passwordField = (EditText) findViewById(R.id.passwordField);
+			String username = usernameField.getText().toString();
+			String pasword = passwordField.getText().toString();
+			Login login = new Login();
+			login.execute(username, pasword, null);
+		}
 	}
 
 	private void register() {
-		EditText usernameField = (EditText) findViewById(R.id.usernameField);
-		EditText passwordField = (EditText) findViewById(R.id.passwordField);
-		EditText repeatPwField = (EditText) findViewById(R.id.repeatPwField);
-		EditText emailField = (EditText) findViewById(R.id.emailField);
-		String username = usernameField.getText().toString();
-		String password = passwordField.getText().toString();
-		String repeatPassword = repeatPwField.getText().toString();
-		String email = emailField.getText().toString();
-		if (password.equals(repeatPassword)) {
-			Login login = new Login();
-			login.execute(username, password, email);
-		} else {
-			handleRegisterError(2);
+		if (Util.notifyIfOffline(this)) {
+			EditText usernameField = (EditText) findViewById(R.id.usernameField);
+			EditText passwordField = (EditText) findViewById(R.id.passwordField);
+			EditText repeatPwField = (EditText) findViewById(R.id.repeatPwField);
+			EditText emailField = (EditText) findViewById(R.id.emailField);
+			String username = usernameField.getText().toString();
+			String password = passwordField.getText().toString();
+			String repeatPassword = repeatPwField.getText().toString();
+			String email = emailField.getText().toString();
+			if (password.equals(repeatPassword)) {
+				Login login = new Login();
+				login.execute(username, password, email);
+			} else {
+				handleRegisterError(2);
+			}
 		}
 	}
 

@@ -60,6 +60,7 @@
     <string name="show_login_form">Show login form</string>
     <string name="message_status">Message Status</string>
     <string name="no_login">Continue without logging in</string>
+    <string name="offline">No Internet</string>
     
     <!-- Picture upload error messages -->
     <string name="city_short">City too short!</string>

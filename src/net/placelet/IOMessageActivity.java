@@ -51,7 +51,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if(!User.getStatus()) {
+		if (!User.getStatus()) {
 			HashMap<String, String> extras = new HashMap<String, String>();
 			extras.put("fragment", "2");
 			NavigateActivities.switchActivity(this, MainActivity.class, false, extras);
@@ -140,11 +140,13 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	}
 
 	public void sendMessage() {
-		setProgressBarIndeterminateVisibility(true);
-		String message = messageField.getText().toString();
-		messageField.setText("");
-		Messages login = new Messages();
-		login.execute(message);
+		if (Util.notifyIfOffline(this)) {
+			setProgressBarIndeterminateVisibility(true);
+			String message = messageField.getText().toString();
+			messageField.setText("");
+			Messages login = new Messages();
+			login.execute(message);
+		}
 	}
 
 	private void loadMessages(boolean reload) {
@@ -153,8 +155,12 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		if (!savedMessages.equals("null") && !reload) {
 			loadSavedMessages(savedMessages);
 		}
-		Messages login = new Messages();
-		login.execute();
+		if (Util.notifyIfOffline(this)) {
+			Messages login = new Messages();
+			login.execute();
+		} else {
+			setProgressBarIndeterminateVisibility(false);
+		}
 	}
 
 	@Override

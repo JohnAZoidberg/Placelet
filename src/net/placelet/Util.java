@@ -4,11 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -106,5 +109,22 @@ public class Util {
 		if (noReload || !User.getStatus()) {
 			activity.invalidateOptionsMenu();
 		}
+	}
+
+	public static boolean isOnline(Context context) {
+		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		if (netInfo != null && netInfo.isConnected()) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean notifyIfOffline(Context context) {
+		boolean isOnline = Util.isOnline(context);
+		if(!isOnline) {
+			Toast.makeText(context, R.string.offline, Toast.LENGTH_SHORT).show();
+		}
+		return isOnline;
 	}
 }

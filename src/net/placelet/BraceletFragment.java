@@ -91,8 +91,12 @@ public class BraceletFragment extends Fragment {
 			loadSavedPics(savedPics);
 		}
 		// load new pics from the internet
-		Pictures pics = new Pictures();
-		pics.execute();
+		if (Util.notifyIfOffline(mainActivity)) {
+			Pictures pics = new Pictures();
+			pics.execute();
+		}else {
+			mainActivity.setProgressBarIndeterminateVisibility(false);
+		}
 	}
 
 	private void updateListView(JSONObject input) {
