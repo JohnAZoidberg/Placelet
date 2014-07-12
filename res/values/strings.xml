@@ -94,11 +94,6 @@
     <string name="weeks_ago_sg"> week ago</string>
     <string name="months_ago_sg"> month ago</string>
 
-    <color name="logo_blue">#0092ff</color>
-    <color name="logo_green">#b7d300</color>
-    <color name="logo_dark_green">#99b002</color>
-    <color name="white">#FFFFFF</color>
-
     <string name="action_settings">Settings</string>
     <string name="title_activity_iomessage">IOMessageActivity</string>
     <string name="title_activity_upload">UploadActivity</string>

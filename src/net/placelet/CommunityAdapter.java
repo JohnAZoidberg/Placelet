@@ -3,6 +3,7 @@ package net.placelet;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,21 +35,16 @@ public class CommunityAdapter extends ArrayAdapter<Picture> {
 				element = inflater.inflate(R.layout.community_nopic_element, null);
 			}
 		}
+		if (position % 2 == 1) {
+	    element.setBackgroundColor(context.getResources().getColor(R.color.light_grey));  
+		}else {
+	    element.setBackgroundColor(Color.WHITE); 
+		}
 		TextView title = (TextView) element.findViewById(R.id.pic_title);
-		TextView description = (TextView) element.findViewById(R.id.pic_description);
 		TextView location = (TextView) element.findViewById(R.id.pic_location);
-		TextView user = (TextView) element.findViewById(R.id.pic_user);
-		TextView date = (TextView) element.findViewById(R.id.pic_date);
 
 		title.setText(picture.title);
-		description.setText(picture.description);
 		location.setText(picture.city + ", " + picture.country);
-		if(picture.uploader.equals("null")) {
-			user.setText("");
-		}else {
-			user.setText(picture.uploader);
-		}
-		date.setText(Util.timestampToDate(picture.date));
 		// load image
 		if (picture.loadImage) {
 			ImageView imgView = (ImageView) element.findViewById(R.id.imageView1);

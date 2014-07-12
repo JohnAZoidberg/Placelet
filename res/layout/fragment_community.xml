@@ -7,7 +7,7 @@
     android:layout_width="0px" android:layout_height="0px"/>
 
     <ListView
-        style="@style/thickDivider"
+        style="@style/noDivider"
         android:id="@+id/listView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
