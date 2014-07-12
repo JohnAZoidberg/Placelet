@@ -111,22 +111,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			if (showRegister) {
 				handleRegisterError(result);
 			} else {
-				switch (result) {
-					case 0:
-						alert(getString(R.string.account_notextisting));
-						break;
-					case 1:
-						alert(getString(R.string.wrong_pasword));
-						break;
-					case 2:
-						alert(getString(R.string.account_not_verified));
-						break;
-					case User.SUCCESS:
-						switchToMainActivity();
-						break;
-					default:
-						alert(result.toString());
-				}
+				handleLoginError(result);
 			}
 		}
 
@@ -143,7 +128,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
 	public void alert(String string) {
-		Toast.makeText(this, string, Toast.LENGTH_LONG).show();		
+		Toast.makeText(this, string, Toast.LENGTH_LONG).show();
 	}
 
 	private void switchToMainActivity() {
@@ -214,8 +199,27 @@ public class LoginActivity extends Activity implements OnClickListener {
 			case 9:
 				alert(getString(R.string.invalid_email));
 				break;
-				default:
-					alert(error + "");
+			default:
+				alert(error + "");
+		}
+	}
+
+	public void handleLoginError(Integer result) {
+		switch (result) {
+			case 0:
+				alert(getString(R.string.account_notextisting));
+				break;
+			case 1:
+				alert(getString(R.string.wrong_pasword));
+				break;
+			case 2:
+				alert(getString(R.string.account_not_verified));
+				break;
+			case User.SUCCESS:
+				switchToMainActivity();
+				break;
+			default:
+				alert(result.toString());
 		}
 	}
 }

@@ -52,7 +52,7 @@ public class CommunityFragment extends Fragment {
 	}
 
 	public void loadPictures(int start, boolean reload) {
-		//toggleLoading(true);
+		toggleLoading(true);
 		// display saved pics if it shouldn't reload and if there are pics saved
 		String savedPics = mainActivity.prefs.getString("communityPics", "null");
 		if (!savedPics.equals("null") && !reload) {
