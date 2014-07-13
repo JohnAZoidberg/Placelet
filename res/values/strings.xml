@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_version" translatable="false">1.1.8</string>
+	<string name="app_version" translatable="false">1.1.8</string>
     <string name="app_name" translatable="false">Placelet</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -62,8 +61,7 @@
     <string name="message_status">Message Status</string>
     <string name="no_login">Continue without logging in</string>
     <string name="offline">No Internet</string>
-    <string name="home">Home</string>
-
+    
     <!-- Picture upload error messages -->
     <string name="city_short">City too short!</string>
     <string name="country_short">Country too short!</string>
@@ -75,7 +73,7 @@
     <string name="too_big">Max picture size: 8MB!</string>
     <string name="enter_title">Enter title!</string>
     <string name="incorrect_id">Enter correct bracelet-ID!</string>
-
+    
     <!-- Register error messages -->
     <string name="different_pws">Passwords don\'t match!</string>
     <string name="name_exists">Username already exists!</string>
@@ -87,7 +85,8 @@
     <string name="invalid_email">Enter correct email!</string>
     <string name="noinput">Enter something!</string>
     <string name="register_success">Registry successful!\nYou\'ll shortly receive an email.</string>
-    <string name="vor"></string>
+    
+    <string name="vor"> </string>
     <string name="today">today</string>
     <string name="yesterday">yesterday</string>
     <string name="days_ago_pl"> days ago</string>
@@ -95,36 +94,11 @@
     <string name="months_ago_pl"> months ago</string>
     <string name="weeks_ago_sg"> week ago</string>
     <string name="months_ago_sg"> month ago</string>
+
     <string name="action_settings">Settings</string>
     <string name="title_activity_iomessage">IOMessageActivity</string>
     <string name="title_activity_upload">UploadActivity</string>
     <string name="title_activity_about">AboutActivity</string>
     <string name="title_activity_options">OptionsActivity</string>
-    <string name="drawer_open">Slider Menu Opened</string>
-    <string name="drawer_close">Slider Menu Closed</string>
-
-    <!-- Nav Drawer Menu Items -->
-    <string-array name="nav_drawer_items">
-        <item>@string/home</item>
-        <item>@string/upload</item>
-        <item>@string/profile</item>
-        <item>@string/options</item>
-        <item>@string/logout_uc</item>
-        <item>@string/about</item>
-    </string-array>
-
-    <!-- Nav Drawer List Item Icons -->
-    <!-- Keep them in order as the titles are in -->
-    <array name="nav_drawer_icons">
-        <item>@android:color/transparent</item>
-        <item>@drawable/ic_action_upload</item>
-        <item>@drawable/ic_action_user</item>
-        <item>@drawable/ic_action_settings</item>
-        <item>@android:color/transparent</item>
-        <item>@drawable/ic_action_about</item>
-    </array>
-
-    <!-- Content Description -->
-    <string name="desc_list_item_icon">Item Icon</string>
 
 </resources>

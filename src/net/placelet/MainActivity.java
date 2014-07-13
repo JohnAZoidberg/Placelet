@@ -1,44 +1,23 @@
 package net.placelet;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import android.R.color;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
-	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerList;
-	private ActionBarDrawerToggle mDrawerToggle;
-
-	private CharSequence mDrawerTitle;
-	private CharSequence mTitle;
-	CustomDrawerAdapter adapter;
-
-	List<DrawerItem> dataList;
-
 	private ViewPager viewPager;
 	private TabsPagerAdapter mAdapter;
 	private ActionBar actionBar;
@@ -66,7 +45,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		User.username = prefs.getString("username", User.NOT_LOGGED_IN);
 		User.dynPW = prefs.getString("dynPW", User.NOT_LOGGED_IN);
 		initializeFragments();
-		initializeNavDrawer(savedInstanceState);
 		Util.display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		Util.display.getSize(size);
@@ -78,57 +56,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			if (!User.getStatus()) {
 				NavigateActivities.switchActivity(this, LoginActivity.class, false);
 			}
-		}
-	}
-
-	private void initializeNavDrawer(Bundle savedInstanceState) {
-		dataList = new ArrayList<DrawerItem>();
-		mTitle = mDrawerTitle = getTitle();
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-		//mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-		// Add Drawer Item to dataList
-		dataList.add(new DrawerItem(getString(R.string.home), 0));
-		dataList.add(new DrawerItem(getString(R.string.upload), R.drawable.ic_action_upload));
-		dataList.add(new DrawerItem(getString(R.string.options), R.drawable.ic_action_settings));
-		dataList.add(new DrawerItem(getString(R.string.about), R.drawable.ic_action_about));
-		if (User.getStatus())
-			dataList.add(new DrawerItem(getString(R.string.logout_uc), color.transparent));
-		else
-			dataList.add(new DrawerItem(getString(R.string.login_uc), color.transparent));
-		adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item, dataList);
-
-		mDrawerList.setAdapter(adapter);
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
-
-		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
-			public void onDrawerClosed(View view) {
-				getActionBar().setTitle(mTitle);
-				invalidateOptionsMenu(); // creates call to
-																	// onPrepareOptionsMenu()
-			}
-
-			public void onDrawerOpened(View drawerView) {
-				getActionBar().setTitle(mDrawerTitle);
-				invalidateOptionsMenu(); // creates call to
-																	// onPrepareOptionsMenu()
-			}
-		};
-
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-		if (savedInstanceState == null) {
-			SelectItem(0);
-		}
-	}
-
-	private class DrawerItemClickListener implements ListView.OnItemClickListener {
-		@Override
-		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-			SelectItem(arg2);
 		}
 	}
 
@@ -173,11 +100,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// The action bar home/up action should open or close the drawer.
-		// ActionBarDrawerToggle will take care of this.
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
 		// Reload content of current fragment
 		if (item.getItemId() == R.id.action_reload) {
 			Fragment fragment = mAdapter.getFragment(currentTabId);
@@ -258,48 +180,5 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		if (fragment != null)
 			fragment.loadPictures(false);
 		switchFragments(1);
-	}
-
-	public void SelectItem(int position) {
-		switch (position) {
-			case 1:
-				NavigateActivities.switchActivity(this, UploadActivity.class, false);
-				break;
-			case 2:
-				NavigateActivities.switchActivity(this, OptionsActivity.class, false);
-				break;
-			case 3:
-				HashMap<String, String> extras = new HashMap<String, String>();
-				if (User.getStatus())
-					extras.put("logout", "true");
-				NavigateActivities.switchActivity(this, LoginActivity.class, false, extras);
-				break;
-			case 4:
-				NavigateActivities.switchActivity(this, AboutActivity.class, false);
-				break;
-		}
-		mDrawerList.setItemChecked(position, true);
-		setTitle(dataList.get(position).getItemName());
-		mDrawerLayout.closeDrawer(mDrawerList);
-	}
-
-	@Override
-	public void setTitle(CharSequence title) {
-		mTitle = title;
-		getActionBar().setTitle(mTitle);
-	}
-
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-		// Sync the toggle state after onRestoreInstanceState has occurred.
-		mDrawerToggle.syncState();
-	}
-
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		// Pass any configuration change to the drawer toggles
-		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 }
