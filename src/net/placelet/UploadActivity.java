@@ -81,19 +81,17 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 		textView = (TextView) findViewById(R.id.textView1);
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-	}
+		
 
-	@Override
-	protected void onStart() {
 		Intent intent = getIntent();
-		if (intent.hasExtra("logout")) {
-			String logout = intent.getStringExtra("logout");
-			if (logout.equals("true")) {
-				User user = new User(prefs);
-				user.logout();
+		if (intent.hasExtra("upload")) {
+			String upload = intent.getStringExtra("upload");
+			if (upload.equals("camera")) {
+				selectImageIntent(true);
+			} else if (upload.equals("gallery")) {
+				selectImageIntent(false);
 			}
 		}
-		super.onStart();
 	}
 
 	@Override
@@ -117,14 +115,9 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 			@Override
 			public void onClick(DialogInterface dialog, int item) {
 				if (items[item].equals(getString(R.string.take_photo))) {
-					Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-					File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
-					intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-					startActivityForResult(intent, REQUEST_CAMERA);
+					selectImageIntent(true);
 				} else if (items[item].equals(getString(R.string.choose_from_library))) {
-					Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-					intent.setType("image/*");
-					startActivityForResult(Intent.createChooser(intent, getString(R.string.select_file)), SELECT_FILE);
+					selectImageIntent(false);
 				} else if (items[item].equals(getString(R.string.cancel))) {
 					dialog.dismiss();
 				}
@@ -354,5 +347,18 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 
 	private double getLongitude() {
 		return longitude;
+	}
+
+	private void selectImageIntent(boolean fromCamera) {
+		if (fromCamera) {
+			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+			startActivityForResult(intent, REQUEST_CAMERA);
+		}else {
+			Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+			intent.setType("image/*");
+			startActivityForResult(Intent.createChooser(intent, getString(R.string.select_file)), SELECT_FILE);
+		}
 	}
 }

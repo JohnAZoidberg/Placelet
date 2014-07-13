@@ -2,6 +2,7 @@ package net.placelet;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,9 +16,11 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -27,13 +30,14 @@ public class CommunityFragment extends Fragment {
 	private List<Picture> pictureList = new ArrayList<Picture>();
 	private ListView list;
 	private final int PIC_COUNT = 5;
-	private int picnr = PIC_COUNT;
+	private int picnr = 8;
 	private Button btnLoadMore;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mainActivity = (MainActivity) getActivity();
 		View rootView = inflater.inflate(R.layout.fragment_community, container, false);
+		setUpUploadBar(rootView);
 		// Initiate ListView
 		list = (ListView) rootView.findViewById(R.id.listView1);
 		list.setClickable(true);
@@ -49,6 +53,23 @@ public class CommunityFragment extends Fragment {
 		loadPictures(0, false);
 
 		return rootView;
+	}
+
+	private void setUpUploadBar(View rootView) {
+		ImageView cameraIcon = (ImageView) rootView.findViewById(R.id.cameraIcon);
+		cameraIcon.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				NavigateActivities.switchActivity(mainActivity, UploadActivity.class, false, "upload", "camera");
+			}
+		});
+		ImageView galleryIcon = (ImageView) rootView.findViewById(R.id.galleryIcon);
+		galleryIcon.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				NavigateActivities.switchActivity(mainActivity, UploadActivity.class, false, "upload", "gallery");
+			}
+		});
 	}
 
 	public void loadPictures(int start, boolean reload) {

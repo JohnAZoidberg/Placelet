@@ -57,4 +57,12 @@ public class NavigateActivities {
 			context.startActivity(intent);
 		}
 	}
+
+	public static void switchActivity(Context context, Class<?> cls, boolean onlyLogin, String key, String val) {
+		if ((onlyLogin && User.getStatus()) || !onlyLogin) {
+			Intent intent = new Intent(context, cls);
+			intent.putExtra(key, val);
+			context.startActivity(intent);
+		}
+	}
 }

@@ -119,12 +119,16 @@ public class Util {
 		}
 		return false;
 	}
-	
+
 	public static boolean notifyIfOffline(Context context) {
 		boolean isOnline = Util.isOnline(context);
-		if(!isOnline) {
+		if (!isOnline) {
 			Toast.makeText(context, R.string.offline, Toast.LENGTH_SHORT).show();
 		}
 		return isOnline;
+	}
+
+	public static void alert(String msg, Context context) {
+		Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
 	}
 }
