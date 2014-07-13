@@ -2,7 +2,6 @@ package net.placelet;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,7 +44,8 @@ public class CommunityFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Picture pic = (Picture) list.getItemAtPosition(position);
-				mainActivity.switchToBraceletFragment(pic);
+				//mainActivity.switchToBraceletFragment(pic);
+				NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", pic.brid);
 			}
 		});
 		adapter = new CommunityAdapter(mainActivity, 0, pictureList);

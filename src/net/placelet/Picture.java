@@ -5,7 +5,7 @@ import java.net.URLEncoder;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-public class Picture implements Comparable<Picture> {
+public class Picture implements Comparable<Picture>, HTMLDecodable {
 	public int id;
 	public String brid;
 	public String braceName;
@@ -31,6 +31,7 @@ public class Picture implements Comparable<Picture> {
 			return 1;
 	}
 
+	@Override
 	public void html_entity_decode() {
 		if (braceName != null)
 			braceName = StringEscapeUtils.unescapeHtml4(braceName);
@@ -49,7 +50,8 @@ public class Picture implements Comparable<Picture> {
 		if (uploader != null)
 			uploader = StringEscapeUtils.unescapeHtml4(uploader);
 	}
-	
+
+	@Override
 	public void urlencode() {
 		if (braceName != null)
 			try {

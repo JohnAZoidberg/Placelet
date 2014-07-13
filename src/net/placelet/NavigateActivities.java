@@ -23,9 +23,6 @@ public class NavigateActivities {
 			case android.R.id.home:
 				switchActivity(context, MainActivity.class, false);
 				return true;
-			case R.id.action_upload:
-				switchActivity(context, UploadActivity.class, false);
-				break;
 			case R.id.action_options:
 				switchActivity(context, OptionsActivity.class, false);
 				break;

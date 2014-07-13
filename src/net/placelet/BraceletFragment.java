@@ -29,7 +29,7 @@ import android.widget.PopupWindow;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class BraceletFragment extends Fragment {
-	private MainActivity mainActivity;
+	private BraceletActivity braceletActivity;
 	private String brid;
 	private BraceletAdapter adapter;
 	private List<Picture> pictureList = new ArrayList<Picture>();
@@ -37,7 +37,7 @@ public class BraceletFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mainActivity = (MainActivity) getActivity();
+		braceletActivity = (BraceletActivity) getActivity();
 		View rootView = inflater.inflate(R.layout.fragment_bracelet, container, false);
 		// initiate listview
 		list = (ListView) rootView.findViewById(R.id.listView1);
@@ -49,7 +49,7 @@ public class BraceletFragment extends Fragment {
 				showPopup(pic);
 			}
 		});
-		adapter = new BraceletAdapter(mainActivity, 0, pictureList);
+		adapter = new BraceletAdapter(braceletActivity, 0, pictureList);
 		loadPictures(false);
 		return rootView;
 	}
@@ -57,7 +57,7 @@ public class BraceletFragment extends Fragment {
 	private class Pictures extends AsyncTask<String, String, JSONObject> {
 		@Override
 		protected JSONObject doInBackground(String... params) {
-			User user = new User(mainActivity.prefs);
+			User user = new User(braceletActivity.prefs);
 			JSONObject content = user.getBraceletPictures(brid);
 			return content;
 		}
@@ -67,35 +67,35 @@ public class BraceletFragment extends Fragment {
 			// check if connected to the internet
 			try {
 				if (result.getString("error").equals("no_internet")) {
-					mainActivity.setProgressBarIndeterminateVisibility(false);
+					braceletActivity.setProgressBarIndeterminateVisibility(false);
 					return;
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			String jsonString = result.toString();
-			Util.saveData(mainActivity.prefs, "braceletPics-" + brid, jsonString);
+			Util.saveData(braceletActivity.prefs, "braceletPics-" + brid, jsonString);
 			updateListView(result);
 		}
 	}
 
 	public void loadPictures(boolean reload) {
-		if (mainActivity.brid != null)
-			brid = mainActivity.brid;
+		if (braceletActivity.bracelet.brid != null)
+			brid = braceletActivity.bracelet.brid;
 		else
 			brid = "588888";
-		mainActivity.setProgressBarIndeterminateVisibility(true);
+		braceletActivity.setProgressBarIndeterminateVisibility(true);
 		// display saved pics if it shouldn't reload and if there are pics saved
-		String savedPics = mainActivity.prefs.getString("braceletPics-" + brid, "null");
+		String savedPics = braceletActivity.prefs.getString("braceletPics-" + brid, "null");
 		if (!savedPics.equals("null") && !reload) {
 			loadSavedPics(savedPics);
 		}
 		// load new pics from the internet
-		if (Util.notifyIfOffline(mainActivity)) {
+		if (Util.notifyIfOffline(braceletActivity)) {
 			Pictures pics = new Pictures();
 			pics.execute();
 		}else {
-			mainActivity.setProgressBarIndeterminateVisibility(false);
+			braceletActivity.setProgressBarIndeterminateVisibility(false);
 		}
 	}
 
@@ -115,7 +115,7 @@ public class BraceletFragment extends Fragment {
 				picture.date = pictures.getLong("date");
 				picture.id = pictures.getInt("id");
 				picture.fileext = pictures.getString("fileext");
-				picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
+				picture.loadImage = braceletActivity.settingsPrefs.getBoolean("pref_download_pics", true);
 				pictureList.add(picture);
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -125,7 +125,7 @@ public class BraceletFragment extends Fragment {
 		Collections.sort(pictureList);
 		list.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
-		mainActivity.setProgressBarIndeterminateVisibility(false);
+		braceletActivity.setProgressBarIndeterminateVisibility(false);
 	}
 
 	@Override
@@ -135,28 +135,28 @@ public class BraceletFragment extends Fragment {
 
 	private void showPopup(Picture picture) {
 		if (picture.loadImage) {
-			mainActivity.setProgressBarIndeterminateVisibility(true);
-			LayoutInflater inflater = (LayoutInflater) mainActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			braceletActivity.setProgressBarIndeterminateVisibility(true);
+			LayoutInflater inflater = (LayoutInflater) braceletActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View popupView = inflater.inflate(R.layout.popup_lightbox, null, false);
 			final PopupWindow pw = new PopupWindow(popupView, Util.width, (int) (Util.height), true);
 			ImageView imgView = (ImageView) popupView.findViewById(R.id.imageView1);
 			// Display high res picture if preferred
 			String picUrl;
-			if (mainActivity.settingsPrefs.getBoolean("pref_highdef_pics", false)) {
+			if (braceletActivity.settingsPrefs.getBoolean("pref_highdef_pics", false)) {
 				picUrl = "http://placelet.de/pictures/bracelets/pic-" + picture.id + "." + picture.fileext;
 			} else {
 				picUrl = "http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg";
 			}
-			Picasso.with(mainActivity).load(picUrl).into(imgView, new Callback() {
+			Picasso.with(braceletActivity).load(picUrl).into(imgView, new Callback() {
 				@Override
 				public void onError() {
-					mainActivity.setProgressBarIndeterminateVisibility(false);
+					braceletActivity.setProgressBarIndeterminateVisibility(false);
 					pw.dismiss();
 				}
 
 				@Override
 				public void onSuccess() {
-					mainActivity.setProgressBarIndeterminateVisibility(false);
+					braceletActivity.setProgressBarIndeterminateVisibility(false);
 				}
 			});
 			imgView.setOnClickListener(new Button.OnClickListener() {
@@ -165,7 +165,7 @@ public class BraceletFragment extends Fragment {
 					pw.dismiss();
 				}
 			});
-			pw.showAtLocation(mainActivity.findViewById(R.id.listView1), Gravity.CENTER, 0, 0);
+			pw.showAtLocation(braceletActivity.findViewById(R.id.listView1), Gravity.CENTER, 0, 0);
 		}
 	}
 

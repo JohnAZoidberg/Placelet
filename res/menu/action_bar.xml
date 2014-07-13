@@ -13,12 +13,6 @@
         android:title="@string/profile">
     </item>
     <item
-        android:id="@+id/action_upload"
-        android:icon="@drawable/ic_action_upload"
-        android:showAsAction="always"
-        android:title="@string/upload">
-    </item>
-    <item
         android:id="@+id/action_logout"
         android:icon="@drawable/ic_action_refresh"
         android:orderInCategory="100"

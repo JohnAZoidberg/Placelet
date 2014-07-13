@@ -19,10 +19,10 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 				fragments[0] = new CommunityFragment();
 				return fragments[0];
 			case 1:
-				fragments[1] = new BraceletFragment();
+				fragments[1] = new MessagesFragment();
 				return fragments[1];
 			case 2:
-				fragments[2] = new MessagesFragment();
+				fragments[2] = new BraceletFragment();
 				return fragments[2];
 		}
 
