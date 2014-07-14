@@ -37,7 +37,7 @@ public class PictureFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		braceletActivity = (BraceletActivity) getActivity();
-		View rootView = inflater.inflate(R.layout.fragment_bracelet, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_picture, container, false);
 		// initiate listview
 		list = (ListView) rootView.findViewById(R.id.listView1);
 		list.setClickable(true);
@@ -48,80 +48,11 @@ public class PictureFragment extends Fragment {
 				showPopup(pic);
 			}
 		});
-		adapter = new BraceletAdapter(braceletActivity, 0, pictureList);
-		loadPictures(false);
 		return rootView;
 	}
 
-	private class Pictures extends AsyncTask<String, String, JSONObject> {
-		@Override
-		protected JSONObject doInBackground(String... params) {
-			User user = new User(braceletActivity.prefs);
-			JSONObject content = user.getBraceletPictures(brid);
-			return content;
-		}
-
-		@Override
-		protected void onPostExecute(JSONObject result) {
-			// check if connected to the internet
-			try {
-				if (result.getString("error").equals("no_internet")) {
-					braceletActivity.setProgressBarIndeterminateVisibility(false);
-					return;
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			String jsonString = result.toString();
-			Util.saveData(braceletActivity.prefs, "braceletPics-" + brid, jsonString);
-			updateListView(result);
-		}
-	}
-
-	public void loadPictures(boolean reload) {
-		if (braceletActivity.bracelet.brid != null)
-			brid = braceletActivity.bracelet.brid;
-		else
-			brid = "588888";
-		braceletActivity.setProgressBarIndeterminateVisibility(true);
-		// display saved pics if it shouldn't reload and if there are pics saved
-		String savedPics = braceletActivity.prefs.getString("braceletPics-" + brid, "null");
-		if (!savedPics.equals("null") && !reload) {
-			loadSavedPics(savedPics);
-		}
-		// load new pics from the internet
-		if (Util.notifyIfOffline(braceletActivity)) {
-			Pictures pics = new Pictures();
-			pics.execute();
-		}else {
-			braceletActivity.setProgressBarIndeterminateVisibility(false);
-		}
-	}
-
-	private void updateListView(JSONObject input) {
-		pictureList.clear();
-		for (Iterator<?> iter =  input.keys(); iter.hasNext();) {
-			String key = (String) iter.next();
-			try {
-				JSONObject pictures = input.getJSONObject(key);
-				Picture picture = new Picture();
-				// picture.brid = pictures.getString("brid");
-				picture.title = pictures.getString("title");
-				picture.description = pictures.getString("description");
-				picture.city = pictures.getString("city");
-				picture.country = pictures.getString("country");
-				picture.uploader = pictures.getString("user");
-				picture.date = pictures.getLong("date");
-				picture.id = pictures.getInt("id");
-				picture.fileext = pictures.getString("fileext");
-				picture.loadImage = braceletActivity.settingsPrefs.getBoolean("pref_download_pics", true);
-				pictureList.add(picture);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-
-		Collections.sort(pictureList);
+	public void updateListView() {
+		adapter = new BraceletAdapter(braceletActivity, 0, braceletActivity.bracelet.pictures);
 		list.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		braceletActivity.setProgressBarIndeterminateVisibility(false);
@@ -168,7 +99,7 @@ public class PictureFragment extends Fragment {
 		}
 	}
 
-	private void loadSavedPics(String result) {
+	public void loadSavedPics(String result) {
 		JSONObject jArray = null;
 		try {
 			jArray = new JSONObject(result);
@@ -176,6 +107,6 @@ public class PictureFragment extends Fragment {
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 		if (jArray != null)
-			updateListView(jArray);
+			updateListView();
 	}
 }

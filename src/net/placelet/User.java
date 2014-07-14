@@ -224,4 +224,14 @@ public class User {
 			return true;
 		}
 	}
+
+	public JSONObject getBraceletData(String brid) {
+		JSONObject result = null;
+		Webserver server = new Webserver();
+		HashMap<String, String> args = new HashMap<String, String>();
+		args.put("androidGetBraceletData", "true");
+		args.put("braceID", brid);
+		result = server.postRequest(args);
+		return result;
+	}
 }

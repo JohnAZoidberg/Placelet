@@ -8,7 +8,11 @@ public class Bracelet {
 	public String brid;
 	public long date;
 	
-	public ArrayList<Picture> pictures;
+	public int picAnz;
+	public String lastCity;
+	public String lastCountry;
+	
+	public ArrayList<Picture> pictures = new ArrayList<Picture>();
 	
 	
 }
