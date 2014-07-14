@@ -70,7 +70,7 @@
         android:onClick="onClick"
         android:text="@string/show_register_form" />
 
-    <Button
+    <!--<Button
         android:id="@+id/noLoginButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
@@ -78,6 +78,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="onClick"
-        android:text="@string/no_login" />
+        android:text="@string/no_login" />-->
 
 </RelativeLayout>
