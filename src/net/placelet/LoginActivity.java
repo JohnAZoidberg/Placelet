@@ -63,9 +63,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 			case R.id.registerButton:
 				toggleRegister();
 				break;
-			case R.id.noLoginButton:
-				switchToMainActivity();
-				break;
 		}
 	}
 
