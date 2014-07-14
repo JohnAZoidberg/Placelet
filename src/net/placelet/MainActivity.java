@@ -70,7 +70,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		// Add Tabs
 		actionBar.addTab(actionBar.newTab().setText(R.string.community_uc).setTabListener(this));
-		//actionBar.addTab(actionBar.newTab().setText(R.string.bracelet).setTabListener(this));
 		// Set Action-Bar title
 		if (User.getStatus()) {
 			actionBar.setTitle(User.username);
@@ -108,10 +107,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					((CommunityFragment) fragment).loadPictures(0, true);
 					break;
 				case 1:
-					((BraceletFragment) fragment).loadPictures(true);
+					((MessagesFragment) fragment).loadMessages(true);
 					break;
 				case 2:
-					((MessagesFragment) fragment).loadMessages(true);
 					break;
 			}
 		}
@@ -151,7 +149,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	private void switchToMessage(String sender) {
 		if (sender.equals(User.NOT_LOGGED_IN)) {
-			switchFragments(2);
+			switchFragments(1);
 		} else {
 			Intent intent = new Intent(this, IOMessageActivity.class);
 			intent.putExtra("recipient", sender);
@@ -171,14 +169,5 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	public void switchFragments(int number) {
 		actionBar.setSelectedNavigationItem(number);
-	}
-
-	public void switchToBraceletFragment(Picture pic) {
-		brid = pic.brid;
-		BraceletFragment fragment = (BraceletFragment) mAdapter.getFragment(1);
-		// TODO Fehler bei Drehen beheben!
-		if (fragment != null)
-			fragment.loadPictures(false);
-		switchFragments(1);
 	}
 }
