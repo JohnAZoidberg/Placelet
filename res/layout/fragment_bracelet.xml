@@ -4,26 +4,12 @@
     android:layout_height="fill_parent" >
 
     <RelativeLayout
-        android:id="@+id/relativeLayout2"
-        android:layout_width="wrap_content"
-        android:layout_height="96dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true" >
-
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/relativeLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/relativeLayout2"
+        android:layout_above="@+id/linearLayout1"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" >
 
         <TextView
@@ -55,7 +41,36 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/braceletPicCount"
             android:text="letzter Ort" />
-
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.30"
+            android:src="@drawable/no_pic" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.30"
+            android:src="@drawable/no_pic" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.30"
+            android:src="@drawable/no_pic" />
+    </LinearLayout>
 
 </RelativeLayout>
