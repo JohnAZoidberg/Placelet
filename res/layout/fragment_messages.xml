@@ -6,7 +6,6 @@
 
     <ListView
         android:id="@+id/messagesList"
-        style="@style/thickDivider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/editText1"
