@@ -9,18 +9,19 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import net.placelet.HTMLDecodable;
 
 public class Bracelet implements HTMLDecodable {
-	public String name;
-	public String owner;
-	public String brid;
-	public long date;
+	public String name = null;
+	public String owner = null;
+	public String brid = null;
+	public long date = -1;
 
-	public int picAnz;
-	public String lastCity;
-	public String lastCountry;
+	public int picAnz = -1;
+	public String lastCity = null;
+	public String lastCountry = null;
 
 	public ArrayList<Picture> pictures = new ArrayList<Picture>();
 
 	public Bracelet(String brid) {
+		System.out.println(pictures.size());
 		this.brid = brid;
 	}
 
@@ -75,5 +76,12 @@ public class Bracelet implements HTMLDecodable {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
+	}
+	
+	public boolean isFilled() {
+		if (name != null && owner != null && brid!= null && date != -1 && picAnz != 1 && lastCity != null &&lastCountry != null && pictures.size() > 0) {
+			return true;
+		}
+		return false;
 	}
 }

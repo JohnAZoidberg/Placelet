@@ -39,22 +39,24 @@ public class BraceletFragment extends Fragment {
 	}
 
 	public void updateData() {
-		nameView.setText(bracelet.name);
-		ownerView.setText(bracelet.owner);
-		picCountView.setText(bracelet.picAnz + "");
-		lastLocationView.setText(bracelet.lastCity + ", " + bracelet.lastCountry);
-
-		switch (bracelet.pictures.size()) {
-			default:
-			case 3:
-				Util.loadThumbnail(braceletActivity, imgView3, bracelet.pictures.get(2).id);
-			case 2:
-				Util.loadThumbnail(braceletActivity, imgView2, bracelet.pictures.get(1).id);
-			case 1:
-				Util.loadThumbnail(braceletActivity, imgView1, bracelet.pictures.get(0).id);
-				break;
-			case 0:
-				break;
+		if(bracelet.isFilled()) {
+			nameView.setText(bracelet.name);
+			ownerView.setText(bracelet.owner);
+			picCountView.setText(bracelet.picAnz + "");
+			lastLocationView.setText(bracelet.lastCity + ", " + bracelet.lastCountry);
+	
+			switch (bracelet.pictures.size()) {
+				default:
+				case 3:
+					Util.loadThumbnail(braceletActivity, imgView3, bracelet.pictures.get(2).id);
+				case 2:
+					Util.loadThumbnail(braceletActivity, imgView2, bracelet.pictures.get(1).id);
+				case 1:
+					Util.loadThumbnail(braceletActivity, imgView1, bracelet.pictures.get(0).id);
+					break;
+				case 0:
+					break;
+			}
 		}
 	}
 }
