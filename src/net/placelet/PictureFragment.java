@@ -37,10 +37,11 @@ public class PictureFragment extends Fragment {
 				showPopup(pic);
 			}
 		});
+		updateData();
 		return rootView;
 	}
 
-	public void updateListView() {
+	public void updateData() {
 		adapter = new BraceletAdapter(braceletActivity, 0, braceletActivity.bracelet.pictures);
 		list.setAdapter(adapter);
 		adapter.notifyDataSetChanged();

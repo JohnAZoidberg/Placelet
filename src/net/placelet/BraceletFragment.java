@@ -12,7 +12,7 @@ import android.widget.TextView;
 public class BraceletFragment extends Fragment {
 	private BraceletActivity braceletActivity;
 	private Bracelet bracelet;
-	
+
 	private TextView nameView;
 	private TextView ownerView;
 	private TextView picCountView;
@@ -26,7 +26,7 @@ public class BraceletFragment extends Fragment {
 		braceletActivity = (BraceletActivity) getActivity();
 		bracelet = braceletActivity.bracelet;
 		View rootView = inflater.inflate(R.layout.fragment_bracelet, container, false);
-		
+
 		nameView = (TextView) rootView.findViewById(R.id.braceletName);
 		ownerView = (TextView) rootView.findViewById(R.id.braceletOwner);
 		picCountView = (TextView) rootView.findViewById(R.id.braceletPicCount);
@@ -34,17 +34,27 @@ public class BraceletFragment extends Fragment {
 		imgView1 = (ImageView) rootView.findViewById(R.id.imageView1);
 		imgView2 = (ImageView) rootView.findViewById(R.id.imageView2);
 		imgView3 = (ImageView) rootView.findViewById(R.id.imageView3);
+		updateData();
 		return rootView;
 	}
-	
+
 	public void updateData() {
 		nameView.setText(bracelet.name);
 		ownerView.setText(bracelet.owner);
 		picCountView.setText(bracelet.picAnz + "");
 		lastLocationView.setText(bracelet.lastCity + ", " + bracelet.lastCountry);
-		
-		Util.loadThumbnail(braceletActivity, imgView1, bracelet.pictures.get(0).id);
-		Util.loadThumbnail(braceletActivity, imgView2, bracelet.pictures.get(1).id);
-		Util.loadThumbnail(braceletActivity, imgView3, bracelet.pictures.get(2).id);
+
+		switch (bracelet.pictures.size()) {
+			default:
+			case 3:
+				Util.loadThumbnail(braceletActivity, imgView3, bracelet.pictures.get(2).id);
+			case 2:
+				Util.loadThumbnail(braceletActivity, imgView2, bracelet.pictures.get(1).id);
+			case 1:
+				Util.loadThumbnail(braceletActivity, imgView1, bracelet.pictures.get(0).id);
+				break;
+			case 0:
+				break;
+		}
 	}
 }

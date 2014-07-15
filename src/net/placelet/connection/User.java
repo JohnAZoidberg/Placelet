@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import net.placelet.data.Bracelet;
 import net.placelet.data.Picture;
 
 import org.apache.http.ParseException;

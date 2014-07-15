@@ -57,8 +57,9 @@ public class BraceletActivity extends FragmentActivity {
 
 		Intent intent = getIntent();
 		String brid = intent.getStringExtra("brid");
+		bracelet = new Bracelet(brid);
 
-		loadPictures(true, brid);
+		loadPictures(false);
 	}
 
 	@Override
@@ -127,52 +128,16 @@ public class BraceletActivity extends FragmentActivity {
 			}
 			String jsonString = result.toString();
 			Util.saveData(prefs, "braceletData-" + bracelet.brid, jsonString);
-
-			bracelet.pictures.clear();
-			try {
-				bracelet.owner = result.getString("owner");
-				bracelet.name = result.getString("name");
-				bracelet.date = result.getLong("date");
-				bracelet.picAnz = result.getInt("pic_anz");
-				bracelet.lastCity = result.getString("lastcity");
-				bracelet.lastCountry = result.getString("lastcountry");
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			for (Iterator<?> iter = result.keys(); iter.hasNext();) {
-				String key = (String) iter.next();
-				try {
-					JSONObject pictures = result.getJSONObject(key);
-					Picture picture = new Picture();
-					// picture.brid = pictures.getString("brid");
-					picture.title = pictures.getString("title");
-					picture.description = pictures.getString("description");
-					picture.city = pictures.getString("city");
-					picture.country = pictures.getString("country");
-					picture.uploader = pictures.getString("user");
-					picture.date = pictures.getLong("date");
-					picture.id = pictures.getInt("id");
-					picture.fileext = pictures.getString("fileext");
-					picture.loadImage = settingsPrefs.getBoolean("pref_download_pics", true);
-					bracelet.pictures.add(picture);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
-
-			Collections.sort(bracelet.pictures);
-			pictureFragment.updateListView();
-			braceletFragment.updateData();
+			updateBracelet(result);
 		}
 	}
 
-	public void loadPictures(boolean reload, String brid) {
-		bracelet = new Bracelet(brid);
+	public void loadPictures(boolean reload) {
 		setProgressBarIndeterminateVisibility(true);
 		// display saved pics if it shouldn't reload and if there are pics saved
-		String savedPics = prefs.getString("braceletData-" + brid, "null");
-		if (!savedPics.equals("null") && !reload) {
-			loadSavedBracelet(savedPics);
+		String savedBracelet = prefs.getString("braceletData-" + bracelet.brid, "null");
+		if (!savedBracelet.equals("null") && !reload) {
+			loadSavedBracelet(savedBracelet);
 		}
 		// load new pics from the internet
 		if (Util.notifyIfOffline(this)) {
@@ -183,15 +148,54 @@ public class BraceletActivity extends FragmentActivity {
 		}
 	}
 
+	public void updateBracelet(JSONObject result) {
+		bracelet.pictures.clear();
+		try {
+			bracelet.owner = result.getString("owner");
+			bracelet.name = result.getString("name");
+			bracelet.date = result.getLong("date");
+			bracelet.picAnz = result.getInt("pic_anz");
+			bracelet.lastCity = result.getString("lastcity");
+			bracelet.lastCountry = result.getString("lastcountry");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		for (Iterator<?> iter = result.keys(); iter.hasNext();) {
+			String key = (String) iter.next();
+			try {
+				JSONObject pictures = result.getJSONObject(key);
+				Picture picture = new Picture();
+				picture.title = pictures.getString("title");
+				picture.description = pictures.getString("description");
+				picture.city = pictures.getString("city");
+				picture.country = pictures.getString("country");
+				picture.uploader = pictures.getString("user");
+				picture.date = pictures.getLong("date");
+				picture.id = pictures.getInt("id");
+				picture.fileext = pictures.getString("fileext");
+				picture.loadImage = settingsPrefs.getBoolean("pref_download_pics", true);
+				bracelet.pictures.add(picture);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
+		Collections.sort(bracelet.pictures);
+		if(pictureFragment != null) {
+			pictureFragment.updateData();
+		}
+		if(braceletFragment != null) {
+			braceletFragment.updateData();
+		}
+	}
+
 	public void loadSavedBracelet(String result) {
 		JSONObject jArray = null;
 		try {
 			jArray = new JSONObject(result);
+			updateBracelet(jArray);
 		} catch (JSONException e) {
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
-		if (jArray != null)
-			pictureFragment.updateListView();
-			braceletFragment.updateData();
 	}
 }
