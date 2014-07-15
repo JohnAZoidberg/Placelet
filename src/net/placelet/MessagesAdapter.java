@@ -2,6 +2,7 @@ package net.placelet;
 
 import java.util.List;
 
+import net.placelet.data.Message;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

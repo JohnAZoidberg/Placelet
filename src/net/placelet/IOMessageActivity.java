@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import net.placelet.connection.User;
+import net.placelet.data.Message;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

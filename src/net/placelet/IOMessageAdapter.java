@@ -2,6 +2,8 @@ package net.placelet;
 
 import java.util.List;
 
+import net.placelet.data.Message;
+
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;

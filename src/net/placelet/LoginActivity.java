@@ -2,6 +2,7 @@ package net.placelet;
 
 import java.util.HashMap;
 
+import net.placelet.connection.User;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

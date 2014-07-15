@@ -1,18 +1,9 @@
 package net.placelet;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import net.placelet.data.Picture;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,9 +20,7 @@ import com.squareup.picasso.Picasso;
 
 public class PictureFragment extends Fragment {
 	private BraceletActivity braceletActivity;
-	private String brid;
 	private BraceletAdapter adapter;
-	private List<Picture> pictureList = new ArrayList<Picture>();
 	private ListView list;
 
 	@Override
@@ -97,16 +86,5 @@ public class PictureFragment extends Fragment {
 			});
 			pw.showAtLocation(braceletActivity.findViewById(R.id.listView1), Gravity.CENTER, 0, 0);
 		}
-	}
-
-	public void loadSavedPics(String result) {
-		JSONObject jArray = null;
-		try {
-			jArray = new JSONObject(result);
-		} catch (JSONException e) {
-			Log.e("log_tag", "Error parsing data " + e.toString());
-		}
-		if (jArray != null)
-			updateListView();
 	}
 }

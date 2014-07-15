@@ -1,5 +1,7 @@
 package net.placelet;
 
+import net.placelet.connection.User;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

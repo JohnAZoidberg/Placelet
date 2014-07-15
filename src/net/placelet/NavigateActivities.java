@@ -3,6 +3,7 @@ package net.placelet;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import net.placelet.connection.User;
 import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;

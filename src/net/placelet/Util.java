@@ -16,6 +16,8 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import net.placelet.connection.User;
+
 import com.squareup.picasso.Picasso;
 
 @SuppressLint("SimpleDateFormat")

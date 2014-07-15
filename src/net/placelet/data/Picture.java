@@ -1,7 +1,9 @@
-package net.placelet;
+package net.placelet.data;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
+import net.placelet.HTMLDecodable;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 

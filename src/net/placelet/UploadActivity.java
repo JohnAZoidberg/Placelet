@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import net.placelet.connection.User;
+import net.placelet.data.Picture;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;

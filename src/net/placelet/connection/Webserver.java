@@ -1,4 +1,4 @@
-package net.placelet;
+package net.placelet.connection;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

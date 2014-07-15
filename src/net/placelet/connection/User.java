@@ -1,8 +1,11 @@
-package net.placelet;
+package net.placelet.connection;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import net.placelet.data.Bracelet;
+import net.placelet.data.Picture;
 
 import org.apache.http.ParseException;
 import org.json.JSONException;
@@ -14,11 +17,11 @@ import android.content.SharedPreferences;
 
 public class User {
 	private SharedPreferences prefs;
-	final static int ERROR = 0;
-	final static int NOT_EXISTING = 1;
-	final static int WRONG_PW = 2;
-	final static int SUCCESS = 3;
-	final static String NOT_LOGGED_IN = "logged_out";
+	public final static int ERROR = 0;
+	public final static int NOT_EXISTING = 1;
+	public final static int WRONG_PW = 2;
+	public final static int SUCCESS = 3;
+	public final static String NOT_LOGGED_IN = "logged_out";
 
 	public static String username;
 	public static String dynPW;

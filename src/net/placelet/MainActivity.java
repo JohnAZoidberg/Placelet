@@ -1,5 +1,6 @@
 package net.placelet;
 
+import net.placelet.connection.User;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;

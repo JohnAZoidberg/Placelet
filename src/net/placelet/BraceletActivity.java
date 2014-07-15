@@ -3,6 +3,10 @@ package net.placelet;
 import java.util.Collections;
 import java.util.Iterator;
 
+import net.placelet.connection.User;
+import net.placelet.data.Bracelet;
+import net.placelet.data.Picture;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +22,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -32,7 +37,7 @@ public class BraceletActivity extends FragmentActivity {
 	private BraceletFragment braceletFragment;
 	private PictureFragment pictureFragment;
 
-	public Bracelet bracelet = new Bracelet();
+	public Bracelet bracelet;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +56,9 @@ public class BraceletActivity extends FragmentActivity {
 		settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		Intent intent = getIntent();
-		bracelet.brid = intent.getStringExtra("brid");
+		String brid = intent.getStringExtra("brid");
 
-		loadPictures(true);
+		loadPictures(true, brid);
 	}
 
 	@Override
@@ -121,7 +126,7 @@ public class BraceletActivity extends FragmentActivity {
 				e.printStackTrace();
 			}
 			String jsonString = result.toString();
-			Util.saveData(prefs, "braceletPics-" + bracelet.brid, jsonString);
+			Util.saveData(prefs, "braceletData-" + bracelet.brid, jsonString);
 
 			bracelet.pictures.clear();
 			try {
@@ -161,14 +166,13 @@ public class BraceletActivity extends FragmentActivity {
 		}
 	}
 
-	public void loadPictures(boolean reload) {
-		if (bracelet.brid == null)
-			bracelet.brid = "588888";
+	public void loadPictures(boolean reload, String brid) {
+		bracelet = new Bracelet(brid);
 		setProgressBarIndeterminateVisibility(true);
 		// display saved pics if it shouldn't reload and if there are pics saved
-		String savedPics = prefs.getString("braceletPics-" + bracelet.brid, "null");
+		String savedPics = prefs.getString("braceletData-" + brid, "null");
 		if (!savedPics.equals("null") && !reload) {
-			pictureFragment.loadSavedPics(savedPics);
+			loadSavedBracelet(savedPics);
 		}
 		// load new pics from the internet
 		if (Util.notifyIfOffline(this)) {
@@ -177,5 +181,17 @@ public class BraceletActivity extends FragmentActivity {
 		} else {
 			setProgressBarIndeterminateVisibility(false);
 		}
+	}
+
+	public void loadSavedBracelet(String result) {
+		JSONObject jArray = null;
+		try {
+			jArray = new JSONObject(result);
+		} catch (JSONException e) {
+			Log.e("log_tag", "Error parsing data " + e.toString());
+		}
+		if (jArray != null)
+			pictureFragment.updateListView();
+			braceletFragment.updateData();
 	}
 }
