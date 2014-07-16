@@ -27,6 +27,7 @@ public class IOMessageAdapter extends ArrayAdapter<Message> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View element = convertView;
+		ViewHolderItem viewHolder;
 		ImageView imgView = null;
 		Message message = messageList.get(position);
 		message.html_entity_decode();
@@ -38,14 +39,19 @@ public class IOMessageAdapter extends ArrayAdapter<Message> {
 			} else {
 				element = inflater.inflate(R.layout.message_element, null);
 			}
+			viewHolder = new ViewHolderItem();
+			viewHolder.sender = (TextView) element.findViewById(R.id.name);
+			viewHolder.messageContent = (TextView) element.findViewById(R.id.message);
+			viewHolder.date = (TextView) element.findViewById(R.id.date);
+			
+			element.setTag(viewHolder);
+		}else {
+			viewHolder = (ViewHolderItem) element.getTag();
 		}
-		TextView sender = (TextView) element.findViewById(R.id.name);
-		TextView messageContent = (TextView) element.findViewById(R.id.message);
-		TextView date = (TextView) element.findViewById(R.id.date);
 
-		sender.setText(message.sender);
-		messageContent.setText(message.message);
-		date.setText(Util.timestampToTime(message.sent));
+		viewHolder.sender.setText(message.sender);
+		viewHolder.messageContent.setText(message.message);
+		viewHolder.date.setText(Util.timestampToTime(message.sent));
 		if (message.loadImage && imgView != null) {
 			Picasso.with(context).load("http://placelet.de/pictures/profiles/" + message.senderID + ".jpg").into(imgView);
 		}
@@ -57,6 +63,12 @@ public class IOMessageAdapter extends ArrayAdapter<Message> {
 	public int getCount() {
 		messageList.size();
 		return super.getCount();
+	}
+	
+	static class ViewHolderItem {
+		TextView sender;
+		TextView messageContent;
+		TextView date;
 	}
 
 }
