@@ -56,7 +56,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		if (!User.getStatus()) {
 			HashMap<String, String> extras = new HashMap<String, String>();
-			extras.put("fragment", "2");
+			extras.put("fragment", "1");
 			NavigateActivities.switchActivity(this, MainActivity.class, false, extras);
 		}
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -171,7 +171,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		switch (item.getItemId()) {
 			case android.R.id.home:
 				HashMap<String, String> extras = new HashMap<String, String>();
-				extras.put("fragment", "2");
+				extras.put("fragment", "1");
 				NavigateActivities.switchActivity(this, MainActivity.class, false, extras);
 				return true;
 			case R.id.action_reload:
@@ -231,7 +231,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	private void displayErrorAtMessageFragment(String err) {
 		Toast.makeText(this, err, Toast.LENGTH_LONG).show();
 		Intent intent = new Intent(this, MainActivity.class);
-		intent.putExtra("fragment", "2");
+		intent.putExtra("fragment", "1");
 		startActivity(intent);
 	}
 
