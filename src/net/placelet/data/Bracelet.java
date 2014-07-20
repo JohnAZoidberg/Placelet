@@ -79,7 +79,7 @@ public class Bracelet implements HTMLDecodable {
 	}
 	
 	public boolean isFilled() {
-		if (name != null && owner != null && brid!= null && date != -1 && picAnz != 1 && lastCity != null &&lastCountry != null && pictures.size() > 0) {
+		if (name != null && owner != null && brid!= null && date != -1 && picAnz != -1 && lastCity != null &&lastCountry != null && pictures.size() > 0) {
 			return true;
 		}
 		return false;
