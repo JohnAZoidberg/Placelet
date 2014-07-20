@@ -3,8 +3,8 @@ package net.placelet;
 import java.util.Collections;
 import java.util.Iterator;
 
+import net.placelet.connection.User;
 import net.placelet.data.Bracelet;
-import net.placelet.data.Loadable;
 import net.placelet.data.Picture;
 
 import org.json.JSONException;
@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -25,7 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class BraceletActivity extends FragmentActivity implements Loadable{
+public class BraceletActivity extends FragmentActivity {
 	private ViewPager mPager;
 	private PagerAdapter mPagerAdapter;
 	private static final int NUM_PAGES = 2;
@@ -56,8 +57,9 @@ public class BraceletActivity extends FragmentActivity implements Loadable{
 
 		Intent intent = getIntent();
 		String brid = intent.getStringExtra("brid");
+		bracelet = new Bracelet(brid);
 
-		loadPictures(brid, false);
+		loadPictures(false);
 	}
 
 	@Override
@@ -105,23 +107,48 @@ public class BraceletActivity extends FragmentActivity implements Loadable{
 		}
 	}
 
-	public void loadPictures(String brid, boolean reload) {
+	private class BraceletData extends AsyncTask<String, String, JSONObject> {
+		@Override
+		protected JSONObject doInBackground(String... params) {
+			User user = new User(prefs);
+			JSONObject content = user.getBraceletData(bracelet.brid);
+			return content;
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			// check if connected to the internet
+			try {
+				if (result.getString("error").equals("no_internet")) {
+					setProgressBarIndeterminateVisibility(false);
+					return;
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			String jsonString = result.toString();
+			Util.saveData(prefs, "braceletData-" + bracelet.brid, jsonString);
+			updateBracelet(result);
+		}
+	}
+
+	public void loadPictures(boolean reload) {
 		setProgressBarIndeterminateVisibility(true);
 		// display saved pics if it shouldn't reload and if there are pics saved
-		String savedBracelet = prefs.getString("braceletData-" + brid, "null");
+		String savedBracelet = prefs.getString("braceletData-" + bracelet.brid, "null");
 		if (!savedBracelet.equals("null") && !reload) {
 			loadSavedBracelet(savedBracelet);
 		}
 		// load new pics from the internet
 		if (Util.notifyIfOffline(this)) {
-			bracelet = new Bracelet(brid, this);
+			BraceletData pics = new BraceletData();
+			pics.execute();
 		} else {
 			setProgressBarIndeterminateVisibility(false);
 		}
 	}
 
-	@Override
-	public void loadData(JSONObject result) {
+	public void updateBracelet(JSONObject result) {
 		bracelet.pictures.clear();
 		try {
 			bracelet.owner = result.getString("owner");
@@ -162,21 +189,11 @@ public class BraceletActivity extends FragmentActivity implements Loadable{
 		}
 	}
 
-	@Override
-	public void setProgressBar(boolean b) {
-		setProgressBarIndeterminateVisibility(b);		
-	}
-
-	@Override
-	public SharedPreferences getPrefs() {
-		return prefs;
-	}
-
 	public void loadSavedBracelet(String result) {
 		JSONObject jArray = null;
 		try {
 			jArray = new JSONObject(result);
-			loadData(jArray);
+			updateBracelet(jArray);
 		} catch (JSONException e) {
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}

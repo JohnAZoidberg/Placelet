@@ -5,14 +5,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import net.placelet.HTMLDecodable;
-import net.placelet.Util;
-import net.placelet.connection.User;
 
 public class Bracelet implements HTMLDecodable {
 	public String name = null;
@@ -25,14 +19,10 @@ public class Bracelet implements HTMLDecodable {
 	public String lastCountry = null;
 
 	public ArrayList<Picture> pictures = new ArrayList<Picture>();
-	
-	private Loadable activity;
 
-	public Bracelet(String brid, Loadable activity) {
-		this.activity = activity;
+	public Bracelet(String brid) {
+		System.out.println(pictures.size());
 		this.brid = brid;
-		BraceletData pics = new BraceletData();
-		pics.execute();
 	}
 
 	@Override
@@ -93,31 +83,5 @@ public class Bracelet implements HTMLDecodable {
 			return true;
 		}
 		return false;
-	}
-
-	private class BraceletData extends AsyncTask<String, String, JSONObject> {
-		SharedPreferences prefs = activity.getPrefs();
-		@Override
-		protected JSONObject doInBackground(String... params) {
-			User user = new User(prefs);
-			JSONObject content = user.getBraceletData(brid);
-			return content;
-		}
-
-		@Override
-		protected void onPostExecute(JSONObject result) {
-			// check if connected to the internet
-			try {
-				if (result.getString("error").equals("no_internet")) {
-					activity.setProgressBar(false);
-					return;
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			String jsonString = result.toString();
-			Util.saveData(prefs, "braceletData-" + brid, jsonString);
-			activity.loadData(result);
-		}
 	}
 }
