@@ -25,6 +25,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 public class BraceletActivity extends FragmentActivity {
 	private ViewPager mPager;
@@ -42,6 +43,7 @@ public class BraceletActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.bracelet_activity);
 
 		// Instantiate a ViewPager and a PagerAdapter.
@@ -58,18 +60,21 @@ public class BraceletActivity extends FragmentActivity {
 		Intent intent = getIntent();
 		String brid = intent.getStringExtra("brid");
 		bracelet = new Bracelet(brid);
-
 		loadPictures(false);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		Util.inflateActionBar(this, menu, true);
+		Util.inflateActionBar(this, menu, false);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		// Reload
+		if (item.getItemId() == R.id.action_reload) {
+			loadPictures(true);
+		}
 		return NavigateActivities.activitySwitchMenu(item, this);
 	}
 
@@ -120,7 +125,7 @@ public class BraceletActivity extends FragmentActivity {
 			// check if connected to the internet
 			try {
 				if (result.getString("error").equals("no_internet")) {
-					setProgressBarIndeterminateVisibility(false);
+					//setProgressBarIndeterminateVisibility(false);
 					return;
 				}
 			} catch (JSONException e) {
@@ -143,8 +148,6 @@ public class BraceletActivity extends FragmentActivity {
 		if (Util.notifyIfOffline(this)) {
 			BraceletData pics = new BraceletData();
 			pics.execute();
-		} else {
-			setProgressBarIndeterminateVisibility(false);
 		}
 	}
 
@@ -187,6 +190,7 @@ public class BraceletActivity extends FragmentActivity {
 		if(braceletFragment != null) {
 			braceletFragment.updateData();
 		}
+		setProgressBarIndeterminateVisibility(false);
 	}
 
 	public void loadSavedBracelet(String result) {
