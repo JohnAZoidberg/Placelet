@@ -72,7 +72,7 @@ public class MyPlaceletFragment extends Fragment {
 			}
 			updateListView(result);
 			String jsonString = result.toString();
-			Util.saveData(mainActivity.prefs, "communityPics", jsonString);
+			Util.saveData(mainActivity.prefs, "myPlacelet", jsonString);
 		}
 	}
 
