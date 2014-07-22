@@ -148,6 +148,8 @@ public class BraceletActivity extends FragmentActivity {
 		if (Util.notifyIfOffline(this)) {
 			BraceletData pics = new BraceletData();
 			pics.execute();
+		}else {
+			setProgressBarIndeterminateVisibility(false);
 		}
 	}
 

@@ -14,6 +14,12 @@
         android:layout_alignParentTop="true" >
 
         <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date" />
+
+        <TextView
             android:id="@+id/name"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -36,13 +42,5 @@
             android:text="@string/message" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/linearLayout1"
-        android:text="@string/date" />
 
 </RelativeLayout>
