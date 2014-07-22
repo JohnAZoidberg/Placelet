@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
-	Fragment[] fragments = new Fragment[2];
+	Fragment[] fragments = new Fragment[3];
 
 	public TabsPagerAdapter(FragmentManager fm) {
 		super(fm);
@@ -21,6 +21,9 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 			case 1:
 				fragments[1] = new MessagesFragment();
 				return fragments[1];
+			case 2:
+				fragments[2] = new MyPlaceletFragment();
+				return fragments[2];
 		}
 
 		return null;
@@ -28,7 +31,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public int getCount() {
-		return 2;
+		return 3;
 	}
 
 	public Fragment getFragment(int index) {

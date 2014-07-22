@@ -236,4 +236,14 @@ public class User {
 		result = server.postRequest(args);
 		return result;
 	}
+
+	public JSONObject getOwnBracelets() {
+		JSONObject result = null;
+		Webserver server = new Webserver();
+		HashMap<String, String> args = new HashMap<String, String>();
+		args.put("androidGetOwnBracelets", "true");
+		args.put("user", username);
+		result = server.postRequest(args);
+		return result;
+	}
 }

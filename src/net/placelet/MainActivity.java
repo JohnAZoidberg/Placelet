@@ -78,6 +78,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		} else {
 			actionBar.setTitle(R.string.app_name);
 		}
+		actionBar.addTab(actionBar.newTab().setIcon(R.drawable.ic_action_user).setTabListener(this));
 
 		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -111,6 +112,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					((MessagesFragment) fragment).loadMessages(true);
 					break;
 				case 2:
+					((MyPlaceletFragment) fragment).loadBracelets(true);
 					break;
 			}
 		}

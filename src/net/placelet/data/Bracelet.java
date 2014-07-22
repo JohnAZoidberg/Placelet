@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import net.placelet.HTMLDecodable;
 
-public class Bracelet implements HTMLDecodable {
+public class Bracelet extends InformationCarrier implements HTMLDecodable {
 	public String name = null;
 	public String owner = null;
 	public String brid = null;

@@ -7,7 +7,7 @@ import net.placelet.HTMLDecodable;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-public class Picture implements Comparable<Picture>, HTMLDecodable {
+public class Picture extends InformationCarrier implements Comparable<Picture>, HTMLDecodable {
 	public int id;
 	public String brid;
 	public String braceName;
