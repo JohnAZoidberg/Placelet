@@ -99,11 +99,6 @@ public class Util {
 			item.setVisible(false);
 		}
 		if (!User.getStatus()) {
-			// disable profile button
-			MenuItem profileItem = menu.findItem(R.id.action_profile);
-			profileItem.setTitle(R.string.login_uc);
-			profileItem.setVisible(false);
-			profileItem.setEnabled(false);
 			// change logout to login
 			MenuItem logoutItem = menu.findItem(R.id.action_logout);
 			logoutItem.setTitle(R.string.login_uc);

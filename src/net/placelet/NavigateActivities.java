@@ -18,9 +18,6 @@ public class NavigateActivities {
 				}
 				switchActivity(context, LoginActivity.class, false, extras);
 				break;
-			case R.id.action_profile:
-				switchActivity(context, ProfileActivity.class, true);
-				break;
 			case android.R.id.home:
 				switchActivity(context, MainActivity.class, false);
 				return true;

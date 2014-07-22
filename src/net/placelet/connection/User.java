@@ -105,16 +105,6 @@ public class User {
 		return 0;
 	}
 
-	public JSONObject getProfileInfo(String user) {
-		JSONObject result;
-		Webserver server = new Webserver();
-		HashMap<String, String> args = new HashMap<String, String>();
-		args.put("user", user);
-		args.put("androidProfileInfo", "true");
-		result = server.postRequest(args);
-		return result;
-	}
-
 	public JSONObject getMessages() {
 		JSONObject result = null;
 		Webserver server = new Webserver();
