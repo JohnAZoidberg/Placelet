@@ -37,9 +37,9 @@ public class MyPlaceletFragment extends Fragment {
 		list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Picture pic = (Picture) list.getItemAtPosition(position);
+				Bracelet bracelet = (Bracelet) list.getItemAtPosition(position);
 				//mainActivity.switchToBraceletFragment(pic);
-				NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", pic.brid);
+				NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", bracelet.brid);
 			}
 		});
 		adapter = new MyPlaceletAdapter(mainActivity, 0, braceletList);
@@ -123,15 +123,16 @@ public class MyPlaceletFragment extends Fragment {
 
 				for (int i = 0; i < jsonArrayLength; i++) {
 					JSONObject row = jsonArray.getJSONObject(i);
-					bracelet = new Bracelet("");
-					picture = new Picture();
 					try {
+						picture = new Picture();
+						picture.brid = row.getString("brid");
+						bracelet = new Bracelet(picture.brid);
 						picture.title = row.getString("title");
 						picture.city = row.getString("city");
 						picture.country = row.getString("country");
-						picture.brid = row.getString("brid");
 						picture.id = Integer.parseInt(row.getString("id"));
 					} catch (JSONException e) {
+						bracelet = new Bracelet("");
 						e.printStackTrace();
 					}
 					picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
