@@ -3,45 +3,91 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout1"
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/gridLayout1"
+        android:layout_alignParentTop="true"
+        class="com.google.android.gms.maps.SupportMapFragment" />
+
+    <GridLayout
+        android:id="@+id/gridLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/linearLayout1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" >
+        android:columnCount="2"
+        android:horizontalSpacing="10dp" >
 
         <TextView
-            android:id="@+id/braceletName"
+            android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name" />
+            android:layout_column="0"
+            android:layout_gravity="left"
+            android:text="@string/last_location" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_gravity="left"
+            android:text="@string/owner" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_gravity="left"
+            android:text="@string/name" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_gravity="left"
+            android:text="@string/pic_count" />
 
         <TextView
             android:id="@+id/braceletOwner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/braceletName"
-            android:text="Käufer" />
+            android:layout_column="1"
+            android:layout_gravity="left"
+            android:layout_row="1"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/braceletName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_gravity="left"
+            android:text="" />
 
         <TextView
             android:id="@+id/braceletPicCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/braceletOwner"
-            android:text="x Bilder" />
+            android:layout_column="1"
+            android:layout_gravity="left"
+            android:text="" />
 
         <TextView
             android:id="@+id/braceletLastLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/braceletPicCount"
-            android:text="letzter Ort" />
-    </RelativeLayout>
+            android:layout_column="1"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
+            android:text="" />
+    </GridLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -55,21 +101,21 @@
             android:id="@+id/imageView1"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="0.30"
+            android:layout_weight="0.33"
             android:src="@drawable/no_pic" />
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="0.30"
+            android:layout_weight="0.33"
             android:src="@drawable/no_pic" />
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="0.30"
+            android:layout_weight="0.33"
             android:src="@drawable/no_pic" />
     </LinearLayout>
 

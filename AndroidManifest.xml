@@ -3,7 +3,8 @@
     package="net.placelet"
     android:versionCode="119"
     android:versionName="1.1.9" >
-	<!-- Change Version here, in the string resources and in the Webserver Class -->
+
+    <!-- Change Version here, in the string resources and in the Webserver Class -->
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
@@ -29,6 +30,10 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <!-- Google Maps Android API v2OpenGL requires OpenGL -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <permission
         android:name="net.placelet.permission.C2D_MESSAGE"
@@ -105,13 +110,11 @@
         <receiver android:name="com.pushbots.push.MsgReceiver" />
 
         <service android:name="com.pushbots.push.GCMIntentService" />
-        
         <service android:name="org.openudid.OpenUDID_service" >
             <intent-filter>
                 <action android:name="org.openudid.GETUDID" />
             </intent-filter>
         </service>
-        
 
         <intent-filter>
             <action android:name="net.placelet.MESSAGE" />
@@ -142,6 +145,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.placelet.MainActivity" />
         </activity>
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyDP3GVSEvSN65ekZmdm90ORbgva4p6Tg6E" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

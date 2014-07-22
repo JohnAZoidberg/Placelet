@@ -178,6 +178,8 @@ public class BraceletActivity extends FragmentActivity {
 				picture.date = pictures.getLong("date");
 				picture.id = pictures.getInt("id");
 				picture.fileext = pictures.getString("fileext");
+				picture.latitude = pictures.getDouble("latitude");
+				picture.longitude = pictures.getDouble("longitude");
 				picture.loadImage = settingsPrefs.getBoolean("pref_download_pics", true);
 				bracelet.pictures.add(picture);
 			} catch (JSONException e) {

@@ -59,6 +59,9 @@
     <string name="message_status">Nachrichten Status</string>
     <string name="no_login">Ohne einloggen fortfahren</string>
     <string name="offline">Kein Internet</string>
+    <string name="last_location">Letzter Ort</string>
+    <string name="owner">Besitzer</string>
+    <string name="pic_count">Bilderanzahl</string>
     
     <!-- Picture upload error messages -->
     <string name="city_short">Stadt zu kurz!</string>

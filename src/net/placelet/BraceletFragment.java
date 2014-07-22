@@ -1,6 +1,18 @@
 package net.placelet;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 import net.placelet.data.Bracelet;
+import net.placelet.data.Picture;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,6 +33,8 @@ public class BraceletFragment extends Fragment {
 	private ImageView imgView2;
 	private ImageView imgView3;
 
+	private GoogleMap googleMap;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		braceletActivity = (BraceletActivity) getActivity();
@@ -35,16 +49,49 @@ public class BraceletFragment extends Fragment {
 		imgView2 = (ImageView) rootView.findViewById(R.id.imageView2);
 		imgView3 = (ImageView) rootView.findViewById(R.id.imageView3);
 		updateData();
+		try {
+			// Loading map
+			initializeMap();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return rootView;
 	}
 
+	private void initializeMap() {
+		if (googleMap == null) {
+			googleMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+
+			// check if map is created successfully or not
+			if (googleMap == null) {
+				Util.alert("Sorry! unable to create maps", braceletActivity);
+			}
+			PolylineOptions rectOptions = new PolylineOptions();
+			LatLngBounds.Builder builder = new LatLngBounds.Builder();
+			for (Picture picture : bracelet.pictures) {
+				MarkerOptions marker = new MarkerOptions().position(new LatLng(picture.latitude, picture.longitude)).title(picture.title);
+				googleMap.addMarker(marker);
+
+				rectOptions.add(new LatLng(picture.latitude, picture.longitude));
+				Polyline polyline = googleMap.addPolyline(rectOptions);
+				
+		    builder.include(marker.getPosition());
+			}
+			LatLngBounds bounds = builder.build();
+		//Change the padding as per needed
+		CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 25, 25, 5);
+			googleMap.moveCamera(cu);
+		}
+	}
+
 	public void updateData() {
-		if(bracelet.isFilled()) {
+		if (bracelet.isFilled()) {
 			nameView.setText(bracelet.name);
 			ownerView.setText(bracelet.owner);
 			picCountView.setText(bracelet.picAnz + "");
 			lastLocationView.setText(bracelet.lastCity + ", " + bracelet.lastCountry);
-	
+
 			switch (bracelet.pictures.size()) {
 				default:
 				case 3:

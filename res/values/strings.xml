@@ -61,6 +61,9 @@
     <string name="message_status">Message Status</string>
     <string name="no_login">Continue without logging in</string>
     <string name="offline">No Internet</string>
+    <string name="last_location">Last Location</string>
+    <string name="owner">Owner</string>
+    <string name="pic_count">Picture Count</string>
     
     <!-- Picture upload error messages -->
     <string name="city_short">City too short!</string>
