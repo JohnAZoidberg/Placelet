@@ -61,12 +61,13 @@ public class BraceletFragment extends Fragment {
 	private void initializeMap() {
 		if (googleMap == null) {
 			googleMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-
 			// check if map is created successfully or not
 			if (googleMap == null) {
 				Util.alert("Sorry! unable to create maps", braceletActivity);
+			}else {
+				googleMap.getUiSettings().setRotateGesturesEnabled(true);
+				putMarkers();
 			}
-			putMarkers();
 		}
 	}
 
