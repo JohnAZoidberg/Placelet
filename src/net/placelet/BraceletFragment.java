@@ -80,7 +80,7 @@ public class BraceletFragment extends Fragment {
 			googleMap.addMarker(marker);
 
 			rectOptions.add(new LatLng(picture.latitude, picture.longitude));
-			Polyline polyline = googleMap.addPolyline(rectOptions);
+			googleMap.addPolyline(rectOptions);
 
 			builder.include(marker.getPosition());
 		}

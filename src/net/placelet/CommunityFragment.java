@@ -20,8 +20,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -33,7 +34,6 @@ public class CommunityFragment extends Fragment {
 	private ListView list;
 	private final int PIC_COUNT = 5;
 	private int picnr = 8;
-	private Button btnLoadMore;
 	private SwipeRefreshLayout swipeLayout;
 
 	@Override
@@ -44,6 +44,7 @@ public class CommunityFragment extends Fragment {
 		// Initiate ListView
 		list = (ListView) rootView.findViewById(R.id.listView1);
 		list.setClickable(true);
+		list.setOnScrollListener(new EndlessScrollListener());
 		list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -62,7 +63,7 @@ public class CommunityFragment extends Fragment {
 				loadPictures(0, true);
 			}
 		});
-		
+
 		loadPictures(0, false);
 		return rootView;
 	}
@@ -121,10 +122,6 @@ public class CommunityFragment extends Fragment {
 				if (result.getString("error").equals("no_internet")) {
 					toggleLoading(false);
 					picnr = PIC_COUNT;
-					if (btnLoadMore != null) {
-						list.removeFooterView(btnLoadMore);
-						btnLoadMore = null;
-					}
 					return;
 				}
 			} catch (JSONException e) {
@@ -137,8 +134,6 @@ public class CommunityFragment extends Fragment {
 	}
 
 	private void loadMore(boolean reload) {
-		if (btnLoadMore != null)
-			btnLoadMore.setEnabled(false);
 		if (!reload)
 			picnr += PIC_COUNT;
 		loadPictures(picnr, false);
@@ -170,16 +165,6 @@ public class CommunityFragment extends Fragment {
 			}
 		}
 		Collections.sort(pictureList);
-		if (btnLoadMore == null) {
-			btnLoadMore = new Button(mainActivity);
-			btnLoadMore.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View arg0) {
-					loadMore(false);
-				}
-			});
-			list.addFooterView(btnLoadMore);
-		}
 		adapter.notifyDataSetChanged();
 		toggleLoading(false);
 	}
@@ -203,18 +188,32 @@ public class CommunityFragment extends Fragment {
 	private void toggleLoading(boolean start) {
 		if (start) {
 			//mainActivity.setProgressBarIndeterminateVisibility(true);
-			if(swipeLayout != null) swipeLayout.setRefreshing(true);
-			if (btnLoadMore != null) {
-				btnLoadMore.setText(getText(R.string.loading));
-				btnLoadMore.setEnabled(false);
-			}
+			if (swipeLayout != null)
+				swipeLayout.setRefreshing(true);
 		} else {
 			//mainActivity.setProgressBarIndeterminateVisibility(false);
-			if(swipeLayout != null) swipeLayout.setRefreshing(false);
-			if (btnLoadMore != null) {
-				btnLoadMore.setEnabled(true);
-				btnLoadMore.setText(getString(R.string.load_more));
-			}
+			if (swipeLayout != null)
+				swipeLayout.setRefreshing(false);
 		}
 	}
+
+	public class EndlessScrollListener implements OnScrollListener {
+		private int preLast;
+
+		@Override
+		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+			final int lastItem = firstVisibleItem + visibleItemCount;
+			if (lastItem == totalItemCount) {
+				if (preLast != lastItem) { //to avoid multiple calls for last item
+					loadMore(false);
+					preLast = lastItem;
+				}
+			}
+		}
+
+		@Override
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+		}
+	}
+
 }
