@@ -4,7 +4,6 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -67,25 +66,31 @@ public class BraceletFragment extends Fragment {
 			if (googleMap == null) {
 				Util.alert("Sorry! unable to create maps", braceletActivity);
 			}
-			PolylineOptions rectOptions = new PolylineOptions();
-			LatLngBounds.Builder builder = new LatLngBounds.Builder();
-			for (Picture picture : bracelet.pictures) {
-				MarkerOptions marker = new MarkerOptions().position(new LatLng(picture.latitude, picture.longitude)).title(picture.title);
-				googleMap.addMarker(marker);
-
-				rectOptions.add(new LatLng(picture.latitude, picture.longitude));
-				Polyline polyline = googleMap.addPolyline(rectOptions);
-				
-		    builder.include(marker.getPosition());
-			}
-			LatLngBounds bounds = builder.build();
-		//Change the padding as per needed
-		CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 25, 25, 5);
-			googleMap.moveCamera(cu);
+			putMarkers();
 		}
 	}
 
+	private void putMarkers() {
+		initializeMap();
+		PolylineOptions rectOptions = new PolylineOptions();
+		LatLngBounds.Builder builder = new LatLngBounds.Builder();
+		for (Picture picture : bracelet.pictures) {
+			MarkerOptions marker = new MarkerOptions().position(new LatLng(picture.latitude, picture.longitude)).title(picture.title);
+			googleMap.addMarker(marker);
+
+			rectOptions.add(new LatLng(picture.latitude, picture.longitude));
+			Polyline polyline = googleMap.addPolyline(rectOptions);
+
+			builder.include(marker.getPosition());
+		}
+		LatLngBounds bounds = builder.build();
+		
+		CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 25, 25, 5);
+		googleMap.moveCamera(cu);
+	}
+
 	public void updateData() {
+		bracelet = braceletActivity.bracelet;
 		if (bracelet.isFilled()) {
 			nameView.setText(bracelet.name);
 			ownerView.setText(bracelet.owner);
@@ -105,5 +110,6 @@ public class BraceletFragment extends Fragment {
 					break;
 			}
 		}
+		putMarkers();
 	}
 }

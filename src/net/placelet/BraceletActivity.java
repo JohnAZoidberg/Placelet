@@ -188,6 +188,7 @@ public class BraceletActivity extends FragmentActivity {
 		}
 
 		Collections.sort(bracelet.pictures);
+		bracelet.html_entity_decode();
 		if(pictureFragment != null) {
 			pictureFragment.updateData();
 		}

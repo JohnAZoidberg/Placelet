@@ -26,7 +26,6 @@ public class BraceletAdapter extends ArrayAdapter<Picture> {
 		View element = convertView;
 		ViewHolderItem viewHolder;
 		Picture picture = communityList.get(position);
-		picture.html_entity_decode();
 		if (element == null) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			// Load different layout if no pictures should be displayed
