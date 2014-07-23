@@ -14,6 +14,7 @@ import net.placelet.data.Picture;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ public class CommunityFragment extends Fragment {
 	private final int PIC_COUNT = 5;
 	private int picnr = 8;
 	private Button btnLoadMore;
+	private SwipeRefreshLayout swipeLayout;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +56,14 @@ public class CommunityFragment extends Fragment {
 		list.setAdapter(adapter);
 		loadPictures(0, false);
 
+		swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+		swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
+		swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				loadPictures(0, true);
+			}
+		});
 		return rootView;
 	}
 
@@ -88,7 +98,7 @@ public class CommunityFragment extends Fragment {
 			Pictures pics = new Pictures();
 			pics.start = start;
 			pics.execute();
-		}else {
+		} else {
 			toggleLoading(false);
 		}
 	}
@@ -189,16 +199,18 @@ public class CommunityFragment extends Fragment {
 		if (jArray != null)
 			updateListView(jArray, 0);
 	}
-	
+
 	private void toggleLoading(boolean start) {
-		if(start) {
-			mainActivity.setProgressBarIndeterminateVisibility(true);
+		if (start) {
+			//mainActivity.setProgressBarIndeterminateVisibility(true);
+			if(swipeLayout != null) swipeLayout.setRefreshing(true);
 			if (btnLoadMore != null) {
 				btnLoadMore.setText(getText(R.string.loading));
 				btnLoadMore.setEnabled(false);
 			}
-		}else {
-			mainActivity.setProgressBarIndeterminateVisibility(false);
+		} else {
+			//mainActivity.setProgressBarIndeterminateVisibility(false);
+			if(swipeLayout != null) swipeLayout.setRefreshing(false);
 			if (btnLoadMore != null) {
 				btnLoadMore.setEnabled(true);
 				btnLoadMore.setText(getString(R.string.load_more));
