@@ -187,11 +187,11 @@ public class CommunityFragment extends Fragment {
 
 	private void toggleLoading(boolean start) {
 		if (start) {
-			//mainActivity.setProgressBarIndeterminateVisibility(true);
+			mainActivity.setProgressBarIndeterminateVisibility(true);
 			if (swipeLayout != null)
 				swipeLayout.setRefreshing(true);
 		} else {
-			//mainActivity.setProgressBarIndeterminateVisibility(false);
+			mainActivity.setProgressBarIndeterminateVisibility(false);
 			if (swipeLayout != null)
 				swipeLayout.setRefreshing(false);
 		}
@@ -203,7 +203,7 @@ public class CommunityFragment extends Fragment {
 		@Override
 		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 			final int lastItem = firstVisibleItem + visibleItemCount;
-			if (lastItem == totalItemCount) {
+			if (lastItem + 1 == totalItemCount) {
 				if (preLast != lastItem) { //to avoid multiple calls for last item
 					loadMore(false);
 					preLast = lastItem;

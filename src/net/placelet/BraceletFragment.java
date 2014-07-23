@@ -7,7 +7,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import net.placelet.data.Bracelet;
@@ -76,15 +75,16 @@ public class BraceletFragment extends Fragment {
 		PolylineOptions rectOptions = new PolylineOptions();
 		LatLngBounds.Builder builder = new LatLngBounds.Builder();
 		for (Picture picture : bracelet.pictures) {
-			MarkerOptions marker = new MarkerOptions().position(new LatLng(picture.latitude, picture.longitude)).title(picture.title);
+			LatLng latLng = new LatLng(picture.latitude, picture.longitude);
+			MarkerOptions marker = new MarkerOptions().position(latLng).title(picture.title);
 			googleMap.addMarker(marker);
 
-			rectOptions.add(new LatLng(picture.latitude, picture.longitude));
+			rectOptions.add(latLng);
 			googleMap.addPolyline(rectOptions);
 
-			builder.include(marker.getPosition());
+			builder.include(latLng);
 		}
-		LatLngBounds bounds = builder.build();
+		LatLngBounds bounds = builder.build();// TODO sometimes error: no included points
 		
 		CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 25, 25, 5);
 		googleMap.moveCamera(cu);
