@@ -13,6 +13,7 @@ import net.placelet.data.Picture;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ public class MyPlaceletFragment extends Fragment {
 	private MyPlaceletAdapter adapter;
 	private ArrayList<Bracelet> braceletList = new ArrayList<Bracelet>();
 	private ListView list;
+	private SwipeRefreshLayout swipeLayout;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +47,15 @@ public class MyPlaceletFragment extends Fragment {
 		adapter = new MyPlaceletAdapter(mainActivity, 0, braceletList);
 		list.setAdapter(adapter);
 
+		swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+		swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
+		swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				loadBracelets(true);
+			}
+		});
+		
 		loadBracelets(false);
 		return rootView;
 	}
@@ -64,7 +75,7 @@ public class MyPlaceletFragment extends Fragment {
 			// check if connected to the internet
 			try {
 				if (result.getString("error").equals("no_internet")) {
-					mainActivity.setProgressBarIndeterminateVisibility(false);
+					swipeLayout.setRefreshing(false);
 					return;
 				}
 			} catch (JSONException e) {
@@ -77,7 +88,7 @@ public class MyPlaceletFragment extends Fragment {
 	}
 
 	public void loadBracelets(boolean reload) {
-		mainActivity.setProgressBarIndeterminateVisibility(true);
+		swipeLayout.setRefreshing(true);
 		// display saved pics if it shouldn't reload and if there are pics saved
 		String savedBracelets = mainActivity.prefs.getString("myPlacelet", "null");
 		if (!savedBracelets.equals("null") && !reload) {
@@ -88,7 +99,7 @@ public class MyPlaceletFragment extends Fragment {
 			Bracelets bracelets = new Bracelets();
 			bracelets.execute();
 		} else {
-			mainActivity.setProgressBarIndeterminateVisibility(false);
+			swipeLayout.setRefreshing(false);
 		}
 	}
 
@@ -145,7 +156,7 @@ public class MyPlaceletFragment extends Fragment {
 			}
 		}
 		adapter.notifyDataSetChanged();
-		mainActivity.setProgressBarIndeterminateVisibility(false);
+		swipeLayout.setRefreshing(false);
 	}
 
 }

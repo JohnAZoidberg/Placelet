@@ -65,7 +65,7 @@ public class BraceletActivity extends FragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		Util.inflateActionBar(this, menu, false);
+		Util.inflateActionBar(this, menu, true);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -125,7 +125,7 @@ public class BraceletActivity extends FragmentActivity {
 			// check if connected to the internet
 			try {
 				if (result.getString("error").equals("no_internet")) {
-					//setProgressBarIndeterminateVisibility(false);
+					//toggleLoading(false);
 					return;
 				}
 			} catch (JSONException e) {
@@ -138,7 +138,7 @@ public class BraceletActivity extends FragmentActivity {
 	}
 
 	public void loadPictures(boolean reload) {
-		setProgressBarIndeterminateVisibility(true);
+		toggleLoading(true);
 		// display saved pics if it shouldn't reload and if there are pics saved
 		String savedBracelet = prefs.getString("braceletData-" + bracelet.brid, "null");
 		if (!savedBracelet.equals("null") && !reload) {
@@ -149,7 +149,7 @@ public class BraceletActivity extends FragmentActivity {
 			BraceletData pics = new BraceletData();
 			pics.execute();
 		}else {
-			setProgressBarIndeterminateVisibility(false);
+			toggleLoading(false);
 		}
 	}
 
@@ -195,7 +195,7 @@ public class BraceletActivity extends FragmentActivity {
 		if(braceletFragment != null) {
 			braceletFragment.updateData();
 		}
-		setProgressBarIndeterminateVisibility(false);
+		toggleLoading(false);
 	}
 
 	public void loadSavedBracelet(String result) {
@@ -205,6 +205,16 @@ public class BraceletActivity extends FragmentActivity {
 			updateBracelet(jArray);
 		} catch (JSONException e) {
 			Log.e("log_tag", "Error parsing data " + e.toString());
+		}
+	}
+
+	private void toggleLoading(boolean start) {
+		if (start) {
+			setProgressBarIndeterminateVisibility(true);
+			if(pictureFragment!= null && pictureFragment.swipeLayout != null) pictureFragment.swipeLayout.setRefreshing(true);
+		} else {
+			setProgressBarIndeterminateVisibility(false);
+			if(pictureFragment!= null && pictureFragment.swipeLayout != null) pictureFragment.swipeLayout.setRefreshing(false);
 		}
 	}
 }

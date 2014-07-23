@@ -54,8 +54,6 @@ public class CommunityFragment extends Fragment {
 		});
 		adapter = new CommunityAdapter(mainActivity, 0, pictureList);
 		list.setAdapter(adapter);
-		loadPictures(0, false);
-
 		swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
 		swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
 		swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -64,6 +62,8 @@ public class CommunityFragment extends Fragment {
 				loadPictures(0, true);
 			}
 		});
+		
+		loadPictures(0, false);
 		return rootView;
 	}
 

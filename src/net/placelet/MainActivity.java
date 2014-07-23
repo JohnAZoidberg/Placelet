@@ -32,7 +32,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		Util.inflateActionBar(this, menu, false);
+		Util.inflateActionBar(this, menu, true);
 		return super.onCreateOptionsMenu(menu);
 	}
 

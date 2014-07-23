@@ -4,6 +4,7 @@ import net.placelet.data.Picture;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ public class PictureFragment extends Fragment {
 	private BraceletActivity braceletActivity;
 	private BraceletAdapter adapter;
 	private ListView list;
+	public SwipeRefreshLayout swipeLayout;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,6 +39,16 @@ public class PictureFragment extends Fragment {
 				showPopup(pic);
 			}
 		});
+		
+		swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+		swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
+		swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				braceletActivity.loadPictures(true);
+			}
+		});
+		
 		updateData();
 		return rootView;
 	}

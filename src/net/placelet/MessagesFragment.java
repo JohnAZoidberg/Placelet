@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ public class MessagesFragment extends Fragment {
 	private MessagesAdapter adapter;
 	private List<Message> messageList = new ArrayList<Message>();
 	private ListView list;
+	private SwipeRefreshLayout swipeLayout;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +65,15 @@ public class MessagesFragment extends Fragment {
 				return false;
 			}
 		});
+		swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+		swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
+		swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				loadMessages(true);
+			}
+		});
+		
 		loadMessages(false);
 		return rootView;
 	}
@@ -92,7 +103,7 @@ public class MessagesFragment extends Fragment {
 		protected void onPostExecute(JSONObject result) {
 			try {
 				if (result.getString("error").equals("no_internet")) {
-					mainActivity.setProgressBarIndeterminateVisibility(false);
+					swipeLayout.setRefreshing(false);
 					return;
 				}
 			} catch (JSONException e) {
@@ -107,7 +118,7 @@ public class MessagesFragment extends Fragment {
 	}
 
 	public void loadMessages(boolean reload) {
-		mainActivity.setProgressBarIndeterminateVisibility(true);
+		swipeLayout.setRefreshing(true);
 		String savedMessages = mainActivity.prefs.getString("messages", "null");
 		if (!savedMessages.equals("null") && !reload) {
 			loadSavedMessages(savedMessages);
@@ -116,7 +127,7 @@ public class MessagesFragment extends Fragment {
 			Messages login = new Messages();
 			login.execute(User.username);
 		} else {
-			mainActivity.setProgressBarIndeterminateVisibility(false);
+			swipeLayout.setRefreshing(false);
 		}
 	}
 
@@ -146,7 +157,7 @@ public class MessagesFragment extends Fragment {
 		Collections.sort(messageList);
 		list.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
-		mainActivity.setProgressBarIndeterminateVisibility(false);
+		swipeLayout.setRefreshing(false);
 	}
 
 	private void loadSavedMessages(String result) {
