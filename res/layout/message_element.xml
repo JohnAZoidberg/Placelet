@@ -6,7 +6,6 @@
     android:layout_alignParentLeft="true"
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
-    android:background="@color/light_grey"
     android:minHeight="48dp" >
 
     <RelativeLayout

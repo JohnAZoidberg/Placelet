@@ -44,6 +44,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	private Boolean recipientVerified = false;
 	private TextView recipientDisplay;
 	private EditText messageField;
+	private Button b;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -66,7 +67,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		// set up Action Bar
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setTitle(User.username);
-		Button b = (Button) findViewById(R.id.button1);
+		b = (Button) findViewById(R.id.button1);
 		b.setOnClickListener(this);
 		list = (ListView) findViewById(R.id.messagesList);
 		messageField = (EditText) findViewById(R.id.editText1);
@@ -85,11 +86,6 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		if (intent.hasExtra("recipientVerified")) {
 			recipientVerified = intent.getBooleanExtra("recipientVerified", false);
 		}
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
 	}
 
 	private class Messages extends AsyncTask<String, String, JSONObject> {
@@ -144,7 +140,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 	public void sendMessage() {
 		if (Util.notifyIfOffline(this)) {
-			setProgressBarIndeterminateVisibility(true);
+			toggleLoading(true);
 			String message = messageField.getText().toString();
 			messageField.setText("");
 			Messages login = new Messages();
@@ -225,7 +221,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		Collections.reverse(messageList);
 		list.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
-		setProgressBarIndeterminateVisibility(false);
+		toggleLoading(false);
 	}
 
 	private void displayErrorAtMessageFragment(String err) {
@@ -248,5 +244,15 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		}
 		if (jArray != null)
 			updateListView(jArray);
+	}
+
+	private void toggleLoading(boolean loading) {
+		if (loading) {
+				b.setEnabled(false);
+			setProgressBarIndeterminateVisibility(true);
+		} else {
+				b.setEnabled(true);
+			setProgressBarIndeterminateVisibility(false);
+		}
 	}
 }
