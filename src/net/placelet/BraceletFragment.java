@@ -65,7 +65,7 @@ public class BraceletFragment extends Fragment {
 			if (googleMap == null) {
 				Util.alert("Sorry! unable to create maps", braceletActivity);
 			}else {
-				googleMap.getUiSettings().setRotateGesturesEnabled(true);
+				googleMap.getUiSettings().setRotateGesturesEnabled(false);
 				putMarkers();
 			}
 		}
