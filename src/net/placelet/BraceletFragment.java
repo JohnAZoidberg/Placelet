@@ -47,25 +47,23 @@ public class BraceletFragment extends Fragment {
 		imgView2 = (ImageView) rootView.findViewById(R.id.imageView2);
 		imgView3 = (ImageView) rootView.findViewById(R.id.imageView3);
 		updateData();
-		try {
-			// Loading map
-			initializeMap();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		initializeMap();
 		return rootView;
 	}
 
 	private void initializeMap() {
 		if (googleMap == null) {
-			googleMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-			// check if map is created successfully or not
-			if (googleMap == null) {
-				Util.alert("Sorry! unable to create maps", braceletActivity);
-			}else {
-				googleMap.getUiSettings().setRotateGesturesEnabled(false);
-				putMarkers();
+			try {
+				googleMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+				// check if map is created successfully or not
+				if (googleMap == null) {
+					Util.alert("Sorry! unable to create maps", braceletActivity);
+				} else {
+					googleMap.getUiSettings().setRotateGesturesEnabled(false);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -85,7 +83,7 @@ public class BraceletFragment extends Fragment {
 			builder.include(latLng);
 		}
 		LatLngBounds bounds = builder.build();// TODO sometimes error: no included points
-		
+
 		CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 25, 25, 5);
 		googleMap.moveCamera(cu);
 	}
@@ -110,7 +108,7 @@ public class BraceletFragment extends Fragment {
 				case 0:
 					break;
 			}
+			putMarkers();
 		}
-		putMarkers();
 	}
 }

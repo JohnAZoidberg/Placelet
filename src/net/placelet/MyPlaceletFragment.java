@@ -55,7 +55,7 @@ public class MyPlaceletFragment extends Fragment {
 				loadBracelets(true);
 			}
 		});
-		
+
 		loadBracelets(false);
 		return rootView;
 	}
