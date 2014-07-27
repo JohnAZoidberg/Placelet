@@ -40,8 +40,8 @@ public class MyPlaceletFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Bracelet bracelet = (Bracelet) list.getItemAtPosition(position);
-				//mainActivity.switchToBraceletFragment(pic);
-				NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", bracelet.brid);
+				if (bracelet.isFilled())
+                    NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", bracelet.brid);
 			}
 		});
 		adapter = new MyPlaceletAdapter(mainActivity, 0, braceletList);
