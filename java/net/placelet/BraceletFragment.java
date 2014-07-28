@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class BraceletFragment extends Fragment {
@@ -31,8 +32,9 @@ public class BraceletFragment extends Fragment {
 	private ImageView imgView3;
 
 	private GoogleMap googleMap;
+    private LinearLayout linearLayout;
 
-	@Override
+    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		braceletActivity = (BraceletActivity) getActivity();
 		bracelet = braceletActivity.bracelet;
@@ -44,6 +46,13 @@ public class BraceletFragment extends Fragment {
 		imgView1 = (ImageView) rootView.findViewById(R.id.imageView1);
 		imgView2 = (ImageView) rootView.findViewById(R.id.imageView2);
 		imgView3 = (ImageView) rootView.findViewById(R.id.imageView3);
+        linearLayout = (LinearLayout) rootView.findViewById(R.id.linearLayout1);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                braceletActivity.switchFragment(1);
+            }
+        });
 		updateData();
 		initializeMap();
 		return rootView;

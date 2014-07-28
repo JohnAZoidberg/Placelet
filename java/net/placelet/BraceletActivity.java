@@ -217,4 +217,8 @@ public class BraceletActivity extends FragmentActivity {
 			if(pictureFragment!= null && pictureFragment.swipeLayout != null) pictureFragment.swipeLayout.setRefreshing(false);
 		}
 	}
+
+    public void switchFragment(int number) {
+        mPager.setCurrentItem(number);
+    }
 }
