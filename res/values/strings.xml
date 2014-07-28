@@ -106,5 +106,6 @@
     <string name="title_activity_bracelet">BraceletActivity</string>
     <string name="own_pics">Own Picture</string>
     <string name="own_bracelets">Own Bracelets</string>
+    <string name="by">by</string>
 
 </resources>

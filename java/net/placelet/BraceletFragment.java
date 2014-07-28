@@ -23,8 +23,7 @@ public class BraceletFragment extends Fragment {
 	private BraceletActivity braceletActivity;
 	private Bracelet bracelet;
 
-	private TextView nameView;
-	private TextView ownerView;
+	private TextView headerView;
 	private TextView picCountView;
 	private TextView lastLocationView;
 	private ImageView imgView1;
@@ -39,8 +38,7 @@ public class BraceletFragment extends Fragment {
 		bracelet = braceletActivity.bracelet;
 		View rootView = inflater.inflate(R.layout.fragment_bracelet, container, false);
 
-		nameView = (TextView) rootView.findViewById(R.id.braceletName);
-		ownerView = (TextView) rootView.findViewById(R.id.braceletOwner);
+		headerView = (TextView) rootView.findViewById(R.id.braceletHeader);
 		picCountView = (TextView) rootView.findViewById(R.id.braceletPicCount);
 		lastLocationView = (TextView) rootView.findViewById(R.id.braceletLastLocation);
 		imgView1 = (ImageView) rootView.findViewById(R.id.imageView1);
@@ -91,8 +89,7 @@ public class BraceletFragment extends Fragment {
 	public void updateData() {
 		bracelet = braceletActivity.bracelet;
 		if (bracelet.isFilled()) {
-			nameView.setText(bracelet.name);
-			ownerView.setText(bracelet.owner);
+            headerView.setText(bracelet.name + " " + braceletActivity.getString(R.string.by) + " " + bracelet.owner);
 			picCountView.setText(bracelet.picAnz + "");
 			lastLocationView.setText(bracelet.lastCity + ", " + bracelet.lastCountry);
 
