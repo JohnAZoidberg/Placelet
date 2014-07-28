@@ -34,7 +34,7 @@ public class MyPlaceletAdapter extends ArrayAdapter<Bracelet> {
 			// Load different layout if no pictures should be displayed
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			if (picture.loadImage) {
-				element = inflater.inflate(R.layout.my_placelet_element, null);
+				element = inflater.inflate(R.layout.community_element, null);
 			} else {
 				element = inflater.inflate(R.layout.community_nopic_element, null);
 			}
