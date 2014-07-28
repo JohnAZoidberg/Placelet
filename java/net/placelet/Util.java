@@ -77,17 +77,10 @@ public class Util {
 	}
 
 	public static void loadThumbnail(Context context, ImageView imgView, int picid) {
-		int picWidth = (int) (Util.width * 0.3);
-		int picHeight = (int) (Util.height * 0.15);
-		// different width and height ratio if in landscape orientation
-		int orientation = Util.display.getRotation();
-		if (orientation == 1 || orientation == 3) {
-			picWidth = (int) (Util.width * 0.15);
-			picHeight = (int) (Util.height * 0.3);
-		}
-		imgView.setMaxHeight(picWidth);
-		imgView.setMaxWidth(picHeight);
-		Picasso.with(context).load("http://placelet.de/pictures/bracelets/thumb-" + picid + ".jpg").placeholder(R.drawable.no_pic).resize(picWidth, picHeight).into(imgView);
+        float dpi = context.getResources().getDisplayMetrics().density;
+		int picWidth = (int) (108 * (dpi));
+		int picHeight = (int) (96 * (dpi));
+		Picasso.with(context).load("http://placelet.de/pictures/bracelets/thumb-" + picid + ".jpg").resize(picWidth, picHeight).into(imgView);
 	}
 
 	public static void inflateActionBar(Activity activity, Menu menu, boolean noReload) {
