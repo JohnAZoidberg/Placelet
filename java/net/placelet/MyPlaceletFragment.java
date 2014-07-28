@@ -40,7 +40,7 @@ public class MyPlaceletFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Bracelet bracelet = (Bracelet) list.getItemAtPosition(position);
-				if (bracelet.isFilled())
+				if (bracelet.pictures.get(0).stringData == null)
                     NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", bracelet.brid);
 			}
 		});
@@ -125,9 +125,9 @@ public class MyPlaceletFragment extends Fragment {
 				Bracelet bracelet = new Bracelet("");
 				Picture picture = new Picture();
 				if (key.equals("pics")) {
-					picture.stringData = "Eigene Bilder";
+					picture.stringData = mainActivity.getString(R.string.own_pics);
 				} else {
-					picture.stringData = "Eigene Armbänder";
+					picture.stringData = mainActivity.getString(R.string.own_bracelets);
 				}
 				bracelet.pictures.add(picture);
 				braceletList.add(bracelet);
