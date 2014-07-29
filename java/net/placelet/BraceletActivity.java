@@ -210,10 +210,10 @@ public class BraceletActivity extends FragmentActivity {
 
 	private void toggleLoading(boolean start) {
 		if (start) {
-			setProgressBarIndeterminateVisibility(true);
+			//setProgressBarIndeterminateVisibility(true);
 			if(pictureFragment!= null && pictureFragment.swipeLayout != null) pictureFragment.swipeLayout.setRefreshing(true);
 		} else {
-			setProgressBarIndeterminateVisibility(false);
+			//setProgressBarIndeterminateVisibility(false);
 			if(pictureFragment!= null && pictureFragment.swipeLayout != null) pictureFragment.swipeLayout.setRefreshing(false);
 		}
 	}

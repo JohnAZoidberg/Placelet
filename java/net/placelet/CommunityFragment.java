@@ -187,11 +187,11 @@ public class CommunityFragment extends Fragment {
 
 	private void toggleLoading(boolean start) {
 		if (start) {
-			mainActivity.setProgressBarIndeterminateVisibility(true);
+			//mainActivity.setProgressBarIndeterminateVisibility(true);
 			if (swipeLayout != null)
 				swipeLayout.setRefreshing(true);
 		} else {
-			mainActivity.setProgressBarIndeterminateVisibility(false);
+			//mainActivity.setProgressBarIndeterminateVisibility(false);
 			if (swipeLayout != null)
 				swipeLayout.setRefreshing(false);
 		}
