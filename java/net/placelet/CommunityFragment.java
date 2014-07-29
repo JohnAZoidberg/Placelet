@@ -33,7 +33,7 @@ public class CommunityFragment extends Fragment {
 	private List<Picture> pictureList = new ArrayList<Picture>();
 	private ListView list;
 	private final int PIC_COUNT = 5;
-	private int picnr = 8;
+	private int picnr = 10;
 	private SwipeRefreshLayout swipeLayout;
 
 	@Override
@@ -203,7 +203,7 @@ public class CommunityFragment extends Fragment {
 		@Override
 		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 			final int lastItem = firstVisibleItem + visibleItemCount;
-			if (lastItem + 1 == totalItemCount) {
+			if (lastItem + 2 == totalItemCount) {
 				if (preLast != lastItem) { //to avoid multiple calls for last item
 					loadMore(false);
 					preLast = lastItem;
