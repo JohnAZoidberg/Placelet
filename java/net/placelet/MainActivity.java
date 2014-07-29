@@ -71,7 +71,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         // Add Tabs
-        actionBar.addTab(actionBar.newTab().setText(R.string.community_uc).setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setIcon(R.drawable.globe).setTabListener(this));
         // Set Action-Bar title
         if (User.getStatus()) {
             actionBar.setTitle(User.username);
