@@ -45,5 +45,6 @@
 
     <style name="list_header">
         <item name="android:textStyle">bold</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
 </resources>

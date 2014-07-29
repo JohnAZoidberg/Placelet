@@ -13,63 +13,23 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:id="@+id/startEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_below="@+id/braceletHeader"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"/>
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/gridLayout1"
-        class="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_below="@+id/braceletHeader"/>
-
-    <GridLayout
-        android:id="@+id/gridLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_above="@+id/linearLayout1"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:columnCount="2"
-        android:useDefaultMargins="true">
-
-        <TextView
-            style="@style/list_header"
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left"
-            android:text="@string/last_location"
-            android:layout_row="0"/>
-
-        <TextView
-            style="@style/list_header"
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="left"
-            android:text="@string/pic_count"
-            android:layout_row="5"/>
-
-        <TextView
-            android:id="@+id/braceletPicCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="left"
-            android:text=""
-            android:layout_row="5"/>
-
-        <TextView
-            android:id="@+id/braceletLastLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="left|top"
-            android:layout_row="0"
-            android:text="" />
-    </GridLayout>
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_below="@+id/startEnd"/>
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -77,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true" >
+        android:layout_alignParentRight="true">
 
         <ImageView
             android:id="@+id/imageView1"
