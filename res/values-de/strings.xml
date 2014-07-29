@@ -95,6 +95,8 @@
     <string name="months_ago_pl">" Monaten"</string>
     <string name="weeks_ago_sg">" Woche"</string>
     <string name="months_ago_sg">" Monat"</string>
+
+    <string name="action_settings">Einstellungen</string>
     <string name="own_pics">Eigene Bilder</string>
     <string name="own_bracelets">Eigene Armbänder</string>
     <string name="by">von</string>
