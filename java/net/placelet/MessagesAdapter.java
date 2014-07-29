@@ -40,7 +40,7 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
 		TextView messageContent = (TextView) element.findViewById(R.id.message);
 		TextView date = (TextView) element.findViewById(R.id.date);
 		ImageView imgView = (ImageView) element.findViewById(R.id.status_image);
-		if(message.seen != 0) imgView.setImageResource(R.drawable.tick);
+		if(message.seen > 0) imgView.setImageResource(R.drawable.tick);
 		
 		String displayMessage = message.message.length() > 20 ? message.message.replaceAll("\n", " ").substring(0, 20).trim()  + "..." : message.message;
 		sender.setText(message.sender);

@@ -30,6 +30,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,8 +46,9 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	private TextView recipientDisplay;
 	private EditText messageField;
 	private Button b;
+    private RelativeLayout footer;
 
-	@Override
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		Util.inflateActionBar(this, menu, false);
 		return super.onCreateOptionsMenu(menu);
@@ -203,6 +205,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 							Message msg = new Message();
 							msg.message = messages.getString("message");
 							msg.sent = messages.getLong("sent");
+                            msg.seen = messages.getLong("seen");
 							msg.loadImage = settingsPrefs.getBoolean("pref_download_pics", true);
 							msg.senderID = Integer.parseInt(messages.getJSONObject("sender").getString("id"));
 							msg.sender = messages.getJSONObject("sender").getString("name");
@@ -221,6 +224,16 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		Collections.reverse(messageList);
 		list.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
+        long last_seen = messageList.get(messageList.size() - 1).seen;
+        long first_seen = messageList.get(0).seen;
+        if(footer != null)
+            list.removeFooterView(footer);
+        if(last_seen > 0) {
+            footer = (RelativeLayout) getLayoutInflater().inflate(R.layout.seen_footer, null);
+            TextView footer_seen = (TextView) footer.findViewById(R.id.textView);
+            footer_seen.append(" " + Util.timestampToTime(last_seen));
+            list.addFooterView(footer);
+        }
 		toggleLoading(false);
 	}
 

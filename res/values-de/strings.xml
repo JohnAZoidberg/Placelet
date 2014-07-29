@@ -100,5 +100,6 @@
     <string name="own_pics">Eigene Bilder</string>
     <string name="own_bracelets">Eigene Armbänder</string>
     <string name="by">von</string>
+    <string name="seen">Gesehen</string>
 
 </resources>
