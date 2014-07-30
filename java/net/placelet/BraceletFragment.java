@@ -87,11 +87,11 @@ public class BraceletFragment extends Fragment {
 			LatLng latLng = new LatLng(picture.latitude, picture.longitude);
 			MarkerOptions marker = new MarkerOptions().position(latLng).title(picture.title);
             if(firstMarker) {
-                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 firstMarker = false;
             }
             if (!i.hasNext()) {
-                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
             }
 			googleMap.addMarker(marker);
 
