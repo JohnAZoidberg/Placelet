@@ -101,5 +101,9 @@
     <string name="own_bracelets">Eigene Armbänder</string>
     <string name="by">von</string>
     <string name="seen">Gesehen</string>
+    <string name="subscribe">Abonnieren</string>
+    <string name="subscribed">Abonniert</string>
+    <string name="unsubscribe">Deabonnieren</string>
+    <string name="unsubscribed">Deabonniert</string>
 
 </resources>

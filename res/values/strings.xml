@@ -108,5 +108,9 @@
     <string name="own_bracelets">Own Bracelets</string>
     <string name="by">by</string>
     <string name="seen">Seen</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="subscribed">Subscribed</string>
+    <string name="unsubscribe">unsubscribe</string>
+    <string name="unsubscribed">unsubscribed</string>
 
 </resources>

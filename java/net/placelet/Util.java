@@ -119,6 +119,6 @@ public class Util {
 	}
 
 	public static void alert(String msg, Context context) {
-		Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+		Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 	}
 }

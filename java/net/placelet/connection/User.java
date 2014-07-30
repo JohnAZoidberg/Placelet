@@ -221,6 +221,10 @@ public class User {
 		JSONObject result = null;
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
+        args.put("androidAuthenticate", "true");
+        args.put("user", username);
+        args.put("dynPW", dynPW);
+
 		args.put("androidGetBraceletData", "true");
 		args.put("braceID", brid);
 		result = server.postRequest(args);
@@ -236,4 +240,42 @@ public class User {
 		result = server.postRequest(args);
 		return result;
 	}
+
+    public boolean subscribe(String brid) {
+        JSONObject result = null;
+        Webserver server = new Webserver();
+        HashMap<String, String> args = new HashMap<String, String>();
+        args.put("androidAuthenticate", "true");
+        args.put("user", username);
+        args.put("dynPW", dynPW);
+
+        args.put("androidSubscribe", "true");
+        args.put("brid", brid);
+        result = server.postRequest(args);
+        try {
+            result.getBoolean("subscribed");
+            return true;
+        } catch (JSONException e) {
+            return false;
+        }
+    }
+
+    public boolean unsubscribe(String brid) {
+        JSONObject result = null;
+        Webserver server = new Webserver();
+        HashMap<String, String> args = new HashMap<String, String>();
+        args.put("androidAuthenticate", "true");
+        args.put("user", username);
+        args.put("dynPW", dynPW);
+
+        args.put("androidSubscribe", "false");
+        args.put("brid", brid);
+        result = server.postRequest(args);
+        try {
+            result.getBoolean("subscribed");
+            return true;
+        } catch (JSONException e) {
+            return false;
+        }
+    }
 }

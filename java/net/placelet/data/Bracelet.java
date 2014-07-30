@@ -19,8 +19,9 @@ public class Bracelet extends InformationCarrier implements HTMLDecodable {
 	public String lastCountry = null;
 
 	public ArrayList<Picture> pictures = new ArrayList<Picture>();
+    public boolean subscribed = false;
 
-	public Bracelet(String brid) {
+    public Bracelet(String brid) {
 		System.out.println(pictures.size());
 		this.brid = brid;
 	}

@@ -41,7 +41,7 @@ public class Webserver {
 		try {
 			jArray = new JSONObject(result);
 		} catch (JSONException e) {
-			Log.e("log_tag", "Error parsing data " + e.toString());
+			Log.e("log_tag", "Error parsing data: " + e.toString() + "\n\"" + result + "\"");
 		}
 
 		return jArray;

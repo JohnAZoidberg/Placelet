@@ -32,6 +32,8 @@ public class BraceletActivity extends FragmentActivity {
 	private PagerAdapter mPagerAdapter;
 	private static final int NUM_PAGES = 2;
 
+    private static final int SUBSCRIBE_BUTTON = 1;
+
 	public SharedPreferences prefs;
 	public SharedPreferences settingsPrefs;
 
@@ -66,19 +68,67 @@ public class BraceletActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		Util.inflateActionBar(this, menu, true);
+        menu.add(Menu.NONE, SUBSCRIBE_BUTTON, 0, getString(R.string.subscribe)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        if(bracelet != null) {
+            MenuItem bedMenuItem = menu.findItem(SUBSCRIBE_BUTTON);
+            if (bracelet.subscribed) {
+                bedMenuItem.setTitle(getString(R.string.unsubscribe));
+            } else {
+                bedMenuItem.setTitle(getString(R.string.subscribe));
+            }
+        }
+        invalidateOptionsMenu();
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Reload
-		if (item.getItemId() == R.id.action_reload) {
-			loadPictures(true);
+		switch (item.getItemId()) {
+            case R.id.action_reload:
+			    loadPictures(true);
+                break;
+            case SUBSCRIBE_BUTTON:
+                toggleSubscribe();
+                break;
 		}
 		return NavigateActivities.activitySwitchMenu(item, this);
 	}
 
-	@Override
+    private void toggleSubscribe() {
+        Subscription sub = new Subscription(this);
+        sub.execute();
+    }
+
+    private class Subscription extends AsyncTask<String, String, Boolean> {
+        private Context context;
+        public Subscription (Context context) {
+            this.context = context;
+        }
+        @Override
+        protected Boolean doInBackground(String... params) {
+            User user = new User(prefs);
+            return bracelet.subscribed ? user.unsubscribe(bracelet.brid) : user.subscribe(bracelet.brid);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            User user = new User(prefs);
+            if(result) {
+                if (bracelet.subscribed) {
+                    bracelet.subscribed = false;
+                    Util.alert(getString(R.string.unsubscribed), context);
+                    invalidateOptionsMenu();
+                } else {
+                    bracelet.subscribed = true;
+                    Util.alert(getString(R.string.subscribed), context);
+                    invalidateOptionsMenu();
+                }
+            }
+        }
+    }
+
+    @Override
 	public void onBackPressed() {
 		if (mPager.getCurrentItem() == 0) {
 			// If the user is currently looking at the first step, allow the system to handle the
@@ -129,7 +179,6 @@ public class BraceletActivity extends FragmentActivity {
 					return;
 				}
 			} catch (JSONException e) {
-				e.printStackTrace();
 			}
 			String jsonString = result.toString();
 			Util.saveData(prefs, "braceletData-" + bracelet.brid, jsonString);
@@ -162,6 +211,7 @@ public class BraceletActivity extends FragmentActivity {
 			bracelet.picAnz = result.getInt("pic_anz");
 			bracelet.lastCity = result.getString("lastcity");
 			bracelet.lastCountry = result.getString("lastcountry");
+            bracelet.subscribed = result.getBoolean("subscribed");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -183,10 +233,9 @@ public class BraceletActivity extends FragmentActivity {
 				picture.loadImage = settingsPrefs.getBoolean("pref_download_pics", true);
 				bracelet.pictures.add(picture);
 			} catch (JSONException e) {
-				e.printStackTrace();
 			}
 		}
-
+        invalidateOptionsMenu();
 		Collections.sort(bracelet.pictures);
 		bracelet.html_entity_decode();
 		if(pictureFragment != null) {
