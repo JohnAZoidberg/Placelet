@@ -110,8 +110,8 @@ public class BraceletFragment extends Fragment {
 		bracelet = braceletActivity.bracelet;
 		if (bracelet.isFilled()) {
             headerView.setText(bracelet.name + " " + braceletActivity.getString(R.string.by) + " " + bracelet.owner);
-            String firstLocation = bracelet.pictures.get(0).city + ", " + bracelet.pictures.get(0).country;
-            String lastLocation = bracelet.pictures.get(bracelet.pictures.size() - 1).city + ", " + bracelet.pictures.get(bracelet.pictures.size() - 1).country;
+            String firstLocation = bracelet.pictures.get(bracelet.pictures.size() - 1).city + ", " + bracelet.pictures.get(bracelet.pictures.size() - 1).country;
+            String lastLocation = bracelet.pictures.get(0).city + ", " + bracelet.pictures.get(0).country;
             String text = "<font color='blue'>" + firstLocation + "</font> -->&nbsp;<font color='green'>" + lastLocation + "</font>";
             startEndView.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
 
