@@ -42,7 +42,7 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
 		ImageView imgView = (ImageView) element.findViewById(R.id.status_image);
 		if(message.seen > 0) imgView.setImageResource(R.drawable.tick);
 		
-		String displayMessage = message.message.length() > 20 ? message.message.replaceAll("\n", " ").substring(0, 20).trim()  + "..." : message.message;
+		String displayMessage = message.content.length() > 20 ? message.content.replaceAll("\n", " ").substring(0, 20).trim()  + "..." : message.content;
 		sender.setText(message.sender);
 		messageContent.setText(displayMessage);
 		date.setText(Util.timestampToTime(message.sent));

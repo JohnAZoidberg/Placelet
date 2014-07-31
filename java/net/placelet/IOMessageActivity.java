@@ -203,7 +203,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 						try {
 							JSONObject messages = chat.getJSONObject(key2);
 							Message msg = new Message();
-							msg.message = messages.getString("message");
+							msg.content = messages.getString("message");
 							msg.sent = messages.getLong("sent");
                             msg.seen = messages.getLong("seen");
 							msg.loadImage = settingsPrefs.getBoolean("pref_download_pics", true);

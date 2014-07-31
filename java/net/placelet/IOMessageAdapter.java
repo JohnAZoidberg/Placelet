@@ -50,7 +50,7 @@ public class IOMessageAdapter extends ArrayAdapter<Message> {
 		}
 
 		viewHolder.sender.setText(message.sender);
-		viewHolder.messageContent.setText(message.message);
+		viewHolder.messageContent.setText(message.content);
 		viewHolder.date.setText(Util.timestampToTime(message.sent));
 		if (message.loadImage && imgView != null) {
 			Picasso.with(context).load("http://placelet.de/pictures/profiles/" + message.senderID + ".jpg").into(imgView);

@@ -12,7 +12,7 @@ public class Message extends InformationCarrier implements Comparable<Message>, 
 	public int recipientID;
 	public long sent;
 	public long seen;
-	public String message;
+	public String content;
 	public String sender;
 	public String recipient;
 	public boolean loadImage;
@@ -28,17 +28,17 @@ public class Message extends InformationCarrier implements Comparable<Message>, 
 	}
 
 	public void html_entity_decode() {
-		if (message != null) {
-			message = StringEscapeUtils.unescapeHtml4(message);
-			message = message.replaceAll("<br>", "");
+		if (content != null) {
+			content = StringEscapeUtils.unescapeHtml4(content);
+			content = content.replaceAll("<br>", "");
 		}
 	}
 
 	@Override
 	public void urlencode() {
-		if (message != null)
+		if (content != null)
 			try {
-				message = URLEncoder.encode(message, "utf-8");
+				content = URLEncoder.encode(content, "utf-8");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
