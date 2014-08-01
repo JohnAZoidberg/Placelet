@@ -282,7 +282,7 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 			errors += getString(R.string.choose_picture) + "\n";
 		}
 		String braceletID = idField.getText().toString().trim();
-		if (braceletID.length() != 6/* || !braceletID.matches("[^a-zA-Z0-9]") */) {
+		if (braceletID.length() != 6 || !braceletID.matches("[a-zA-Z0-9]{6}") ) {
 			inputsValid = false;
 			errors += getString(R.string.incorrect_id) + "\n";
 		}

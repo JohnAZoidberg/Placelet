@@ -8,13 +8,17 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import net.placelet.R;
 import net.placelet.connection.User;
+import net.placelet.connection.Webserver;
 import net.placelet.data.Picture;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +27,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -76,6 +82,13 @@ public class CommunityFragment extends Fragment {
 				NavigateActivities.switchActivity(mainActivity, UploadActivity.class, false, "upload", "camera");
 			}
 		});
+        ImageView newBraceletIcon = (ImageView) rootView.findViewById(R.id.newBraceletIcon);
+        newBraceletIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                displayRegisterDialog();
+            }
+        });
 		ImageView galleryIcon = (ImageView) rootView.findViewById(R.id.galleryIcon);
 		galleryIcon.setOnClickListener(new OnClickListener() {
 			@Override
@@ -85,7 +98,79 @@ public class CommunityFragment extends Fragment {
 		});
 	}
 
-	public void loadPictures(int start, boolean reload) {
+    private void displayRegisterDialog() {
+        final EditText input = new EditText(mainActivity);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        final AlertDialog dialog = new AlertDialog.Builder(mainActivity)
+                .setTitle("Register new Bracelet")
+                .setView(input)
+                .setPositiveButton("Register", null)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }).create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface d) {
+
+                Button b = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        String braceletID = input.getText().toString();
+                        if (braceletID.matches("[a-zA-Z0-9]{6}") && Util.notifyIfOffline(mainActivity)) {
+                            RegisterBracelet registerBr = new RegisterBracelet(braceletID);
+                            registerBr.execute();
+                            dialog.dismiss();
+                        } else
+                            Util.alert("ID has to be 6 letters and numbers!", mainActivity);
+                    }
+                });
+            }
+        });
+        dialog.show();
+    }
+
+    private class RegisterBracelet extends AsyncTask<String, String, Integer> {
+        private String brid;
+
+        public RegisterBracelet (String brid) {
+            this.brid = brid;
+        }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            User user = new User(mainActivity.prefs);
+            return user.registerBracelet(brid);
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            switch(result) {
+                case 0:
+                    Util.alert("Bracelet does not exist!", mainActivity);
+                    break;
+                case 1:
+                    Util.alert(brid + " registered!", mainActivity);
+                    break;
+                case 2:
+                    Util.alert("Bracelet already registered to you!", mainActivity);
+                    break;
+                case 3:
+                    Util.alert("Bracelet registered to someone else!", mainActivity);
+                    break;
+                default:
+                    Util.alert("Server Problem", mainActivity);
+            }
+        }
+    }
+
+    public void loadPictures(int start, boolean reload) {
 		toggleLoading(true);
 		// display saved pics if it shouldn't reload and if there are pics saved
 		String savedPics = mainActivity.prefs.getString("communityPics", "null");
@@ -96,8 +181,7 @@ public class CommunityFragment extends Fragment {
 		}
 		// load new pics from the internet
 		if (Util.notifyIfOffline(mainActivity)) {
-			Pictures pics = new Pictures();
-			pics.start = start;
+			Pictures pics = new Pictures(start);
 			pics.execute();
 		} else {
 			toggleLoading(false);
@@ -106,6 +190,10 @@ public class CommunityFragment extends Fragment {
 
 	private class Pictures extends AsyncTask<String, String, JSONObject> {
 		public int start = 0;
+
+        public Pictures(int start) {
+            this.start = start;
+        }
 
 		@Override
 		protected JSONObject doInBackground(String... params) {
@@ -117,16 +205,10 @@ public class CommunityFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
-			// check if connected to the internet
-			try {
-				if (result.getString("error").equals("no_internet")) {
-					toggleLoading(false);
-					picnr = PIC_COUNT;
-					return;
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+            if(Webserver.checkConnection(result)) {
+                toggleLoading(false);
+                picnr = PIC_COUNT;
+            }
 			updateListView(result, start);
 			String jsonString = result.toString();
 			Util.saveData(mainActivity.prefs, "communityPics", jsonString);

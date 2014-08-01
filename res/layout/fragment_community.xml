@@ -30,21 +30,21 @@
         android:background="@android:color/darker_gray" >
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/cameraIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:src="@android:drawable/ic_menu_upload" />
+            android:src="@android:drawable/ic_menu_camera" />
 
         <ImageView
-            android:id="@+id/cameraIcon"
+            android:id="@+id/newBraceletIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:src="@android:drawable/ic_menu_camera" />
+            android:src="@android:drawable/ic_menu_add" />
 
         <ImageView
             android:id="@+id/galleryIcon"

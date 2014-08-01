@@ -24,6 +24,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +32,7 @@ import android.util.Log;
 
 public class Webserver {
 	String androidVersion = "1.1.7";
+    private static final boolean debug = true;
 	private String connectionURL = "http://placelet.de/android/android" + androidVersion + ".php";
 	HttpClient httpClient = new DefaultHttpClient();
 	HttpPost httpPost = new HttpPost(connectionURL);
@@ -38,10 +40,16 @@ public class Webserver {
 	public JSONObject postRequest(HashMap<String, String> args) {
 		JSONObject jArray = null;
 		String result = stringPostRequest(args);
+        if(debug) Log.e("debug", "Data from Webserver(PHP): \n\"" + result + "\"");
 		try {
 			jArray = new JSONObject(result);
 		} catch (JSONException e) {
-			Log.e("log_tag", "Error parsing data: " + e.toString() + "\n\"" + result + "\"");
+            try {
+                jArray = new JSONObject("{error: \"server\"}");
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+            Log.e("log_tag", "Error parsing data: " + e.toString() + "\n\"" + result + "\"");
 		}
 
 		return jArray;
@@ -195,4 +203,17 @@ public class Webserver {
 		}
 		return sb.toString();
 	}
+
+    public static boolean checkConnection(JSONObject result) {
+        // check if connected to the internet
+        try {
+            if (result.getString("error").equals("no_internet")) {
+                return false;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

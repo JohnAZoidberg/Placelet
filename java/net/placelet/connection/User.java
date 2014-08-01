@@ -278,4 +278,22 @@ public class User {
             return false;
         }
     }
+
+    public int registerBracelet(String brid) {
+        JSONObject result = null;
+        Webserver server = new Webserver();
+        HashMap<String, String> args = new HashMap<String, String>();
+        args.put("androidAuthenticate", "true");
+        args.put("user", username);
+        args.put("dynPW", dynPW);
+
+        args.put("androidRegisterBracelet", "true");
+        args.put("brid", brid);
+        result = server.postRequest(args);
+        try {
+            return result.getInt("registered");
+        } catch (JSONException e) {
+            return -1;
+        }
+    }
 }
