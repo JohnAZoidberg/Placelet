@@ -112,5 +112,12 @@
     <string name="subscribed">Subscribed</string>
     <string name="unsubscribe">unsubscribe</string>
     <string name="unsubscribed">unsubscribed</string>
+    <string name="register_bracelet">Register new Bracelet</string>
+    <string name="wrong_brid_format">ID has to be 6 letters and numbers!</string>
+    <string name="server_problem">Server Problem</string>
+    <string name="registered_exclamation"> registered!</string>
+    <string name="bracelet_registered_to_you">Bracelet already registered to you!</string>
+    <string name="bracelet_registered_someone">Bracelet registered to someone else!</string>
+    <string name="bracelet_notextisting">Bracelet does not exist!</string>
 
 </resources>

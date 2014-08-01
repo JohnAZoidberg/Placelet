@@ -105,5 +105,12 @@
     <string name="subscribed">Abonniert</string>
     <string name="unsubscribe">Deabonnieren</string>
     <string name="unsubscribed">Deabonniert</string>
+    <string name="register_bracelet">Neues Armband registrieren</string>
+    <string name="wrong_brid_format">ID muss 6 Buchstaben und Zahlen sein!</string>
+    <string name="server_problem">Server Problem</string>
+    <string name="registered_exclamation"> registriert!</string>
+    <string name="bracelet_registered_to_you">Armband schon auf dich registriert!</string>
+    <string name="bracelet_registered_someone">Armband auf jemand anderen registriert!</string>
+    <string name="bracelet_notextisting">Armband existiert nicht!</string>
 
 </resources>

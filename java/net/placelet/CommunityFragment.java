@@ -102,10 +102,10 @@ public class CommunityFragment extends Fragment {
         final EditText input = new EditText(mainActivity);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         final AlertDialog dialog = new AlertDialog.Builder(mainActivity)
-                .setTitle("Register new Bracelet")
+                .setTitle(mainActivity.getString(R.string.register_bracelet))
                 .setView(input)
-                .setPositiveButton("Register", null)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setPositiveButton(mainActivity.getString(R.string.register), null)
+                .setNegativeButton(mainActivity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -128,7 +128,7 @@ public class CommunityFragment extends Fragment {
                             registerBr.execute();
                             dialog.dismiss();
                         } else
-                            Util.alert("ID has to be 6 letters and numbers!", mainActivity);
+                            Util.alert(mainActivity.getString(R.string.wrong_brid_format), mainActivity);
                     }
                 });
             }
@@ -153,19 +153,19 @@ public class CommunityFragment extends Fragment {
         protected void onPostExecute(Integer result) {
             switch(result) {
                 case 0:
-                    Util.alert("Bracelet does not exist!", mainActivity);
+                    Util.alert(mainActivity.getString(R.string.bracelet_notextisting), mainActivity);
                     break;
                 case 1:
-                    Util.alert(brid + " registered!", mainActivity);
+                    Util.alert(brid + mainActivity.getString(R.string.registered_exclamation), mainActivity);
                     break;
                 case 2:
-                    Util.alert("Bracelet already registered to you!", mainActivity);
+                    Util.alert(mainActivity.getString(R.string.bracelet_registered_to_you), mainActivity);
                     break;
                 case 3:
-                    Util.alert("Bracelet registered to someone else!", mainActivity);
+                    Util.alert(mainActivity.getString(R.string.bracelet_registered_someone), mainActivity);
                     break;
                 default:
-                    Util.alert("Server Problem", mainActivity);
+                    Util.alert(mainActivity.getString(R.string.server_problem), mainActivity);
             }
         }
     }
