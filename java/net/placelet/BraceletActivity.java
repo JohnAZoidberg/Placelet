@@ -96,8 +96,10 @@ public class BraceletActivity extends FragmentActivity {
 	}
 
     private void toggleSubscribe() {
-        Subscription sub = new Subscription(this);
-        sub.execute();
+        if(Util.notifyIfOffline(this)) {
+            Subscription sub = new Subscription(this);
+            sub.execute();
+        }
     }
 
     private class Subscription extends AsyncTask<String, String, Boolean> {
@@ -108,7 +110,7 @@ public class BraceletActivity extends FragmentActivity {
         @Override
         protected Boolean doInBackground(String... params) {
             User user = new User(prefs);
-            return bracelet.subscribed ? user.unsubscribe(bracelet.brid) : user.subscribe(bracelet.brid);
+            return user.subscribe(bracelet.brid, !bracelet.subscribed);
         }
 
         @Override

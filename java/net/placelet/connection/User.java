@@ -241,7 +241,7 @@ public class User {
 		return result;
 	}
 
-    public boolean subscribe(String brid) {
+    public boolean subscribe(String brid, boolean subscribe) {
         JSONObject result = null;
         Webserver server = new Webserver();
         HashMap<String, String> args = new HashMap<String, String>();
@@ -249,26 +249,9 @@ public class User {
         args.put("user", username);
         args.put("dynPW", dynPW);
 
-        args.put("androidSubscribe", "true");
-        args.put("brid", brid);
-        result = server.postRequest(args);
-        try {
-            result.getBoolean("subscribed");
-            return true;
-        } catch (JSONException e) {
-            return false;
-        }
-    }
-
-    public boolean unsubscribe(String brid) {
-        JSONObject result = null;
-        Webserver server = new Webserver();
-        HashMap<String, String> args = new HashMap<String, String>();
-        args.put("androidAuthenticate", "true");
-        args.put("user", username);
-        args.put("dynPW", dynPW);
-
-        args.put("androidSubscribe", "false");
+        String subParam = "true";
+        if(!subscribe) subParam = "false";
+        args.put("androidSubscribe", subParam);
         args.put("brid", brid);
         result = server.postRequest(args);
         try {
