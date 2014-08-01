@@ -122,34 +122,34 @@ public class MyPlaceletFragment extends Fragment {
 				JSONArray jsonArray = input.getJSONArray(key);
 				int jsonArrayLength = jsonArray.length();
 
-				Bracelet bracelet = new Bracelet("");
-				Picture picture = new Picture();
+				Bracelet separatorBacelet = new Bracelet("");
+				Picture separatorPicture = new Picture();
 				if (key.equals("pics")) {
-					picture.stringData = mainActivity.getString(R.string.own_pics);
-				} else {
-					picture.stringData = mainActivity.getString(R.string.own_bracelets);
+                    separatorPicture.stringData = mainActivity.getString(R.string.own_pics);
+				} else if(key.equals("ownBracelets")){
+                    separatorPicture.stringData = mainActivity.getString(R.string.own_bracelets);
 				}
-				bracelet.pictures.add(picture);
-				braceletList.add(bracelet);
+                separatorBacelet.pictures.add(separatorPicture);
+				braceletList.add(separatorBacelet);
 
 				for (int i = 0; i < jsonArrayLength; i++) {
-					JSONObject row = jsonArray.getJSONObject(i);
 					try {
-						picture = new Picture();
+                        JSONObject row = jsonArray.getJSONObject(i);
+						Picture picture = new Picture();
 						picture.brid = row.getString("brid");
-						bracelet = new Bracelet(picture.brid);
+
+						Bracelet bracelet = new Bracelet(picture.brid);
 						picture.title = row.getString("title");
 						picture.city = row.getString("city");
 						picture.country = row.getString("country");
 						picture.id = Integer.parseInt(row.getString("id"));
+                        picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
+                        bracelet.pictures.add(picture);
+                        // TODO sort pics
+                        braceletList.add(bracelet);
 					} catch (JSONException e) {
-						bracelet = new Bracelet("");
 						e.printStackTrace();
 					}
-					picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
-					bracelet.pictures.add(picture);
-					// TODO sort pics
-					braceletList.add(bracelet);
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
