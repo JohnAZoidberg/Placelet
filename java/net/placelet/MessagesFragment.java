@@ -150,8 +150,8 @@ public class MessagesFragment extends Fragment {
 				msg.sender = key;
 				messageList.add(msg);
 			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+                e.printStackTrace();
+            }
 		}
 
 		Collections.sort(messageList);
