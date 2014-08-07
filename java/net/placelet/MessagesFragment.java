@@ -141,6 +141,7 @@ public class MessagesFragment extends Fragment {
 				try {
 					if (msg == null || msg.sent < Long.valueOf(chat.getString("sent"))) {
 						msg.content = chat.getString("message");
+                        msg.recipient = chat.getJSONObject("recipient").getString("name");
 						msg.sent = chat.getLong("sent");
 						msg.seen = chat.getLong("seen");
 					}

@@ -2,6 +2,7 @@ package net.placelet;
 
 import java.util.List;
 
+import net.placelet.connection.User;
 import net.placelet.data.Message;
 import android.content.Context;
 import android.graphics.Color;
@@ -40,7 +41,7 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
 		TextView messageContent = (TextView) element.findViewById(R.id.message);
 		TextView date = (TextView) element.findViewById(R.id.date);
 		ImageView imgView = (ImageView) element.findViewById(R.id.status_image);
-		if(message.seen > 0) imgView.setImageResource(R.drawable.tick);
+		if(message.seen > 0 && !message.recipient.equals(User.username)) imgView.setImageResource(R.drawable.tick);
 		
 		String displayMessage = message.content.length() > 20 ? message.content.replaceAll("\n", " ").substring(0, 20).trim()  + "..." : message.content;
 		sender.setText(message.sender);
