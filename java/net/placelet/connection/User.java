@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import net.placelet.Util;
 import net.placelet.data.Picture;
 
 import org.apache.http.ParseException;
@@ -102,10 +103,12 @@ public class User {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return 0;
+        return 0;
 	}
 
 	public JSONObject getMessages() {
+        String lastUpdate = "" + prefs.getLong("getMessagesLastUpdate", 0);
+        Util.saveDate(prefs, "getMessagesLastUpdate", System.currentTimeMillis() / 1000L);
 		JSONObject result = null;
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
@@ -113,11 +116,14 @@ public class User {
 		args.put("dynPW", dynPW);
 		args.put("androidGetMessages", "true");
         args.put("androidAuthenticate", "true");
+        args.put("lastUpdate", lastUpdate);
 		result = server.postRequest(args);
 		return result;
 	}
 
 	public JSONObject getIOMessages(String recipient) {
+        String lastUpdate = "" + prefs.getLong("getIOMessagesLastUpdate", 0);
+        Util.saveDate(prefs, "getIOMessagesLastUpdate", System.currentTimeMillis() / 1000L);
 		JSONObject result = null;
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
@@ -126,11 +132,14 @@ public class User {
 		args.put("recipient", recipient);
         args.put("androidAuthenticate", "true");
 		args.put("androidGetIOMessages", "true");
+        args.put("lastUpdate", lastUpdate);
 		result = server.postRequest(args);
 		return result;
 	}
 
 	public JSONObject sendMessage(String recipient, String content) {
+        String lastUpdate = "" + prefs.getLong("getIOMessagesLastUpdate", 0);
+        Util.saveDate(prefs, "getIOMessagesLastUpdate", System.currentTimeMillis() / 1000L);
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
 		// Login-Variables
@@ -141,15 +150,19 @@ public class User {
 		args.put("content", content);
 		args.put("androidSendMessages", "true");
         args.put("androidAuthenticate", "true");
+        args.put("lastUpdate", lastUpdate);
 		return server.postRequest(args);
 	}
 
 	public JSONObject getCommunityPictures(int picCount) {
+        String lastUpdate = "" + prefs.getLong("getCommunityPicturesLastUpdate", 0);
+        Util.saveDate(prefs, "getCommunityPicturesLastUpdate", System.currentTimeMillis() / 1000L);
 		JSONObject result = null;
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
 		args.put("androidGetCommunityPictures", "true");
 		args.put("pic_count", "" + picCount);
+        args.put("lastUpdate", lastUpdate);
 		result = server.postRequest(args);
 		return result;
 	}
@@ -182,16 +195,6 @@ public class User {
 		return error;
 	}
 
-	public JSONObject getBraceletPictures(String brid) {
-		JSONObject result = null;
-		Webserver server = new Webserver();
-		HashMap<String, String> args = new HashMap<String, String>();
-		args.put("androidGetBraceletPictures", "true");
-		args.put("braceID", brid);
-		result = server.postRequest(args);
-		return result;
-	}
-
 	public String writeTest(String content) {
 		JSONObject result = null;
 		Webserver server = new Webserver();
@@ -221,12 +224,15 @@ public class User {
 	}
 
 	public JSONObject getBraceletData(String brid) {
+        String lastUpdate = "" + prefs.getLong("getBraceletDataLastUpdate-" + brid, 0);
+        Util.saveDate(prefs, "getBraceletDataLastUpdate-" + brid, System.currentTimeMillis() / 1000L);
 		JSONObject result = null;
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
         args.put("androidAuthenticate", "true");
         args.put("user", username);
         args.put("dynPW", dynPW);
+        args.put("lastUpdate", lastUpdate);
 
 		args.put("androidGetBraceletData", "true");
 		args.put("braceID", brid);
@@ -235,11 +241,14 @@ public class User {
 	}
 
 	public JSONObject getOwnBracelets() {
+        String lastUpdate = "" + prefs.getLong("getOwnBraceletsLastUpdate", 0);
+        Util.saveDate(prefs, "getOwnBraceletsLastUpdate", System.currentTimeMillis() / 1000L);
 		JSONObject result = null;
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
 		args.put("androidGetOwnBracelets", "true");
 		args.put("user", username);
+        args.put("lastUpdate", lastUpdate);
 		result = server.postRequest(args);
 		return result;
 	}

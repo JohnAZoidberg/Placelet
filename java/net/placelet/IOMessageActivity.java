@@ -224,7 +224,8 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		Collections.reverse(messageList);
 		list.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
-        Message lastMessage = messageList.get(messageList.size() - 1);
+        Message lastMessage = new Message();
+        if(messageList.size() > 0) lastMessage = messageList.get(messageList.size() - 1);
         if(footer != null)
             list.removeFooterView(footer);
         if(lastMessage.seen > 0 && lastMessage.sender.equals(User.username)) {

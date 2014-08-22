@@ -76,6 +76,12 @@ public class Util {
 		}
 	}
 
+    public static void saveDate(SharedPreferences prefs, String key, long date) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(key, date);
+        editor.commit();
+    }
+
 	public static void loadThumbnail(Context context, ImageView imgView, int picid) {
         float dpi = context.getResources().getDisplayMetrics().density;
 		int picWidth = (int) (108 * (dpi));
