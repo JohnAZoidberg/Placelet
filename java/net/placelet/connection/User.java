@@ -112,6 +112,7 @@ public class User {
 		args.put("user", username);
 		args.put("dynPW", dynPW);
 		args.put("androidGetMessages", "true");
+        args.put("androidAuthenticate", "true");
 		result = server.postRequest(args);
 		return result;
 	}
@@ -123,6 +124,7 @@ public class User {
 		args.put("user", username);
 		args.put("dynPW", dynPW);
 		args.put("recipient", recipient);
+        args.put("androidAuthenticate", "true");
 		args.put("androidGetIOMessages", "true");
 		result = server.postRequest(args);
 		return result;
@@ -138,6 +140,7 @@ public class User {
 		args.put("recipient", recipient);
 		args.put("content", content);
 		args.put("androidSendMessages", "true");
+        args.put("androidAuthenticate", "true");
 		return server.postRequest(args);
 	}
 
@@ -159,7 +162,7 @@ public class User {
 		Webserver server = new Webserver();
 		String post = "androidUploadPicture=true" + "&brid=" + picture.brid + "&description=" + picture.description + "&city=" + picture.city
 				+ "&country=" + picture.country + "&title=" + picture.title + "&date=" + picture.date + "&latitude=" + picture.latitude
-				+ "&longitude=" + picture.longitude + "&user=" + User.username + "&dynPW=" + User.dynPW;
+				+ "&longitude=" + picture.longitude + "&user=" + User.username + "&dynPW=" + User.dynPW + "androidAuthenticate=true";
 		String filefield = "uploadPic";
 
 		String resultString = "{}";

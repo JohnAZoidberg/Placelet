@@ -22,7 +22,6 @@ public class Bracelet extends InformationCarrier implements HTMLDecodable {
     public boolean subscribed = false;
 
     public Bracelet(String brid) {
-		System.out.println(pictures.size());
 		this.brid = brid;
 	}
 
