@@ -14,6 +14,9 @@ import net.placelet.data.Picture;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -41,6 +44,8 @@ public class CommunityFragment extends Fragment {
 	private final int PIC_COUNT = 5;
 	private int picnr = 10;
 	private SwipeRefreshLayout swipeLayout;
+
+    private boolean updateDialogDisplayed = false;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -223,6 +228,11 @@ public class CommunityFragment extends Fragment {
 
 	private void updateListView(JSONObject input, int start) {
 		pictureList.clear();
+        try {
+            showUpdateDialog(input.getString("version"));
+        } catch (JSONException e1) {
+            return;
+        }
 		for (Iterator<?> iter = input.keys(); iter.hasNext();) {
 			String key = (String) iter.next();
 			try {
@@ -243,15 +253,42 @@ public class CommunityFragment extends Fragment {
 					e.printStackTrace();
 				}
 			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+            }
 		}
 		Collections.sort(pictureList);
 		adapter.notifyDataSetChanged();
 		toggleLoading(false);
 	}
 
-	@Override
+    private void showUpdateDialog(String version) {
+        Long lastNotified = mainActivity.prefs.getLong("updateLater", 0);
+        if(!updateDialogDisplayed && !version.equals(mainActivity.getString(R.string.app_version)) && lastNotified + 3600 < (System.currentTimeMillis() / 1000L)) {
+            final AlertDialog dialog = new AlertDialog.Builder(mainActivity)
+                .setTitle(mainActivity.getString(R.string.please_update))
+                .setPositiveButton(mainActivity.getString(R.string.update), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse("market://details?id=net.placelet"));
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton(mainActivity.getString(R.string.remind_later), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences.Editor editor = mainActivity.prefs.edit();
+                        editor.putLong("updateLater", System.currentTimeMillis() / 1000L);
+                        editor.commit();
+                        dialog.cancel();
+                    }
+                }).create();
+            dialog.show();
+        }
+        updateDialogDisplayed = true;
+    }
+
+    @Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 	}

@@ -112,5 +112,8 @@
     <string name="bracelet_registered_to_you">Armband schon auf dich registriert!</string>
     <string name="bracelet_registered_someone">Armband auf jemand anderen registriert!</string>
     <string name="bracelet_notextisting">Armband existiert nicht!</string>
+    <string name="please_update">Bitte App aktualisieren</string>
+    <string name="update">Update</string>
+    <string name="remind_later">Später erinnern</string>
 
 </resources>
