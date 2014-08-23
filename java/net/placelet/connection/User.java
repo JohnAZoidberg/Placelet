@@ -161,6 +161,7 @@ public class User {
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
 		args.put("androidGetCommunityPictures", "true");
+        args.put("user", username);
 		args.put("pic_count", "" + picCount);
         args.put("lastUpdate", lastUpdate);
 		result = server.postRequest(args);
