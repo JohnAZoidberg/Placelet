@@ -46,8 +46,9 @@ public class CommunityFragment extends Fragment {
 	private SwipeRefreshLayout swipeLayout;
 
     private boolean updateDialogDisplayed = false;
+    private boolean newsDialogDisplayed = false;
 
-	@Override
+    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mainActivity = (MainActivity) getActivity();
 		View rootView = inflater.inflate(R.layout.fragment_community, container, false);
@@ -82,11 +83,11 @@ public class CommunityFragment extends Fragment {
 	private void setUpUploadBar(View rootView) {
 		ImageView cameraIcon = (ImageView) rootView.findViewById(R.id.cameraIcon);
 		cameraIcon.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				NavigateActivities.switchActivity(mainActivity, UploadActivity.class, false, "upload", "camera");
-			}
-		});
+            @Override
+            public void onClick(View arg0) {
+                NavigateActivities.switchActivity(mainActivity, UploadActivity.class, false, "upload", "camera");
+            }
+        });
         ImageView newBraceletIcon = (ImageView) rootView.findViewById(R.id.newBraceletIcon);
         newBraceletIcon.setOnClickListener(new OnClickListener() {
             @Override
@@ -228,11 +229,8 @@ public class CommunityFragment extends Fragment {
 
 	private void updateListView(JSONObject input, int start) {
 		pictureList.clear();
-        try {
-            showUpdateDialog(input.getString("version"));
-        } catch (JSONException e1) {
-            return;
-        }
+        showNews(input);
+        showUpdateDialog(input);
 		for (Iterator<?> iter = input.keys(); iter.hasNext();) {
 			String key = (String) iter.next();
 			try {
@@ -260,7 +258,103 @@ public class CommunityFragment extends Fragment {
 		toggleLoading(false);
 	}
 
-    private void showUpdateDialog(String version) {
+    private void showNews(JSONObject input) {
+        JSONObject news = null;
+        String type = "";
+        String content = "";
+        int snooze = 3600;
+        try {
+            news = input.getJSONObject("news");
+            type = news.getString("type");
+            content = news.getString("content");
+        } catch (JSONException e1) {
+            return;
+        }
+        try {
+            snooze = news.getInt("snooze");
+            Util.alert(snooze + "", mainActivity);
+        } catch (JSONException ignored) {
+        }
+        Long lastNewsNotified = mainActivity.prefs.getLong("newsLater", 0);
+        if(!newsDialogDisplayed && lastNewsNotified + snooze < (System.currentTimeMillis() / 1000L)) {
+            try {
+                String user = news.getString("user");
+                if(!user.equals(User.username)) return;
+            } catch (JSONException ignored) {
+            }
+            if(type.equals("toast")) {// Show Toast
+                Util.alert(content, mainActivity);
+            }else if(type.equals("dialog")) {// Show Dialog
+                String _action = "URL";
+                try {
+                    _action = news.getString("action");
+                } catch (JSONException ignored) {
+                }
+                final String action = _action;
+
+                String positiveLabel = "Okay";
+                try {
+                    positiveLabel = news.getString("positiveLabel");
+                } catch (JSONException ignored) {
+                }
+
+                String negativeLabel = mainActivity.getString(R.string.cancel);
+                try {
+                    negativeLabel = news.getString("negativeLabel");
+                } catch (JSONException ignored) {
+                }
+
+                String title = mainActivity.getString(R.string.message);
+                try {
+                    title = news.getString("title");
+                } catch (JSONException ignored) {
+                }
+
+                if(content.equals("")) content = "http://placelet.de";
+                final String destination = content;
+
+
+                final AlertDialog dialog = new AlertDialog.Builder(mainActivity)
+                    .setTitle(title)
+                    .setPositiveButton(positiveLabel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            if(action.equals("URL")) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse(destination));
+                                startActivity(intent);
+                            }else if(action.equals("Activity")){
+                                try {
+                                    Intent intent = new Intent(mainActivity, Class.forName("net.placelet." + destination));
+                                    startActivity(intent);
+                                } catch (ClassNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    })
+                    .setNegativeButton(negativeLabel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences.Editor editor = mainActivity.prefs.edit();
+                            editor.putLong("newsLater", System.currentTimeMillis() / 1000L);
+                            editor.commit();
+                            dialog.cancel();
+                        }
+                    }).create();
+                dialog.show();
+            }
+        }
+        newsDialogDisplayed = true;
+    }
+
+    private void showUpdateDialog(JSONObject input) {
+        String version = "";
+        try {
+            version = input.getString("version");
+        } catch (JSONException e1) {
+        }
         Long lastNotified = mainActivity.prefs.getLong("updateLater", 0);
         if(!updateDialogDisplayed && !version.equals(mainActivity.getString(R.string.app_version)) && lastNotified + 3600 < (System.currentTimeMillis() / 1000L)) {
             final AlertDialog dialog = new AlertDialog.Builder(mainActivity)
