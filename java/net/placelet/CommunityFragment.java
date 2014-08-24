@@ -272,16 +272,10 @@ public class CommunityFragment extends Fragment {
         }
         try {
             snooze = news.getInt("snooze");
-            Util.alert(snooze + "", mainActivity);
         } catch (JSONException ignored) {
         }
         Long lastNewsNotified = mainActivity.prefs.getLong("newsLater", 0);
         if(!newsDialogDisplayed && lastNewsNotified + snooze < (System.currentTimeMillis() / 1000L)) {
-            try {
-                String user = news.getString("user");
-                if(!user.equals(User.username)) return;
-            } catch (JSONException ignored) {
-            }
             if(type.equals("toast")) {// Show Toast
                 Util.alert(content, mainActivity);
             }else if(type.equals("dialog")) {// Show Dialog
@@ -350,13 +344,15 @@ public class CommunityFragment extends Fragment {
     }
 
     private void showUpdateDialog(JSONObject input) {
-        String version = "";
+        boolean update = false;
         try {
-            version = input.getString("version");
+            update = input.getBoolean("u");
         } catch (JSONException e1) {
+            return;
         }
         Long lastNotified = mainActivity.prefs.getLong("updateLater", 0);
-        if(!updateDialogDisplayed && !version.equals(mainActivity.getString(R.string.app_version)) && lastNotified + 3600 < (System.currentTimeMillis() / 1000L)) {
+        if(!updateDialogDisplayed && update && lastNotified + 3600 < (System.currentTimeMillis() / 1000L)) {
+            Util.alert("please update nigga", mainActivity);
             final AlertDialog dialog = new AlertDialog.Builder(mainActivity)
                 .setTitle(mainActivity.getString(R.string.please_update))
                 .setPositiveButton(mainActivity.getString(R.string.update), new DialogInterface.OnClickListener() {

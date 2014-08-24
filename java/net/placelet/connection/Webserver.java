@@ -31,7 +31,7 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class Webserver {
-	String androidVersion = "1.2.4";
+	public static final String androidVersion = "1.2.4";
     private static final boolean debug = true;
 	private String connectionURL = "http://placelet.de/android/android" + androidVersion + ".php";
 	HttpClient httpClient = new DefaultHttpClient();
@@ -40,7 +40,10 @@ public class Webserver {
 	public JSONObject postRequest(HashMap<String, String> args) {
 		JSONObject jArray = null;
 		String result = stringPostRequest(args);
-        if(debug) Log.e("debug", "Data from Webserver(PHP): \n\"" + result + "\"");
+        if(debug) {
+            Log.e("debug", "Data from Webserver(PHP): \n\"" + result + "\"");
+            Log.e("stats", "Length of request: " + result.length());
+        }
 		try {
 			jArray = new JSONObject(result);
 		} catch (JSONException e) {
