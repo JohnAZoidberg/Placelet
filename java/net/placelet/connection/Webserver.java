@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -40,10 +41,6 @@ public class Webserver {
 	public JSONObject postRequest(HashMap<String, String> args) {
 		JSONObject jArray = null;
 		String result = stringPostRequest(args);
-        if(debug) {
-            Log.e("debug", "Data from Webserver(PHP): \n\"" + result + "\"");
-            Log.e("stats", "Length of request: " + result.length());
-        }
 		try {
 			jArray = new JSONObject(result);
 		} catch (JSONException e) {
@@ -96,6 +93,11 @@ public class Webserver {
 			Log.e("log_tag", "Error converting result " + e.toString());
 			result = "{error: no_internet}";
 		}
+        Log.e("stats", "Length of request before minifying: " + result.length());
+        Log.e("debug", "Data from Webserver(PHP) before minifying: \n\"" + result + "\"");
+        result = deminify_json(result);
+        Log.e("debug", "Data from Webserver(PHP): \n\"" + result + "\"");
+        Log.e("stats", "Length of request: " + result.length());
 		return result;
 	}
 
@@ -218,5 +220,11 @@ public class Webserver {
             return false;
         }
         return true;
+    }
+
+    private String deminify_json(String json) {
+        String[] searchList = {"1‡", "2‡", "3‡", "4‡", "5‡", "6‡", "7‡", "8‡", "9‡", "‡10", "‡11", "‡12", "‡13", "‡14", "‡15", "‡16", "‡17", "‡18", "‡19", "‡20", "‡21", "‡22", "‡3", "‡24", "‡25", "‡26"};
+        String[] replaceList = {"recipient", "name", "sender", "sent", "seen", "message", "update", "exists", "brid", "title", "description", "city", "country", "userid", "date", "upload", "user", "user", "ownBracelet", "alreadyUpToDate", "picid", "longitude", "latitude", "state", "commid", "fileext"};
+        return StringUtils.replaceEach(json,  searchList, replaceList);
     }
 }
