@@ -47,10 +47,11 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	private EditText messageField;
 	private Button b;
     private RelativeLayout footer;
+    private boolean reloadHidden = false;
 
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		Util.inflateActionBar(this, menu, false);
+		Util.inflateActionBar(this, menu, reloadHidden);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -142,7 +143,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 	public void sendMessage() {
 		if (Util.notifyIfOffline(this)) {
-			toggleLoading(true);
+			toggleLoading(true, true);
 			String message = messageField.getText().toString();
 			messageField.setText("");
 			Messages login = new Messages();
@@ -151,7 +152,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	}
 
 	private void loadMessages(boolean reload) {
-		setProgressBarIndeterminateVisibility(true);
+        toggleLoading(true, false);
 		String savedMessages = prefs.getString("messages-" + recipient, "null");
 		if (!savedMessages.equals("null") && !reload) {
 			loadSavedMessages(savedMessages);
@@ -160,7 +161,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 			Messages login = new Messages();
 			login.execute();
 		} else {
-			setProgressBarIndeterminateVisibility(false);
+            toggleLoading(false, false);
 		}
 	}
 
@@ -234,7 +235,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
             footer_seen.append(" " + Util.timestampToTime(lastMessage.seen));
             list.addFooterView(footer);
         }
-		toggleLoading(false);
+		toggleLoading(false, true);
 	}
 
 	private void displayErrorAtMessageFragment(String err) {
@@ -259,13 +260,17 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 			updateListView(jArray);
 	}
 
-	private void toggleLoading(boolean loading) {
+	private void toggleLoading(boolean loading, boolean disableButton) {
 		if (loading) {
-				b.setEnabled(false);
+			if(disableButton) b.setEnabled(false);
 			setProgressBarIndeterminateVisibility(true);
+            reloadHidden = true;
+
 		} else {
-				b.setEnabled(true);
+            if(disableButton) b.setEnabled(true);
+            reloadHidden = false;
 			setProgressBarIndeterminateVisibility(false);
 		}
+        invalidateOptionsMenu();
 	}
 }
