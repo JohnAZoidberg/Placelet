@@ -93,11 +93,14 @@ public class Webserver {
 			Log.e("log_tag", "Error converting result " + e.toString());
 			result = "{error: no_internet}";
 		}
+        double length_before = result.length();
         Log.e("stats", "Length of request before minifying: " + result.length());
         Log.e("debug", "Data from Webserver(PHP) before minifying: \n\"" + result + "\"");
         result = deminify_json(result);
+        double length_after = result.length();
         Log.e("debug", "Data from Webserver(PHP): \n\"" + result + "\"");
         Log.e("stats", "Length of request: " + result.length());
+        Log.e("stats", "Saving: " + (length_after / length_before));
 		return result;
 	}
 
@@ -225,8 +228,8 @@ public class Webserver {
     private String deminify_json(String json) {
         String username_json = "John#Zoidberg";
         if(!json.contains("John#Zoidberg")) username_json = User.username;
-        String[] searchList = {"1‡", "2‡", "3‡", "4‡", "5‡", "6‡", "7‡", "8‡", "9‡", "‡10", "‡11", "‡12", "‡13", "‡14", "‡15", "‡16", "‡17", "‡18", "‡19", "‡20", "‡21", "‡22", "‡3", "‡24", "‡25", "‡26", "‡27"};
-        String[] replaceList = {"recipient", "name", "sender", "sent", "seen", "message", "update", "exists", "brid", "title", "description", "city", "country", "userid", "date", "upload", "user", "user", "ownBracelet", "alreadyUpToDate", "picid", "longitude", "latitude", "state", "commid", "fileext", username_json};
+        String[] searchList = {"1‡", "2‡", "3‡", "4‡", "5‡", "6‡", "7‡", "8‡", "9‡", "‡10", "‡11", "‡12", "‡13", "‡14", "‡15", "‡16", "‡17", "‡18", "‡19", "‡20", "‡21", "‡22", "‡3", "‡24", "‡25", "‡26", "‡27", "‡28", "‡29"};
+        String[] replaceList = {"recipient", "name", "sender", "sent", "seen", "message", "update", "exists", "brid", "title", "description", "city", "country", "userid", "date", "upload", "user", "user", "ownBracelet", "alreadyUpToDate", "picid", "longitude", "latitude", "state", "commid", "fileext", username_json, "Deutschland", "United States"};
         return StringUtils.replaceEach(json,  searchList, replaceList);
     }
 }
