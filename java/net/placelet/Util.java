@@ -72,14 +72,14 @@ public class Util {
 		if (!value.equals("{error: no_internet}")) {
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString(key, value);
-			editor.commit();
+			editor.apply();
 		}
 	}
 
     public static void saveDate(SharedPreferences prefs, String key, long date) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putLong(key, date);
-        editor.commit();
+        editor.apply();
     }
 
 	public static void loadThumbnail(Context context, ImageView imgView, int picid) {

@@ -333,7 +333,7 @@ public class CommunityFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             SharedPreferences.Editor editor = mainActivity.prefs.edit();
                             editor.putLong("newsLater", System.currentTimeMillis() / 1000L);
-                            editor.commit();
+                            editor.apply();
                             dialog.cancel();
                         }
                     }).create();
@@ -369,7 +369,7 @@ public class CommunityFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         SharedPreferences.Editor editor = mainActivity.prefs.edit();
                         editor.putLong("updateLater", System.currentTimeMillis() / 1000L);
-                        editor.commit();
+                        editor.apply();
                         dialog.cancel();
                     }
                 }).create();

@@ -47,7 +47,7 @@ public class User {
 		editor.putString("username", NOT_LOGGED_IN);
 		editor.putString("dynPW", NOT_LOGGED_IN);
 		editor.putInt("userid", 0);
-		editor.commit();
+		editor.apply();
 	}
 
 	public int login(String user, String password) {
@@ -73,7 +73,7 @@ public class User {
 				editor.putInt("userid", userid);
 				editor.putString("dynPW", dynamicPW);
 				editor.putString("username", user);
-				editor.commit();
+				editor.apply();
 				return SUCCESS;
 			} else {
 				switch (result.getInt("error")) {

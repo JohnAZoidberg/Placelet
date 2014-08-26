@@ -133,7 +133,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 				String jsonString = result.toString();
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putString("messages-" + recipient, jsonString);
-				editor.commit();
+				editor.apply();
 				updateListView(result);
 			} else {
 				displayErrorAtMessageFragment(getString(R.string.user_notextisting));

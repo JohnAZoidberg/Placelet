@@ -112,7 +112,7 @@ public class MessagesFragment extends Fragment {
 			String jsonString = result.toString();
 			SharedPreferences.Editor editor = mainActivity.prefs.edit();
 			editor.putString("messages", jsonString);
-			editor.commit();
+			editor.apply();
 			updateListView(result);
 		}
 	}
