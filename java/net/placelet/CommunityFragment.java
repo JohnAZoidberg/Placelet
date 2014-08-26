@@ -352,7 +352,6 @@ public class CommunityFragment extends Fragment {
         }
         Long lastNotified = mainActivity.prefs.getLong("updateLater", 0);
         if(!updateDialogDisplayed && update && lastNotified + 3600 < (System.currentTimeMillis() / 1000L)) {
-            Util.alert("please update nigga", mainActivity);
             final AlertDialog dialog = new AlertDialog.Builder(mainActivity)
                 .setTitle(mainActivity.getString(R.string.please_update))
                 .setPositiveButton(mainActivity.getString(R.string.update), new DialogInterface.OnClickListener() {
