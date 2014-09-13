@@ -7,7 +7,7 @@ import net.placelet.HTMLDecodable;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-public class Message extends InformationCarrier implements Comparable<Message>, HTMLDecodable {
+public class Message implements Comparable<Message>, HTMLDecodable {
 	public int senderID;
 	public int recipientID;
 	public long sent;
