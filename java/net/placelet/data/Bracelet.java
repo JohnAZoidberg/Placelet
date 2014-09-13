@@ -1,12 +1,13 @@
 package net.placelet.data;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
+import net.placelet.HTMLDecodable;
+import net.placelet.Util;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import net.placelet.HTMLDecodable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 
 public class Bracelet extends InformationCarrier implements HTMLDecodable {
 	public String name = null;
@@ -84,4 +85,14 @@ public class Bracelet extends InformationCarrier implements HTMLDecodable {
 		}
 		return false;
 	}
+
+    public int getDistance() {
+        int distance = 0;
+        if(pictures != null && pictures.size() > 1) {
+            for (int i = 1; i < pictures.size(); i++) {
+                distance += Util.getDistance(pictures.get(i - 1).latitude, pictures.get(i - 1).longitude, pictures.get(i).latitude, pictures.get(i).longitude);
+            }
+        }
+        return distance;
+    }
 }

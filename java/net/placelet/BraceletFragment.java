@@ -1,5 +1,15 @@
 package net.placelet;
 
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -12,15 +22,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import net.placelet.data.Bracelet;
 import net.placelet.data.Picture;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.text.Html;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.Iterator;
 
@@ -33,6 +34,7 @@ public class BraceletFragment extends Fragment {
 	private ImageView imgView1;
 	private ImageView imgView2;
 	private ImageView imgView3;
+    private TextView distanceView;
 
 	private GoogleMap googleMap;
     private LinearLayout linearLayout;
@@ -44,6 +46,7 @@ public class BraceletFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_bracelet, container, false);
 
 		headerView = (TextView) rootView.findViewById(R.id.braceletHeader);
+        distanceView = (TextView) rootView.findViewById(R.id.braceletDistance);
         startEndView = (TextView) rootView.findViewById(R.id.startEnd);
 		imgView1 = (ImageView) rootView.findViewById(R.id.imageView1);
 		imgView2 = (ImageView) rootView.findViewById(R.id.imageView2);
@@ -110,6 +113,7 @@ public class BraceletFragment extends Fragment {
 		bracelet = braceletActivity.bracelet;
 		if (bracelet.isFilled()) {
             headerView.setText(bracelet.name + " " + braceletActivity.getString(R.string.by) + " " + bracelet.owner);
+            distanceView.setText(bracelet.getDistance() + " km");
             String firstLocation = bracelet.pictures.get(bracelet.pictures.size() - 1).city + ", " + bracelet.pictures.get(bracelet.pictures.size() - 1).country;
             String lastLocation = bracelet.pictures.get(0).city + ", " + bracelet.pictures.get(0).country;
             String text = "<font color='blue'>" + firstLocation + "</font> -->&nbsp;<font color='green'>" + lastLocation + "</font>";

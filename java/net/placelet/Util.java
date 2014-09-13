@@ -13,12 +13,12 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.squareup.picasso.Picasso;
 
 import net.placelet.connection.User;
 
-import com.squareup.picasso.Picasso;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @SuppressLint("SimpleDateFormat")
 public class Util {
@@ -127,4 +127,18 @@ public class Util {
 	public static void alert(String msg, Context context) {
 		Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 	}
+
+    public static int getDistance(double latFrom, double longFrom, double latTo, double longTo){
+        // convert from degrees to radians
+        latFrom = Math.toRadians(latFrom);
+        longFrom = Math.toRadians(longFrom);
+        latTo = Math.toRadians(latTo);
+        longTo = Math.toRadians(longTo);
+
+        double latDelta = latTo - latFrom;
+        double longDelta = longTo - longFrom;
+
+        double angle = 2.0 * Math.asin(Math.sqrt(Math.pow(Math.sin(latDelta / 2.0), 2) + Math.cos(latFrom) * Math.cos(latTo) * Math.pow(Math.sin(longDelta / 2.0), 2)));
+        return (int) (angle * 6378137.0 / 1000);
+    }
 }

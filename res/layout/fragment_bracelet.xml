@@ -17,7 +17,7 @@
         android:id="@+id/startEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="StartCity, Country --> EndCity, Country"
         android:layout_below="@+id/braceletHeader"
         android:layout_centerHorizontal="true"
         android:textStyle="bold"/>
@@ -63,5 +63,15 @@
             android:src="@android:color/white"
             android:layout_gravity="bottom"/>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00000 km"
+        android:id="@+id/braceletDistance"
+        android:layout_alignTop="@+id/map"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="16dp"/>
 
 </RelativeLayout>
