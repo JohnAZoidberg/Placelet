@@ -1,15 +1,5 @@
 package net.placelet;
 
-import java.util.Collections;
-import java.util.Iterator;
-
-import net.placelet.connection.User;
-import net.placelet.data.Bracelet;
-import net.placelet.data.Picture;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +16,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+
+import net.placelet.connection.User;
+import net.placelet.data.Bracelet;
+import net.placelet.data.Picture;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Collections;
+import java.util.Iterator;
 
 public class BraceletActivity extends FragmentActivity {
 	private ViewPager mPager;
@@ -46,7 +46,7 @@ public class BraceletActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setContentView(R.layout.bracelet_activity);
+		setContentView(R.layout.activity_bracelet);
 
 		// Instantiate a ViewPager and a PagerAdapter.
 		mPager = (ViewPager) findViewById(R.id.pager);
@@ -247,6 +247,7 @@ public class BraceletActivity extends FragmentActivity {
 			braceletFragment.updateData();
 		}
 		toggleLoading(false);
+        Util.alert(bracelet.getDistance() + "km", this);
 	}
 
 	public void loadSavedBracelet(String result) {

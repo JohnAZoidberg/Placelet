@@ -1,15 +1,5 @@
 package net.placelet;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import net.placelet.connection.User;
-import net.placelet.data.Bracelet;
-import net.placelet.data.Picture;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,33 +9,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+
+import net.placelet.connection.User;
+import net.placelet.data.Bracelet;
+import net.placelet.data.Picture;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MyPlaceletFragment extends Fragment {
 	private MainActivity mainActivity;
 	private MyPlaceletAdapter adapter;
-	private ArrayList<Bracelet> braceletList = new ArrayList<Bracelet>();
+	private ArrayList<Bracelet> bracelets = new ArrayList<Bracelet>();
+    private ArrayList<Picture> pictures = new ArrayList<Picture>();
 	private ListView list;
 	private SwipeRefreshLayout swipeLayout;
+    private CommunityAdapter pictureAdapter;
+    private BraceletAdapter braceletAdapter;
 
-	@Override
+    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mainActivity = (MainActivity) getActivity();
-		View rootView = inflater.inflate(R.layout.fragment_my_placelet, container, false);
-		//Initiate ListView
-		list = (ListView) rootView.findViewById(R.id.listView1);
-		list.setClickable(true);
-		list.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Bracelet bracelet = (Bracelet) list.getItemAtPosition(position);
-				if (bracelet.pictures.get(0).stringData == null)
-                    NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", bracelet.brid);
-			}
-		});
-		adapter = new MyPlaceletAdapter(mainActivity, 0, braceletList);
-		list.setAdapter(adapter);
+        mainActivity = (MainActivity) getActivity();
+        View rootView = inflater.inflate(R.layout.fragment_my_placelet, container, false);
+        //Initiate ListView
+        list = (ListView) rootView.findViewById(R.id.listView1);
+        list.setClickable(true);
+        setupAdapters();
 
 		swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
 		swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
@@ -59,6 +54,29 @@ public class MyPlaceletFragment extends Fragment {
 		loadBracelets(false);
 		return rootView;
 	}
+
+    public void setupAdapters() {
+        pictureAdapter = new CommunityAdapter(mainActivity, 0, pictures);
+        braceletAdapter = new BraceletAdapter(mainActivity, 0, bracelets);
+
+        MyPlaceletAdapter adapter = new MyPlaceletAdapter(mainActivity);
+        adapter.addSection(getString(R.string.own_pics), pictureAdapter);
+        adapter.addSection(getString(R.string.own_bracelets), braceletAdapter);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                if(position > pictureAdapter.getCount()) {
+                    Bracelet bracelet = (Bracelet) list.getItemAtPosition(position);
+                    NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", bracelet.brid);
+                }else {
+                    Picture pic = (Picture) list.getItemAtPosition(position);
+                    NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", pic.brid);
+                }
+            }
+        });
+    }
 
 	private class Bracelets extends AsyncTask<String, String, JSONObject> {
 
@@ -115,47 +133,54 @@ public class MyPlaceletFragment extends Fragment {
 	}
 
 	private void updateListView(JSONObject input) {
-		braceletList.clear();
-		for (Iterator<?> iter = input.keys(); iter.hasNext();) {
+        pictures.clear();
+		bracelets.clear();
+
+        for (Iterator<?> iter = input.keys(); iter.hasNext();) {
 			String key = (String) iter.next();
 			try {
 				JSONArray jsonArray = input.getJSONArray(key);
 				int jsonArrayLength = jsonArray.length();
 
-				Bracelet separatorBacelet = new Bracelet("");
-				Picture separatorPicture = new Picture();
-				if (key.equals("pics")) {
-                    separatorPicture.stringData = mainActivity.getString(R.string.own_pics);
-				} else if(key.equals("ownBracelets")){
-                    separatorPicture.stringData = mainActivity.getString(R.string.own_bracelets);
-				}
-                separatorBacelet.pictures.add(separatorPicture);
-				braceletList.add(separatorBacelet);
+                if(key.equals("pics") || key.equals("ownBracelets")) {
+                    for (int i = 0; i < jsonArrayLength; i++) {
+                        try {
+                            JSONObject row = jsonArray.getJSONObject(i);
+                            if (key.equals("pics")) {
+                                Picture picture = new Picture();
+                                picture.brid = row.getString("brid");
+                                picture.title = row.getString("title");
+                                picture.city = row.getString("city");
+                                picture.country = row.getString("country");
+                                picture.id = Integer.parseInt(row.getString("id"));
+                                picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
+                                // TODO sort pics
+                                pictures.add(picture);
+                            } else if (key.equals("ownBracelets")) {
+                                Picture picture = new Picture();
+                                picture.brid = row.getString("brid");
 
-				for (int i = 0; i < jsonArrayLength; i++) {
-					try {
-                        JSONObject row = jsonArray.getJSONObject(i);
-						Picture picture = new Picture();
-						picture.brid = row.getString("brid");
-
-						Bracelet bracelet = new Bracelet(picture.brid);
-						picture.title = row.getString("title");
-						picture.city = row.getString("city");
-						picture.country = row.getString("country");
-						picture.id = Integer.parseInt(row.getString("id"));
-                        picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
-                        bracelet.pictures.add(picture);
-                        // TODO sort pics
-                        braceletList.add(bracelet);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
+                                Bracelet bracelet = new Bracelet(picture.brid);
+                                bracelet.setDistance(row.getInt("distance"));
+                                bracelet.name = row.getString("name");
+                                picture.title = row.getString("title");
+                                picture.city = row.getString("city");
+                                picture.country = row.getString("country");
+                                picture.id = Integer.parseInt(row.getString("id"));
+                                picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
+                                bracelet.pictures.add(picture);
+                                // TODO sort pics
+                                bracelets.add(bracelet);
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
 				}
 			} catch (JSONException e) {
-				e.printStackTrace();
 			}
 		}
-		adapter.notifyDataSetChanged();
+		braceletAdapter.notifyDataSetChanged();
+        pictureAdapter.notifyDataSetChanged();
 		swipeLayout.setRefreshing(false);
 	}
 

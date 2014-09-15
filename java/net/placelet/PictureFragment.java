@@ -21,7 +21,7 @@ import com.squareup.picasso.Picasso;
 
 public class PictureFragment extends Fragment {
 	private BraceletActivity braceletActivity;
-	private BraceletAdapter adapter;
+	private PictureDetailAdapter adapter;
 	private ListView list;
 	public SwipeRefreshLayout swipeLayout;
 
@@ -54,7 +54,7 @@ public class PictureFragment extends Fragment {
 	}
 
 	public void updateData() {
-		adapter = new BraceletAdapter(braceletActivity, 0, braceletActivity.bracelet.pictures);
+		adapter = new PictureDetailAdapter(braceletActivity, 0, braceletActivity.bracelet.pictures);
 		list.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		braceletActivity.setProgressBarIndeterminateVisibility(false);

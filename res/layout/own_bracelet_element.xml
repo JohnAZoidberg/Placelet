@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+<ImageView
+    android:id="@+id/imageView1"
+    android:layout_width="108dp"
+    android:maxWidth="108dp"
+    android:layout_height="96dp"
+    android:maxHeight="96dp"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentRight="true"
+    android:adjustViewBounds="true"
+    android:scaleType="fitXY"
+    android:src="@android:color/transparent" />
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_toLeftOf="@+id/imageView1"
+    android:layout_marginRight="8dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BraceletName#1"
+        android:id="@+id/braceletName"
+        android:textSize="18sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Last, Location"
+        android:id="@+id/braceletLastLocation"
+        android:layout_below="@+id/braceletName"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distance"
+        android:id="@+id/braceletDistance"
+        android:layout_below="@+id/braceletLastLocation"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>
+
+</RelativeLayout>

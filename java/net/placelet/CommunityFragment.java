@@ -1,17 +1,5 @@
 package net.placelet;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import net.placelet.connection.User;
-import net.placelet.connection.Webserver;
-import net.placelet.data.Picture;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,11 +18,23 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
+
+import net.placelet.connection.User;
+import net.placelet.connection.Webserver;
+import net.placelet.data.Picture;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class CommunityFragment extends Fragment {
 	private MainActivity mainActivity;
@@ -192,6 +192,8 @@ public class CommunityFragment extends Fragment {
 		} else {
 			toggleLoading(false);
 		}
+
+        //Util.alert(Util.getDistance(36.0470801, 27.9552618, 51.6257436, 10.4610299) + "km", mainActivity);
 	}
 
 	private class Pictures extends AsyncTask<String, String, JSONObject> {

@@ -14,6 +14,7 @@ public class Bracelet implements HTMLDecodable {
 	public String owner = null;
 	public String brid = null;
 	public long date = -1;
+    private int distance = 0;
 
 	public int picAnz = -1;
 	public String lastCity = null;
@@ -87,12 +88,16 @@ public class Bracelet implements HTMLDecodable {
 	}
 
     public int getDistance() {
-        int distance = 0;
-        if(pictures != null && pictures.size() > 1) {
+        int distanceSum = 0;
+        if(distance == 0 && pictures != null && pictures.size() > 1) {
             for (int i = 1; i < pictures.size(); i++) {
-                distance += Util.getDistance(pictures.get(i - 1).latitude, pictures.get(i - 1).longitude, pictures.get(i).latitude, pictures.get(i).longitude);
+                distanceSum += Util.getDistance(pictures.get(i - 1).latitude, pictures.get(i - 1).longitude, pictures.get(i).latitude, pictures.get(i).longitude);
             }
-        }
-        return distance;
+        }else return distance;
+        return distanceSum;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
     }
 }
