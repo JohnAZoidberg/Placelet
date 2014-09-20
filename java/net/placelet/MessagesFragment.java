@@ -111,7 +111,7 @@ public class MessagesFragment extends Fragment {
 			}
             // check if new content
             try {
-                Util.alert("Update: " + result.getString("update"), mainActivity);
+                result.getString("update");
                 swipeLayout.setRefreshing(false);
             } catch (JSONException e) {
                 Util.saveDate(mainActivity.prefs, "getMessagesLastUpdate", System.currentTimeMillis() / 1000L);

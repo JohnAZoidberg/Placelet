@@ -132,7 +132,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 			if (recipientVerified || exists) {
                 // check if new content
                 try {
-                    Util.alert("Update: " + result.getString("update"), IOMessageActivity.this);
+                    result.getString("update");
                     toggleLoading(false, true);
                 } catch (JSONException e) {
                     Util.saveDate(prefs, "getIOMessagesLastUpdate-" + recipient, System.currentTimeMillis() / 1000L);

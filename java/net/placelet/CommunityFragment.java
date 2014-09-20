@@ -229,9 +229,8 @@ public class CommunityFragment extends Fragment {
             }
             // check if new content
             try {
-                Util.alert("Update: " + result.getString("update"), mainActivity);
+                result.getString("update");
             } catch (JSONException e) {
-                Util.alert("Update: NewContent", mainActivity);
                 Util.saveDate(mainActivity.prefs, "getCommunityPicturesLastUpdate", System.currentTimeMillis() / 1000L);
                 String jsonString = result.toString();
                 Util.saveData(mainActivity.prefs, "communityPics", jsonString);

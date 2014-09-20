@@ -184,7 +184,7 @@ public class BraceletActivity extends FragmentActivity {
 			}
             // check if new content
             try {
-                Util.alert("Update: " + result.getString("update"), BraceletActivity.this);
+                result.getString("update");
                 toggleLoading(false);
             } catch (JSONException e) {
                 Util.saveDate(prefs, "getBraceletDataLastUpdate-" + bracelet.brid, System.currentTimeMillis() / 1000L);
@@ -254,7 +254,6 @@ public class BraceletActivity extends FragmentActivity {
 			braceletFragment.updateData();
 		}
 		toggleLoading(false);
-        Util.alert(bracelet.getDistance() + "km", this);
 	}
 
 	public void loadSavedBracelet(String result) {
