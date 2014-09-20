@@ -45,7 +45,6 @@ public class CommunityFragment extends Fragment {
     private static final int PIC_START = 10;
 	private int displayed_pics = PIC_START;
 	private SwipeRefreshLayout swipeLayout;
-    private int loadTimes = 0;
 
     private boolean updateDialogDisplayed = false;
     private boolean newsDialogDisplayed = false;
@@ -182,13 +181,13 @@ public class CommunityFragment extends Fragment {
 		toggleLoading(true);
 		// display saved pics if it shouldn't reload and if there are pics saved
 		String savedPics = mainActivity.prefs.getString("communityPics", "null");
-		if (!savedPics.equals("null") && !reload && loadTimes == 0) {
-			//loadSavedPics(savedPics);
+		if (!savedPics.equals("null") && reload && displayed_pics == PIC_START) {
+			loadSavedPics(savedPics);
 		}
 		// load new pics from the internet
 		if (Util.notifyIfOffline(mainActivity)) {
-			Pictures picss = new Pictures(reload);
-			picss.execute();
+			Pictures pics = new Pictures(reload);
+			pics.execute();
 		} else {
 			toggleLoading(false);
 		}
@@ -199,8 +198,8 @@ public class CommunityFragment extends Fragment {
         private boolean reload;
         public Pictures(boolean reload) {
             this.reload = reload;
-            if (reload);
-                //displayed_pics = PIC_START;
+            if (reload)
+                displayed_pics = PIC_START;
         }
 
 		@Override
@@ -209,12 +208,10 @@ public class CommunityFragment extends Fragment {
 			User user = new User(mainActivity.prefs);
             int start = 0;
             int count = PIC_START;
-            if(loadTimes > 0) {
-                start = ((loadTimes * PIC_COUNT + PIC_START) - PIC_COUNT);
+            if(displayed_pics > PIC_START) {
                 start = (displayed_pics - PIC_COUNT);
                 count = PIC_COUNT;
             }
-            System.out.println("PICS!!!!! " + displayed_pics + " -- " + loadTimes);
 
 			content = user.getCommunityPictures(start, count);
 			return content;
@@ -224,8 +221,9 @@ public class CommunityFragment extends Fragment {
 		protected void onPostExecute(JSONObject result) {
             if(!Webserver.checkConnection(result)) {
                 toggleLoading(false);
-                if (!reload)
-                    loadTimes--;
+                if (!reload) {
+                    displayed_pics--;
+                }
             }
             // check if new content
             try {
@@ -264,10 +262,9 @@ public class CommunityFragment extends Fragment {
 				}
 			} catch (JSONException e) {
             }
-            Collections.sort(pictureList);
-            adapter.notifyDataSetChanged();
 		}
-		//Collections.sort(pictureList);
+		Collections.sort(pictureList);
+        adapter.notifyDataSetChanged();
 		toggleLoading(false);
 	}
 
@@ -408,11 +405,9 @@ public class CommunityFragment extends Fragment {
 
 	private void toggleLoading(boolean start) {
 		if (start) {
-			//mainActivity.setProgressBarIndeterminateVisibility(true);
 			if (swipeLayout != null)
 				swipeLayout.setRefreshing(true);
 		} else {
-			//mainActivity.setProgressBarIndeterminateVisibility(false);
 			if (swipeLayout != null)
 				swipeLayout.setRefreshing(false);
 		}
@@ -426,10 +421,9 @@ public class CommunityFragment extends Fragment {
 			final int lastItem = firstVisibleItem + visibleItemCount;
 			if (lastItem + 2 == totalItemCount) {
 				if (preLast != lastItem) { //to avoid multiple calls for last item
-                    loadPictures(false); // load more
                     displayed_pics += PIC_COUNT;
+                    loadPictures(false); // load more
 					preLast = lastItem;
-                    loadTimes++;
 				}
 			}
 		}
