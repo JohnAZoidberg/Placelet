@@ -122,5 +122,7 @@
     <string name="please_update">Please Update App</string>
     <string name="update">Update</string>
     <string name="remind_later">Remind me later</string>
+    <string name="will_be_reloaded">Data will be reloaded</string>
+    <string name="reload_everything">Reload everything</string>
 
 </resources>

@@ -1,19 +1,18 @@
 package net.placelet.connection;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
+import android.content.SharedPreferences;
 
-import net.placelet.Util;
+import com.pushbots.push.Pushbots;
+
 import net.placelet.data.Picture;
 
 import org.apache.http.ParseException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.pushbots.push.Pushbots;
-
-import android.content.SharedPreferences;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class User {
 	private SharedPreferences prefs;
@@ -108,7 +107,6 @@ public class User {
 
 	public JSONObject getMessages() {
         String lastUpdate = "" + prefs.getLong("getMessagesLastUpdate", 0);
-        Util.saveDate(prefs, "getMessagesLastUpdate", System.currentTimeMillis() / 1000L);
 		JSONObject result = null;
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
@@ -122,8 +120,7 @@ public class User {
 	}
 
 	public JSONObject getIOMessages(String recipient) {
-        String lastUpdate = "" + prefs.getLong("getIOMessagesLastUpdate", 0);
-        Util.saveDate(prefs, "getIOMessagesLastUpdate", System.currentTimeMillis() / 1000L);
+        String lastUpdate = "" + prefs.getLong("getIOMessagesLastUpdate-" + recipient, 0);
 		JSONObject result = null;
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
@@ -138,8 +135,7 @@ public class User {
 	}
 
 	public JSONObject sendMessage(String recipient, String content) {
-        String lastUpdate = "" + prefs.getLong("getIOMessagesLastUpdate", 0);
-        Util.saveDate(prefs, "getIOMessagesLastUpdate", System.currentTimeMillis() / 1000L);
+        String lastUpdate = "" + prefs.getLong("getIOMessagesLastUpdate-" + recipient, 0);
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
 		// Login-Variables
@@ -154,16 +150,16 @@ public class User {
 		return server.postRequest(args);
 	}
 
-	public JSONObject getCommunityPictures(int picCount) {
+	public JSONObject getCommunityPictures(int picStart, int picCount) {
         String lastUpdate = "" + prefs.getLong("getCommunityPicturesLastUpdate", 0);
-        Util.saveDate(prefs, "getCommunityPicturesLastUpdate", System.currentTimeMillis() / 1000L);
 		JSONObject result = null;
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
 		args.put("androidGetCommunityPictures", "true");
         args.put("user", username);
         args.put("v", Webserver.androidVersion);
-		args.put("pic_count", "" + picCount);
+		args.put("pic_start", "" + picStart);
+        args.put("pic_count", "" + picCount);
         args.put("lastUpdate", lastUpdate);
 		result = server.postRequest(args);
 		return result;
@@ -227,7 +223,6 @@ public class User {
 
 	public JSONObject getBraceletData(String brid) {
         String lastUpdate = "" + prefs.getLong("getBraceletDataLastUpdate-" + brid, 0);
-        Util.saveDate(prefs, "getBraceletDataLastUpdate-" + brid, System.currentTimeMillis() / 1000L);
 		JSONObject result = null;
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();
@@ -244,7 +239,6 @@ public class User {
 
 	public JSONObject getOwnBracelets() {
         String lastUpdate = "" + prefs.getLong("getOwnBraceletsLastUpdate", 0);
-        Util.saveDate(prefs, "getOwnBraceletsLastUpdate", System.currentTimeMillis() / 1000L);
 		JSONObject result = null;
 		Webserver server = new Webserver();
 		HashMap<String, String> args = new HashMap<String, String>();

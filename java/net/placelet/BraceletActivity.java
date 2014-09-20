@@ -182,9 +182,16 @@ public class BraceletActivity extends FragmentActivity {
 				}
 			} catch (JSONException e) {
 			}
-			String jsonString = result.toString();
-			Util.saveData(prefs, "braceletData-" + bracelet.brid, jsonString);
-			updateBracelet(result);
+            // check if new content
+            try {
+                Util.alert("Update: " + result.getString("update"), BraceletActivity.this);
+                toggleLoading(false);
+            } catch (JSONException e) {
+                Util.saveDate(prefs, "getBraceletDataLastUpdate-" + bracelet.brid, System.currentTimeMillis() / 1000L);
+                String jsonString = result.toString();
+                Util.saveData(prefs, "braceletData-" + bracelet.brid, jsonString);
+                updateBracelet(result);
+            }
 		}
 	}
 
@@ -205,7 +212,7 @@ public class BraceletActivity extends FragmentActivity {
 	}
 
 	public void updateBracelet(JSONObject result) {
-		bracelet.pictures.clear();
+        bracelet = new Bracelet(bracelet.brid);
 		try {
 			bracelet.owner = result.getString("owner");
 			bracelet.name = result.getString("name");

@@ -1,19 +1,5 @@
 package net.placelet;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import net.placelet.connection.User;
-import net.placelet.data.Message;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +19,20 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import net.placelet.connection.User;
+import net.placelet.data.Message;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 public class IOMessageActivity extends Activity implements OnClickListener {
 
@@ -130,11 +130,16 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 				e.printStackTrace();
 			}
 			if (recipientVerified || exists) {
-				String jsonString = result.toString();
-				SharedPreferences.Editor editor = prefs.edit();
-				editor.putString("messages-" + recipient, jsonString);
-				editor.apply();
-				updateListView(result);
+                // check if new content
+                try {
+                    Util.alert("Update: " + result.getString("update"), IOMessageActivity.this);
+                    toggleLoading(false, true);
+                } catch (JSONException e) {
+                    Util.saveDate(prefs, "getIOMessagesLastUpdate-" + recipient, System.currentTimeMillis() / 1000L);
+                    String jsonString = result.toString();
+                    Util.saveData(prefs, "messages-" + recipient, jsonString);
+                    updateListView(result);
+                }
 			} else {
 				displayErrorAtMessageFragment(getString(R.string.user_notextisting));
 			}
@@ -193,7 +198,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	}
 
 	private void updateListView(JSONObject input) {
-		messageList.clear();
+        messageList.clear();
 		for (Iterator<?> iter = input.keys(); iter.hasNext();) {
 			String key = (String) iter.next();
 			try {

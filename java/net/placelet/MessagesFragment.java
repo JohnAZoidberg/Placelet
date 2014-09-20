@@ -1,16 +1,5 @@
 package net.placelet;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import net.placelet.connection.User;
-import net.placelet.data.Message;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -27,6 +16,17 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import net.placelet.connection.User;
+import net.placelet.data.Message;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class MessagesFragment extends Fragment {
 	private SharedPreferences prefs;
@@ -109,11 +109,16 @@ public class MessagesFragment extends Fragment {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			String jsonString = result.toString();
-			SharedPreferences.Editor editor = mainActivity.prefs.edit();
-			editor.putString("messages", jsonString);
-			editor.apply();
-			updateListView(result);
+            // check if new content
+            try {
+                Util.alert("Update: " + result.getString("update"), mainActivity);
+                swipeLayout.setRefreshing(false);
+            } catch (JSONException e) {
+                Util.saveDate(mainActivity.prefs, "getMessagesLastUpdate", System.currentTimeMillis() / 1000L);
+                String jsonString = result.toString();
+                Util.saveData(mainActivity.prefs, "messages", jsonString);
+                updateListView(result);
+            }
 		}
 	}
 
@@ -132,7 +137,7 @@ public class MessagesFragment extends Fragment {
 	}
 
 	private void updateListView(JSONObject input) {
-		messageList.clear();
+        messageList.clear();
 		for (Iterator<?> iter = input.keys(); iter.hasNext();) {
 			String key = (String) iter.next();
 			try {

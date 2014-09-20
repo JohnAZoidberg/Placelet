@@ -115,5 +115,7 @@
     <string name="please_update">Bitte App aktualisieren</string>
     <string name="update">Update</string>
     <string name="remind_later">Später erinnern</string>
+    <string name="will_be_reloaded">Daten werden neu geladen</string>
+    <string name="reload_everything">Alles neu laden</string>
 
 </resources>

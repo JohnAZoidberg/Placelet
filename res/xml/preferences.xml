@@ -8,5 +8,8 @@
         android:key="pref_highdef_pics"
         android:title="@string/highdef_pictures"
         android:defaultValue="false"
-        android:summary="@string/highdef_pictures_summary"/>
+        android:summary="@string/highdef_pictures_summary" />
+   <Preference
+       android:key="pref_reset_update"
+       android:title="@string/reload_everything" />
 </PreferenceScreen>

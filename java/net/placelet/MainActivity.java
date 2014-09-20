@@ -107,7 +107,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             Fragment fragment = mAdapter.getFragment(currentTabId);
             switch (currentTabId) {
                 case 0:
-                    ((CommunityFragment) fragment).loadPictures(0, true);
+                    ((CommunityFragment) fragment).loadPictures(true);
                     break;
                 case 1:
                     ((MessagesFragment) fragment).loadMessages(true);

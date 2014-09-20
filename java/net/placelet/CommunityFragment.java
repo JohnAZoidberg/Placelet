@@ -41,9 +41,11 @@ public class CommunityFragment extends Fragment {
 	private CommunityAdapter adapter;
 	private List<Picture> pictureList = new ArrayList<Picture>();
 	private ListView list;
-	private final int PIC_COUNT = 5;
-	private int picnr = 10;
+	private static final int PIC_COUNT = 5;
+    private static final int PIC_START = 10;
+	private int displayed_pics = PIC_START;
 	private SwipeRefreshLayout swipeLayout;
+    private int loadTimes = 0;
 
     private boolean updateDialogDisplayed = false;
     private boolean newsDialogDisplayed = false;
@@ -72,11 +74,11 @@ public class CommunityFragment extends Fragment {
 		swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				loadPictures(0, true);
+				loadPictures(true);
 			}
 		});
 
-		loadPictures(0, false);
+		loadPictures(true);
 		return rootView;
 	}
 
@@ -176,61 +178,70 @@ public class CommunityFragment extends Fragment {
         }
     }
 
-    public void loadPictures(int start, boolean reload) {
+    public void loadPictures(boolean reload) {
 		toggleLoading(true);
 		// display saved pics if it shouldn't reload and if there are pics saved
 		String savedPics = mainActivity.prefs.getString("communityPics", "null");
-		if (!savedPics.equals("null") && !reload) {
-			loadSavedPics(savedPics);
-		} else {
-			start = picnr;
+		if (!savedPics.equals("null") && !reload && loadTimes == 0) {
+			//loadSavedPics(savedPics);
 		}
 		// load new pics from the internet
 		if (Util.notifyIfOffline(mainActivity)) {
-			Pictures pics = new Pictures(start);
-			pics.execute();
+			Pictures picss = new Pictures(reload);
+			picss.execute();
 		} else {
 			toggleLoading(false);
 		}
 
-        //Util.alert(Util.getDistance(36.0470801, 27.9552618, 51.6257436, 10.4610299) + "km", mainActivity);
 	}
 
 	private class Pictures extends AsyncTask<String, String, JSONObject> {
-		public int start = 0;
-
-        public Pictures(int start) {
-            this.start = start;
+        private boolean reload;
+        public Pictures(boolean reload) {
+            this.reload = reload;
+            if (reload);
+                //displayed_pics = PIC_START;
         }
 
 		@Override
 		protected JSONObject doInBackground(String... params) {
 			JSONObject content;
 			User user = new User(mainActivity.prefs);
-			content = user.getCommunityPictures(picnr);
+            int start = 0;
+            int count = PIC_START;
+            if(loadTimes > 0) {
+                start = ((loadTimes * PIC_COUNT + PIC_START) - PIC_COUNT);
+                start = (displayed_pics - PIC_COUNT);
+                count = PIC_COUNT;
+            }
+            System.out.println("PICS!!!!! " + displayed_pics + " -- " + loadTimes);
+
+			content = user.getCommunityPictures(start, count);
 			return content;
 		}
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
-            if(Webserver.checkConnection(result)) {
+            if(!Webserver.checkConnection(result)) {
                 toggleLoading(false);
-                picnr = PIC_COUNT;
+                if (!reload)
+                    loadTimes--;
             }
-			updateListView(result, start);
-			String jsonString = result.toString();
-			Util.saveData(mainActivity.prefs, "communityPics", jsonString);
+            // check if new content
+            try {
+                Util.alert("Update: " + result.getString("update"), mainActivity);
+            } catch (JSONException e) {
+                Util.alert("Update: NewContent", mainActivity);
+                Util.saveDate(mainActivity.prefs, "getCommunityPicturesLastUpdate", System.currentTimeMillis() / 1000L);
+                String jsonString = result.toString();
+                Util.saveData(mainActivity.prefs, "communityPics", jsonString);
+                updateListView(result, reload);
+            }
 		}
 	}
 
-	private void loadMore(boolean reload) {
-		if (!reload)
-			picnr += PIC_COUNT;
-		loadPictures(picnr, false);
-	}
-
-	private void updateListView(JSONObject input, int start) {
-		pictureList.clear();
+	private void updateListView(JSONObject input, boolean reload) {
+        if(reload) pictureList.clear();
         showNews(input);
         showUpdateDialog(input);
 		for (Iterator<?> iter = input.keys(); iter.hasNext();) {
@@ -254,9 +265,10 @@ public class CommunityFragment extends Fragment {
 				}
 			} catch (JSONException e) {
             }
+            Collections.sort(pictureList);
+            adapter.notifyDataSetChanged();
 		}
-		Collections.sort(pictureList);
-		adapter.notifyDataSetChanged();
+		//Collections.sort(pictureList);
 		toggleLoading(false);
 	}
 
@@ -392,7 +404,7 @@ public class CommunityFragment extends Fragment {
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 		if (jArray != null)
-			updateListView(jArray, 0);
+			updateListView(jArray, true);
 	}
 
 	private void toggleLoading(boolean start) {
@@ -415,8 +427,10 @@ public class CommunityFragment extends Fragment {
 			final int lastItem = firstVisibleItem + visibleItemCount;
 			if (lastItem + 2 == totalItemCount) {
 				if (preLast != lastItem) { //to avoid multiple calls for last item
-					loadMore(false);
+                    loadPictures(false); // load more
+                    displayed_pics += PIC_COUNT;
 					preLast = lastItem;
+                    loadTimes++;
 				}
 			}
 		}

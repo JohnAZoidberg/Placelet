@@ -99,9 +99,16 @@ public class MyPlaceletFragment extends Fragment {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			updateListView(result);
-			String jsonString = result.toString();
-			Util.saveData(mainActivity.prefs, "myPlacelet", jsonString);
+            // check if new content
+            try {
+                Util.alert("Update: " + result.getString("update"), mainActivity);
+                swipeLayout.setRefreshing(false);
+            } catch (JSONException e) {
+                Util.saveDate(mainActivity.prefs, "getOwnBraceletsLastUpdate", System.currentTimeMillis() / 1000L);
+                String jsonString = result.toString();
+                Util.saveData(mainActivity.prefs, "myPlacelet", jsonString);
+                updateListView(result);
+            }
 		}
 	}
 
@@ -134,8 +141,7 @@ public class MyPlaceletFragment extends Fragment {
 
 	private void updateListView(JSONObject input) {
         pictures.clear();
-		bracelets.clear();
-
+        bracelets.clear();
         for (Iterator<?> iter = input.keys(); iter.hasNext();) {
 			String key = (String) iter.next();
 			try {

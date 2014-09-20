@@ -19,6 +19,7 @@ import net.placelet.connection.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 @SuppressLint("SimpleDateFormat")
 public class Util {
@@ -140,5 +141,29 @@ public class Util {
 
         double angle = 2.0 * Math.asin(Math.sqrt(Math.pow(Math.sin(latDelta / 2.0), 2) + Math.cos(latFrom) * Math.cos(latTo) * Math.pow(Math.sin(longDelta / 2.0), 2)));
         return (int) (angle * 6378137.0 / 1000);
+    }
+
+    public static void resetUpdates(SharedPreferences prefs) {
+        Map<String, ?> prefsAll = prefs.getAll();
+        String[] keys = {
+                "getCommunityPicturesLastUpdate",
+                "getBraceletDataLastUpdate",
+                "getOwnBraceletsLastUpdate",
+                "getMessagesLastUpdate",
+                "getIOMessagesLastUpdate",
+        };
+        for(Map.Entry<String, ?> entry : prefsAll.entrySet()) {
+            if(stringContains(entry.getKey(), keys)) {
+                Util.saveDate(prefs, entry.getKey(), 0);
+            }
+        }
+    }
+
+    public static boolean stringContains(String haystack, String[] needles) {
+        haystack = haystack.toLowerCase();
+        for(String needle : needles) {
+            if(haystack.contains(needle.toLowerCase())) return true;
+        }
+        return false;
     }
 }
