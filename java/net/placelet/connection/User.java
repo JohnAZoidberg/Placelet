@@ -24,6 +24,7 @@ public class User {
 
 	public static String username;
 	public static String dynPW;
+    public static boolean admin;
 	
 	public static boolean trial = false;
 
@@ -31,20 +32,22 @@ public class User {
 		prefs = preferences;
 	}
 
-	public static String getUsername() {
+	/*public static String getUsername() {
 		return username;
 	}
 
 	public static String getDynPW() {
 		return dynPW;
-	}
+	}*/
 
 	public void logout() {
 		SharedPreferences.Editor editor = prefs.edit();
 		username = NOT_LOGGED_IN;
 		dynPW = NOT_LOGGED_IN;
+        admin = false;
 		editor.putString("username", NOT_LOGGED_IN);
 		editor.putString("dynPW", NOT_LOGGED_IN);
+        editor.putBoolean("admin", false);
 		editor.putInt("userid", 0);
 		editor.apply();
 	}
@@ -65,13 +68,15 @@ public class User {
 				int userid = result.getInt("userid");
 				String dynamicPW = result.getString("dynPW");
 				// boolean firstLogin = result.getBoolean("firstLogin");
-				// boolean admin = result.getBoolean("admin");
+				boolean status= result.getBoolean("admin");
 
 				username = user;
 				dynPW = dynamicPW;
+                admin = status;
 				editor.putInt("userid", userid);
 				editor.putString("dynPW", dynamicPW);
 				editor.putString("username", user);
+                editor.putBoolean("admin", status);
 				editor.apply();
 				return SUCCESS;
 			} else {
