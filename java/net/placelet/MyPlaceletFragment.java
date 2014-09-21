@@ -101,7 +101,7 @@ public class MyPlaceletFragment extends Fragment {
 			}
             // check if new content
             try {
-                result.getString("update");
+                if(User.admin) Util.alert("Update: " + result.getString("update"), mainActivity);
                 swipeLayout.setRefreshing(false);
             } catch (JSONException e) {
                 Util.saveDate(mainActivity.prefs, "getOwnBraceletsLastUpdate", System.currentTimeMillis() / 1000L);
