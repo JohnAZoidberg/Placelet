@@ -12,7 +12,8 @@
         android:text="@string/send"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:layout_margin="8dp"/>
 
     <EditText
         android:id="@+id/editText1"
@@ -25,7 +26,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/button1"
-        android:layout_toStartOf="@+id/button1"/>
+        android:layout_toStartOf="@+id/button1"
+        android:layout_margin="8dp"/>
 
     <ListView
         style="@style/thickDivider"
@@ -35,8 +37,8 @@
         android:layout_above="@+id/editText1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/username"
-        android:stackFromBottom="true" >
+        android:stackFromBottom="true"
+        android:layout_below="@+id/username">
 
     </ListView>
 
@@ -48,6 +50,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:gravity="center_horizontal"
-        android:text="@string/username" />
+        android:text="@string/username"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
 
 </RelativeLayout>

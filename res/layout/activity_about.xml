@@ -10,7 +10,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="@string/about_text" />
+        android:text="@string/about_text"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        />
 
     <TextView
         android:id="@+id/version_text"

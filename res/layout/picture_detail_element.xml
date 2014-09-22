@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:padding="16dp">
     
 
     <TextView
@@ -10,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/pic_location"
-        android:text="TextView" />
+        android:text="TextView"/>
 
     <TextView
         android:id="@+id/pic_date"
@@ -27,7 +28,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/wrappingLayout"
-        android:text="TextView" />
+        android:text="TextView"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"/>
 
     <RelativeLayout
         android:id="@+id/wrappingLayout"
@@ -60,7 +63,8 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/pic_title"
             android:layout_toRightOf="@+id/imageView1"
-            android:text="TextView" />
+            android:text="TextView"
+            android:layout_marginLeft="8dp"/>
     </RelativeLayout>
 
 </RelativeLayout>
