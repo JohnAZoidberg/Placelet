@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import com.pushbots.push.Pushbots;
 
+import net.placelet.Util;
 import net.placelet.data.Picture;
 
 import org.apache.http.ParseException;
@@ -41,10 +42,11 @@ public class User {
 	}*/
 
 	public void logout() {
-		SharedPreferences.Editor editor = prefs.edit();
 		username = NOT_LOGGED_IN;
 		dynPW = NOT_LOGGED_IN;
         admin = false;
+        Util.resetUpdates(prefs);
+        SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("username", NOT_LOGGED_IN);
 		editor.putString("dynPW", NOT_LOGGED_IN);
         editor.putBoolean("admin", false);
