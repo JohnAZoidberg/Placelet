@@ -184,7 +184,8 @@ public class BraceletActivity extends FragmentActivity {
 			}
             // check if new content
             try {
-                if(User.admin) Util.alert("Update: " + result.getString("update"), BraceletActivity.this);
+                String updateString = result.getString("update");
+                if(User.admin) Util.alert("Update: " + updateString, BraceletActivity.this);
                 toggleLoading(false);
             } catch (JSONException e) {
                 Util.saveDate(prefs, "getBraceletDataLastUpdate-" + bracelet.brid, System.currentTimeMillis() / 1000L);

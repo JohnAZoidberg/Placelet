@@ -62,7 +62,6 @@ public class CommunityFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Picture pic = (Picture) list.getItemAtPosition(position);
-				//mainActivity.switchToBraceletFragment(pic);
 				NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", pic.brid);
 			}
 		});
@@ -227,7 +226,8 @@ public class CommunityFragment extends Fragment {
             }
             // check if new content
             try {
-                if(User.admin) Util.alert("Update: " + result.getString("update"), mainActivity);
+                String updateString = result.getString("update");
+                if(User.admin) Util.alert("Update: " + updateString, mainActivity);
                 toggleLoading(false);
             } catch (JSONException e) {
                 Util.saveDate(mainActivity.prefs, "getCommunityPicturesLastUpdate", System.currentTimeMillis() / 1000L);
@@ -264,7 +264,7 @@ public class CommunityFragment extends Fragment {
 			} catch (JSONException e) {
             }
 		}
-		Collections.sort(pictureList);
+        Collections.sort(pictureList);
         adapter.notifyDataSetChanged();
 		toggleLoading(false);
 	}

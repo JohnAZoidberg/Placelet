@@ -132,12 +132,13 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 			if (recipientVerified || exists) {
                 // check if new content
                 try {
-                    if(User.admin) Util.alert("Update: " + result.getString("update"), IOMessageActivity.this);
+                    String updateString = result.getString("update");
+                    if(User.admin) Util.alert("Update: " + updateString, IOMessageActivity.this);
                     toggleLoading(false, true);
                 } catch (JSONException e) {
                     Util.saveDate(prefs, "getIOMessagesLastUpdate-" + recipient, System.currentTimeMillis() / 1000L);
                     String jsonString = result.toString();
-                    Util.saveData(prefs, "messages-" + recipient, jsonString);
+                    Util.saveData(prefs, "IOmessages-" + recipient, jsonString);
                     updateListView(result);
                 }
 			} else {
@@ -158,7 +159,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 	private void loadMessages(boolean reload) {
         toggleLoading(true, false);
-		String savedMessages = prefs.getString("messages-" + recipient, "null");
+		String savedMessages = prefs.getString("IOmessages-" + recipient, "null");
 		if (!savedMessages.equals("null") && !reload) {
 			loadSavedMessages(savedMessages);
 		}
