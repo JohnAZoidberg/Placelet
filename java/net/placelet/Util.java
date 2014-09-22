@@ -145,18 +145,30 @@ public class Util {
 
     public static void resetUpdates(SharedPreferences prefs) {
         Map<String, ?> prefsAll = prefs.getAll();
-        String[] keys = {
+        String[] updateKeys = {
                 "getCommunityPicturesLastUpdate",
                 "getBraceletDataLastUpdate",
                 "getOwnBraceletsLastUpdate",
                 "getMessagesLastUpdate",
                 "getIOMessagesLastUpdate",
         };
+        String[] dataKeys = {
+                "communityPics",
+                "braceletData",
+                "myPlacelet",
+                "messages",
+                "IOmessages-"
+
+        };
+        SharedPreferences.Editor editor = prefs.edit();
         for(Map.Entry<String, ?> entry : prefsAll.entrySet()) {
-            if(stringContains(entry.getKey(), keys)) {
-                Util.saveDate(prefs, entry.getKey(), 0);
+            if(stringContains(entry.getKey(), updateKeys)) {
+                editor.putLong(entry.getKey(), 0);
+            }else if(stringContains(entry.getKey(), dataKeys)) {
+                editor.putString(entry.getKey(), "null");
             }
         }
+        editor.apply();
     }
 
     public static boolean stringContains(String haystack, String[] needles) {
