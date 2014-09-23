@@ -6,7 +6,10 @@
     android:layout_alignParentLeft="true"
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
-    android:minHeight="48dp" >
+    android:minHeight="48dp"
+    android:paddingLeft="8dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -43,6 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="0.50"
-        android:text="@string/message" />
+        android:text="@string/message"
+        android:layout_marginLeft="8dp"/>
 
 </LinearLayout>
