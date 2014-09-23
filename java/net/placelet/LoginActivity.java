@@ -1,8 +1,5 @@
 package net.placelet;
 
-import java.util.HashMap;
-
-import net.placelet.connection.User;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import net.placelet.connection.User;
+
+import java.util.HashMap;
+
 public class LoginActivity extends Activity implements OnClickListener {
 
 	private SharedPreferences prefs;
@@ -25,7 +26,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, R.id.action_about, 0, R.string.about).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(0, R.id.action_options, 0, R.string.options).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
 		return super.onCreateOptionsMenu(menu);
 	}

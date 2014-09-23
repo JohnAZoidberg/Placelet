@@ -24,9 +24,7 @@
     <string name="name">Name</string>
     <string name="loading">Loading&#8230;</string>
     <string name="date">Date</string>
-    <string name="about">About</string>
     <string name="email">Email</string>
-    <string name="about_text">\u00A9 Placelet, 2014\nplacelet.de, placelet.net\nDaniel Schäfer, ds@struckmeierfliesen.de</string>
     <string name="options">Settings</string>
     <string name="activate_download">Activate picture download</string>
     <string name="deactivate_download">Deactivate picture download</string>
@@ -126,5 +124,11 @@
     <string name="reload_everything">Reload everything</string>
     <string name="new_bracelet">New Bracelet</string>
     <string name="new_picture">New Picture</string>
+    <string name="send_email">Send Email</string>
+    <string name="placelet_copyright" translatable="false">\u00A9 Placelet 2014</string>
+    <string name="domains" translatable="false">placelet.de, placelet.net</string>
+    <string name="developer">Developer</string>
+    <string name="dev_contact" translatable="false">Daniel Schäfer, ds@struckmeierfliesen.de</string>
+    <string name="version">Version</string>
 
 </resources>

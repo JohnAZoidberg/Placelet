@@ -3,13 +3,33 @@
     <CheckBoxPreference
         android:key="pref_download_pics"
         android:title="@string/download_pictures"
-        android:defaultValue="true" />
+        android:defaultValue="true"
+        android:persistent="true" />
     <CheckBoxPreference
         android:key="pref_highdef_pics"
         android:title="@string/highdef_pictures"
         android:defaultValue="false"
-        android:summary="@string/highdef_pictures_summary" />
+        android:summary="@string/highdef_pictures_summary"
+        android:persistent="true" />
    <Preference
        android:key="pref_reset_update"
-       android:title="@string/reload_everything" />
+       android:title="@string/reload_everything"
+       android:persistent="false" />
+    <Preference
+        android:enabled="false" />
+    <Preference
+        android:key="pref_website"
+        android:title="@string/placelet_copyright"
+        android:summary="@string/domains"
+        android:persistent="false" />
+    <Preference
+        android:key="pref_developer"
+        android:title="@string/developer"
+        android:summary="@string/dev_contact"
+        android:persistent="false" />
+    <Preference
+        android:key="pref_version"
+        android:title="@string/version"
+        android:summary="@string/app_version"
+        android:persistent="false" />
 </PreferenceScreen>

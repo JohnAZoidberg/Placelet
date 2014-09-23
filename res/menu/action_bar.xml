@@ -18,11 +18,5 @@
         android:orderInCategory="200"
         android:showAsAction="never"
         android:title="@string/options"/>
-    <item
-        android:id="@+id/action_about"
-        android:icon="@drawable/ic_action_about"
-        android:orderInCategory="300"
-        android:showAsAction="never"
-        android:title="@string/about"/>
 
 </menu>

@@ -1,12 +1,13 @@
 package net.placelet;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
-import net.placelet.connection.User;
 import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;
+
+import net.placelet.connection.User;
+
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class NavigateActivities {
 	public static boolean activitySwitchMenu(MenuItem item, Context context) {
@@ -23,9 +24,6 @@ public class NavigateActivities {
 				return true;
 			case R.id.action_options:
 				switchActivity(context, OptionsActivity.class, false);
-				break;
-			case R.id.action_about:
-				switchActivity(context, AboutActivity.class, false);
 				break;
 		}
 		return true;
