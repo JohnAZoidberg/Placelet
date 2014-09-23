@@ -69,10 +69,18 @@ public class MyPlaceletFragment extends Fragment {
                                     int position, long id) {
                 if(position > pictureAdapter.getCount()) {
                     Bracelet bracelet = (Bracelet) list.getItemAtPosition(position);
-                    NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", bracelet.brid);
+                    if(bracelet.brid.equals("register_bracelet")) {
+                        Util.displayRegisterDialog(mainActivity, mainActivity.prefs);
+                    }else {
+                        NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", bracelet.brid);
+                    }
                 }else {
                     Picture pic = (Picture) list.getItemAtPosition(position);
-                    NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", pic.brid);
+                    if(pic.brid.equals("upload_picture")) {
+                        NavigateActivities.switchActivity(mainActivity, UploadActivity.class, false);
+                    }else {
+                        NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", pic.brid);
+                    }
                 }
             }
         });
@@ -186,9 +194,28 @@ public class MyPlaceletFragment extends Fragment {
 			} catch (JSONException e) {
 			}
 		}
-		braceletAdapter.notifyDataSetChanged();
+        if(bracelets.size() == 0) {
+            Bracelet bracelet = new Bracelet("register_bracelet");
+            bracelet.name = "New Bracelet";
+            Picture picture = new Picture();
+            picture.city = "City";
+            picture.country = "Country";
+            picture.loadImage = true;
+            bracelet.pictures.add(picture);
+            bracelets.add(bracelet);
+        }
+        if(pictures.size() == 0) {
+            Picture picture = new Picture();
+            picture.brid = "upload_picture";
+            picture.title = "New Picture";
+            picture.city = "City";
+            picture.country = "Country";
+            picture.loadImage = true;
+            pictures.add(picture);
+        }
+        braceletAdapter.notifyDataSetChanged();
         pictureAdapter.notifyDataSetChanged();
-		swipeLayout.setRefreshing(false);
+        swipeLayout.setRefreshing(false);
 	}
 
 }
