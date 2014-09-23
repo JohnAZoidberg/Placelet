@@ -124,5 +124,7 @@
     <string name="remind_later">Remind me later</string>
     <string name="will_be_reloaded">Data will be reloaded</string>
     <string name="reload_everything">Reload everything</string>
+    <string name="new_bracelet">New Bracelet</string>
+    <string name="new_picture">New Picture</string>
 
 </resources>

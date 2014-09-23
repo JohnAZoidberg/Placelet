@@ -196,10 +196,10 @@ public class MyPlaceletFragment extends Fragment {
 		}
         if(bracelets.size() == 0) {
             Bracelet bracelet = new Bracelet("register_bracelet");
-            bracelet.name = "New Bracelet";
+            bracelet.name = mainActivity.getString(R.string.new_bracelet);
             Picture picture = new Picture();
-            picture.city = "City";
-            picture.country = "Country";
+            picture.city = mainActivity.getString(R.string.city);
+            picture.country = mainActivity.getString(R.string.country);
             picture.loadImage = true;
             bracelet.pictures.add(picture);
             bracelets.add(bracelet);
@@ -207,9 +207,9 @@ public class MyPlaceletFragment extends Fragment {
         if(pictures.size() == 0) {
             Picture picture = new Picture();
             picture.brid = "upload_picture";
-            picture.title = "New Picture";
-            picture.city = "City";
-            picture.country = "Country";
+            picture.title = mainActivity.getString(R.string.new_picture);
+            picture.city = mainActivity.getString(R.string.city);
+            picture.country = mainActivity.getString(R.string.country);
             picture.loadImage = true;
             pictures.add(picture);
         }
