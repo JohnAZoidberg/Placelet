@@ -2,14 +2,21 @@ package net.placelet;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.text.InputType;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -177,5 +184,81 @@ public class Util {
             if(haystack.contains(needle.toLowerCase())) return true;
         }
         return false;
+    }
+
+    public static void displayRegisterDialog(final Context context, final SharedPreferences prefs) {
+        final EditText input = new EditText(context);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle(context.getString(R.string.register_bracelet))
+                .setView(input)
+                .setPositiveButton(context.getString(R.string.register), null)
+                .setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }).create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface d) {
+
+                Button b = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        String braceletID = input.getText().toString();
+                        if (braceletID.matches("[a-zA-Z0-9]{6}") && Util.notifyIfOffline(context)) {
+                            RegisterBracelet registerBr = new RegisterBracelet(braceletID, context, prefs);
+                            registerBr.execute();
+                            dialog.dismiss();
+                        } else
+                            Util.alert(context.getString(R.string.wrong_brid_format), context);
+                    }
+                });
+            }
+        });
+        dialog.show();
+    }
+
+    private static class RegisterBracelet extends AsyncTask<String, String, Integer> {
+        private String brid;
+        private Context context;
+        private SharedPreferences prefs;
+
+        public RegisterBracelet (String brid, Context context, SharedPreferences prefs) {
+            this.brid = brid;
+            this.context = context;
+            this.prefs = prefs;
+        }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            User user = new User(prefs);
+            return user.registerBracelet(brid);
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            switch(result) {
+                case 0:
+                    Util.alert(context.getString(R.string.bracelet_notextisting), context);
+                    break;
+                case 1:
+                    Util.alert(brid + " " + context.getString(R.string.registered_exclamation), context);
+                    break;
+                case 2:
+                    Util.alert(context.getString(R.string.bracelet_registered_to_you), context);
+                    break;
+                case 3:
+                    Util.alert(context.getString(R.string.bracelet_registered_someone), context);
+                    break;
+                default:
+                    Util.alert(context.getString(R.string.server_problem), context);
+            }
+        }
     }
 }

@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +18,6 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -92,7 +89,7 @@ public class CommunityFragment extends Fragment {
         newBraceletIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                displayRegisterDialog();
+                Util.displayRegisterDialog(mainActivity, mainActivity.prefs);
             }
         });
 		ImageView galleryIcon = (ImageView) rootView.findViewById(R.id.galleryIcon);
@@ -103,78 +100,6 @@ public class CommunityFragment extends Fragment {
 			}
 		});
 	}
-
-    private void displayRegisterDialog() {
-        final EditText input = new EditText(mainActivity);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        final AlertDialog dialog = new AlertDialog.Builder(mainActivity)
-                .setTitle(mainActivity.getString(R.string.register_bracelet))
-                .setView(input)
-                .setPositiveButton(mainActivity.getString(R.string.register), null)
-                .setNegativeButton(mainActivity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                }).create();
-
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-
-            @Override
-            public void onShow(DialogInterface d) {
-
-                Button b = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                b.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        String braceletID = input.getText().toString();
-                        if (braceletID.matches("[a-zA-Z0-9]{6}") && Util.notifyIfOffline(mainActivity)) {
-                            RegisterBracelet registerBr = new RegisterBracelet(braceletID);
-                            registerBr.execute();
-                            dialog.dismiss();
-                        } else
-                            Util.alert(mainActivity.getString(R.string.wrong_brid_format), mainActivity);
-                    }
-                });
-            }
-        });
-        dialog.show();
-    }
-
-    private class RegisterBracelet extends AsyncTask<String, String, Integer> {
-        private String brid;
-
-        public RegisterBracelet (String brid) {
-            this.brid = brid;
-        }
-
-        @Override
-        protected Integer doInBackground(String... params) {
-            User user = new User(mainActivity.prefs);
-            return user.registerBracelet(brid);
-        }
-
-        @Override
-        protected void onPostExecute(Integer result) {
-            switch(result) {
-                case 0:
-                    Util.alert(mainActivity.getString(R.string.bracelet_notextisting), mainActivity);
-                    break;
-                case 1:
-                    Util.alert(brid + mainActivity.getString(R.string.registered_exclamation), mainActivity);
-                    break;
-                case 2:
-                    Util.alert(mainActivity.getString(R.string.bracelet_registered_to_you), mainActivity);
-                    break;
-                case 3:
-                    Util.alert(mainActivity.getString(R.string.bracelet_registered_someone), mainActivity);
-                    break;
-                default:
-                    Util.alert(mainActivity.getString(R.string.server_problem), mainActivity);
-            }
-        }
-    }
 
     public void loadPictures(boolean reload) {
 		toggleLoading(true);
