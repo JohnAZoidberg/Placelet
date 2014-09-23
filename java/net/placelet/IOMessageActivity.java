@@ -99,12 +99,13 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 			if (params.length == 1) {
 				String content = params[0];
 				try {
-					user.sendMessage(recipient, URLEncoder.encode(content, "utf-8"));
+					login = user.sendMessage(recipient, URLEncoder.encode(content, "utf-8"));
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
-			}
-			login = user.getIOMessages(recipient);
+			}else {
+                login = user.getIOMessages(recipient);
+            }
 			return login;
 		}
 
@@ -152,8 +153,8 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 			toggleLoading(true, true);
 			String message = messageField.getText().toString();
 			messageField.setText("");
-			Messages login = new Messages();
-			login.execute(message);
+			Messages send = new Messages();
+			send.execute(message);
 		}
 	}
 
