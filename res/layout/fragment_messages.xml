@@ -17,8 +17,8 @@
             android:layout_above="@+id/editText1"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true" >
-        </ListView>
+            android:layout_alignParentTop="true"
+            style="@style/noDivider" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <EditText
