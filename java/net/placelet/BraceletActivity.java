@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -180,7 +179,7 @@ public class BraceletActivity extends FragmentActivity {
 					//toggleLoading(false);
 					return;
 				}
-			} catch (JSONException e) {
+			} catch (JSONException ignored) {
 			}
             // check if new content
             try {
@@ -222,8 +221,7 @@ public class BraceletActivity extends FragmentActivity {
 			bracelet.lastCity = result.getString("lastcity");
 			bracelet.lastCountry = result.getString("lastcountry");
             bracelet.subscribed = result.getBoolean("subscribed");
-		} catch (JSONException e) {
-			e.printStackTrace();
+		} catch (JSONException ignored) {
 		}
 		for (Iterator<?> iter = result.keys(); iter.hasNext();) {
 			String key = (String) iter.next();
@@ -242,7 +240,7 @@ public class BraceletActivity extends FragmentActivity {
 				picture.longitude = pictures.getDouble("longitude");
 				picture.loadImage = settingsPrefs.getBoolean("pref_download_pics", true);
 				bracelet.pictures.add(picture);
-			} catch (JSONException e) {
+			} catch (JSONException ignored) {
 			}
 		}
         invalidateOptionsMenu();
@@ -262,8 +260,7 @@ public class BraceletActivity extends FragmentActivity {
 		try {
 			jArray = new JSONObject(result);
 			updateBracelet(jArray);
-		} catch (JSONException e) {
-			Log.e("log_tag", "Error parsing data " + e.toString());
+		} catch (JSONException ignored) {
 		}
 	}
 

@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -183,10 +182,9 @@ public class CommunityFragment extends Fragment {
 					picture.id = Integer.parseInt(pictures.getString("id"));
 					picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
 					pictureList.add(picture);
-				} catch (JSONException e) {
-					e.printStackTrace();
+				} catch (JSONException ignored) {
 				}
-			} catch (JSONException e) {
+			} catch (JSONException ignored) {
             }
 		}
         Collections.sort(pictureList);
@@ -203,7 +201,7 @@ public class CommunityFragment extends Fragment {
             news = input.getJSONObject("news");
             type = news.getString("type");
             content = news.getString("content");
-        } catch (JSONException e1) {
+        } catch (JSONException ignored) {
             return;
         }
         try {
@@ -283,7 +281,7 @@ public class CommunityFragment extends Fragment {
         boolean update = false;
         try {
             update = input.getBoolean("u");
-        } catch (JSONException e1) {
+        } catch (JSONException e) {
             return;
         }
         Long lastNotified = mainActivity.prefs.getLong("updateLater", 0);
@@ -322,8 +320,7 @@ public class CommunityFragment extends Fragment {
 		JSONObject jArray = null;
 		try {
 			jArray = new JSONObject(result);
-		} catch (JSONException e) {
-			Log.e("log_tag", "Error parsing data " + e.toString());
+		} catch (JSONException ignored) {
 		}
 		if (jArray != null)
 			updateListView(jArray, true);

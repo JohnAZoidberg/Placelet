@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -121,15 +120,13 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 					}
 					return;
 				}
-			} catch (JSONException e) {
-				e.printStackTrace();
+			} catch (JSONException ignored) {
 			}
 			Boolean exists = false;
 			try {
 				if (result != null)
 					exists = result.getBoolean("exists");
-			} catch (JSONException e) {
-				e.printStackTrace();
+			} catch (JSONException ignored) {
 			}
 			if (recipientVerified || exists) {
                 // check if new content
@@ -219,13 +216,11 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 							msg.senderID = Integer.parseInt(messages.getJSONObject("sender").getString("id"));
 							msg.sender = messages.getJSONObject("sender").getString("name");
 							messageList.add(msg);
-						} catch (JSONException e) {
-							e.printStackTrace();
+						} catch (JSONException ignored) {
 						}
 					}
 				}
-			} catch (JSONException e) {
-				e.printStackTrace();
+			} catch (JSONException ignored) {
 			}
 		}
 
@@ -261,8 +256,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		JSONObject jArray = null;
 		try {
 			jArray = new JSONObject(result);
-		} catch (JSONException e) {
-			Log.e("log_tag", "Error parsing data " + e.toString());
+		} catch (JSONException ignored) {
 		}
 		if (jArray != null)
 			updateListView(jArray);

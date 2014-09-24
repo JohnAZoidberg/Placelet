@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,8 +105,7 @@ public class MessagesFragment extends Fragment {
 					swipeLayout.setRefreshing(false);
 					return;
 				}
-			} catch (JSONException e) {
-				e.printStackTrace();
+			} catch (JSONException ignored) {
 			}
             // check if new content
             try {
@@ -151,13 +149,11 @@ public class MessagesFragment extends Fragment {
 						msg.sent = chat.getLong("sent");
 						msg.seen = chat.getLong("seen");
 					}
-				} catch (JSONException e) {
-					e.printStackTrace();
+				} catch (JSONException ignored) {
 				}
 				msg.sender = key;
 				messageList.add(msg);
-			} catch (JSONException e) {
-                e.printStackTrace();
+			} catch (JSONException ignored) {
             }
 		}
 
@@ -171,8 +167,7 @@ public class MessagesFragment extends Fragment {
 		JSONObject jArray = null;
 		try {
 			jArray = new JSONObject(result);
-		} catch (JSONException e) {
-			Log.e("log_tag", "Error parsing data " + e.toString());
+		} catch (JSONException ignored) {
 		}
 		if (jArray != null)
 			updateListView(jArray);

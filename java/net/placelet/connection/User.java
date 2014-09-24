@@ -89,8 +89,7 @@ public class User {
 						return WRONG_PW;
 				}
 			}
-		} catch (JSONException e) {
-			e.printStackTrace();
+		} catch (JSONException ignored) {
 		}
 		return 0;
 	}
@@ -106,8 +105,7 @@ public class User {
 		try {
 			result = server.postRequest(args);
 			return result.getInt("registered");
-		} catch (JSONException e) {
-			e.printStackTrace();
+		} catch (JSONException ignored) {
 		}
         return 0;
 	}
@@ -194,8 +192,7 @@ public class User {
 		try {
 			result = new JSONObject(resultString);
 			error = result.getInt("upload");
-		} catch (JSONException e) {
-			e.printStackTrace();
+		} catch (JSONException ignored) {
 		}
 		return error;
 	}
@@ -213,8 +210,7 @@ public class User {
 				String key = (String) iter.next();
 				resultString += key + " : " + result.getString(key) + "\n";
 			}
-		} catch (JSONException e) {
-			e.printStackTrace();
+		} catch (JSONException ignored) {
 		}
 		return resultString;
 	}

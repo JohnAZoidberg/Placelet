@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,8 +103,7 @@ public class MyPlaceletFragment extends Fragment {
 					swipeLayout.setRefreshing(false);
 					return;
 				}
-			} catch (JSONException e) {
-				e.printStackTrace();
+			} catch (JSONException ignored) {
 			}
             // check if new content
             try {
@@ -141,8 +139,7 @@ public class MyPlaceletFragment extends Fragment {
 		JSONObject jArray = null;
 		try {
 			jArray = new JSONObject(result);
-		} catch (JSONException e) {
-			Log.e("log_tag", "Error parsing data " + e.toString());
+		} catch (JSONException ignored) {
 		}
 		if (jArray != null)
 			updateListView(jArray);
