@@ -77,6 +77,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		recipientDisplay = (TextView) findViewById(R.id.username);
 		getIntents();
 		adapter = new IOMessageAdapter(this, 0, messageList);
+        list.setAdapter(adapter);
 		loadMessages(false);
 	}
 
@@ -230,7 +231,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 		Collections.sort(messageList);
 		Collections.reverse(messageList);
-		list.setAdapter(adapter);
+        messageList = mergeMessages(messageList);
 		adapter.notifyDataSetChanged();
         Message lastMessage = new Message();
         if(messageList.size() > 0) lastMessage = messageList.get(messageList.size() - 1);
@@ -245,7 +246,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		toggleLoading(false, true);
 	}
 
-	private void displayErrorAtMessageFragment(String err) {
+    private void displayErrorAtMessageFragment(String err) {
 		Toast.makeText(this, err, Toast.LENGTH_LONG).show();
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra("fragment", "1");
@@ -280,4 +281,24 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		}
         invalidateOptionsMenu();
 	}
+
+    private List<Message> mergeMessages(List<Message> messages) {
+        List<Message> messagesClone = new ArrayList<Message>();
+        for(Message message : messages) messagesClone.add(message);
+        messages.clear();
+
+        for(Message message : messagesClone) {
+            if(messages.size() > 0) {
+                Message lastMerged = messages.get(messages.size() - 1);
+                if(message.sender.equals(messages.get(messages.size() - 1).sender)) {
+                    messages.get(messages.size() - 1).addContent("\n\n" + message.content);
+                }else {
+                    messages.add(message);
+                }
+            }else {
+                messages.add(message);
+            }
+        }
+        return messages;
+    }
 }
