@@ -1,11 +1,5 @@
 package net.placelet;
 
-import java.util.List;
-
-import net.placelet.data.Message;
-
-import com.squareup.picasso.Picasso;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import net.placelet.data.Message;
+
+import java.util.List;
 
 public class IOMessageAdapter extends ArrayAdapter<Message> {
 	private Context context;
@@ -28,14 +28,12 @@ public class IOMessageAdapter extends ArrayAdapter<Message> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View element = convertView;
 		ViewHolderItem viewHolder;
-		ImageView imgView = null;
 		Message message = messageList.get(position);
 		message.html_entity_decode();
 		if (element == null) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			if (message.loadImage) {
 				element = inflater.inflate(R.layout.io_message_element, null);
-				imgView = (ImageView) element.findViewById(R.id.imageView1);
 			} else {
 				element = inflater.inflate(R.layout.message_element, null);
 			}
@@ -43,6 +41,7 @@ public class IOMessageAdapter extends ArrayAdapter<Message> {
 			viewHolder.sender = (TextView) element.findViewById(R.id.name);
 			viewHolder.messageContent = (TextView) element.findViewById(R.id.message);
 			viewHolder.date = (TextView) element.findViewById(R.id.date);
+            viewHolder.imgView = (ImageView) element.findViewById(R.id.imageView1);
 			
 			element.setTag(viewHolder);
 		}else {
@@ -52,8 +51,8 @@ public class IOMessageAdapter extends ArrayAdapter<Message> {
 		viewHolder.sender.setText(message.sender);
 		viewHolder.messageContent.setText(message.content);
 		viewHolder.date.setText(Util.timestampToTime(message.sent));
-		if (message.loadImage && imgView != null) {
-			Picasso.with(context).load("http://placelet.de/pictures/profiles/" + message.senderID + ".jpg").into(imgView);
+		if (message.loadImage) {
+            Picasso.with(context).load("http://placelet.de/pictures/profiles/" + message.senderID + ".jpg").into(viewHolder.imgView);
 		}
 
 		return element;
@@ -69,6 +68,6 @@ public class IOMessageAdapter extends ArrayAdapter<Message> {
 		TextView sender;
 		TextView messageContent;
 		TextView date;
+        ImageView imgView;
 	}
-
 }
