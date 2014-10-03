@@ -1,5 +1,6 @@
 package net.placelet.connection;
 
+import android.net.http.AndroidHttpClient;
 import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
@@ -55,6 +56,8 @@ public class Webserver {
 	}
 
 	public String stringPostRequest(HashMap<String, String> args) {
+        httpPost.addHeader("Accept-Encoding", "gzip");
+        AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpPost);
 		InputStream is = null;
 		String result = "";
 		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(args.size());
@@ -70,7 +73,7 @@ public class Webserver {
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
 			HttpResponse response = httpClient.execute(httpPost);
 			HttpEntity entity = response.getEntity();
-			is = entity.getContent();
+            is = AndroidHttpClient.getUngzippedContent(response.getEntity());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IllegalStateException e) {
@@ -103,7 +106,7 @@ public class Webserver {
 		return result;
 	}
 
-	public String multipartRequest(String post, String filepath, String filefield) throws ParseException, IOException {
+    public String multipartRequest(String post, String filepath, String filefield) throws ParseException, IOException {
 		String urlTo = connectionURL;
 		HttpURLConnection connection = null;
 		DataOutputStream outputStream = null;
