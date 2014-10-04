@@ -59,6 +59,11 @@ public class BraceletActivity extends FragmentActivity {
 		settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		Intent intent = getIntent();
+        if (intent.hasExtra("fragment")) {
+            // switch to specific fragment
+            int fragmentNr = intent.getIntExtra("fragment", 0);
+            switchFragments(fragmentNr);
+        }
 		String brid = intent.getStringExtra("brid");
 		bracelet = new Bracelet(brid);
 		loadPictures(false);
@@ -274,7 +279,7 @@ public class BraceletActivity extends FragmentActivity {
 		}
 	}
 
-    public void switchFragment(int number) {
+    public void switchFragments(int number) {
         mPager.setCurrentItem(number);
     }
 }

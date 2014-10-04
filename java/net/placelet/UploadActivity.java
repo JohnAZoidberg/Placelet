@@ -1,13 +1,5 @@
 package net.placelet;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
-import net.placelet.connection.User;
-import net.placelet.data.Picture;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -25,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +27,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import net.placelet.connection.User;
+import net.placelet.data.Picture;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class UploadActivity extends Activity implements OnClickListener, LocationListener {
 
@@ -262,8 +264,9 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 				switchToBracelet(brid);
 				break;
 			default:
-				alert(error + "");
-				break;
+				alert("Error");
+                Log.e("Upload-Error", error + "");
+                break;
 		}
 	}
 
@@ -312,7 +315,7 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 	}
 
 	private void switchToBracelet(String brid) {
-		Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, BraceletActivity.class);
 		intent.putExtra("fragment", 1);
 		intent.putExtra("brid", brid);
 		startActivity(intent);
