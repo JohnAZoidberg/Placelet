@@ -68,18 +68,18 @@ public class Webserver {
 			String val = (String) args.get(key);
 			nameValuePair.add(new BasicNameValuePair(key, val));
 		}
-
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
 			HttpResponse response = httpClient.execute(httpPost);
-			HttpEntity entity = response.getEntity();
+            HttpEntity entity = response.getEntity();
             is = AndroidHttpClient.getUngzippedContent(response.getEntity());
+            //is = entity.getContent(); // Use for debugging if a PHP error causes IOException
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+            e.printStackTrace();
 		}
 		// Convert response to string
 		try {
@@ -185,6 +185,14 @@ public class Webserver {
 			outputStream.flush();
 			outputStream.close();
 
+            double length_before = result.length();
+            Log.e("stats", "Length of request before minifying: " + result.length());
+            Log.e("debug", "Data from Webserver(PHP) before minifying: \n\"" + result + "\"");
+            result = deminify_json(result);
+            double length_after = result.length();
+            Log.e("debug", "Data from Webserver(PHP): \n\"" + result + "\"");
+            Log.e("stats", "Length of request: " + result.length());
+            Log.e("stats", "Saving: " + (length_after / length_before));
 			return result;
 		} catch (Exception e) {
 			Log.e("MultipartRequest", "Multipart Form Upload Error");

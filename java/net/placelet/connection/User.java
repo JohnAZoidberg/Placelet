@@ -178,7 +178,7 @@ public class User {
 		Webserver server = new Webserver();
 		String post = "androidUploadPicture=true" + "&brid=" + picture.brid + "&description=" + picture.description + "&city=" + picture.city
 				+ "&country=" + picture.country + "&title=" + picture.title + "&date=" + picture.date + "&latitude=" + picture.latitude
-				+ "&longitude=" + picture.longitude + "&user=" + User.username + "&dynPW=" + User.dynPW + "androidAuthenticate=true";
+				+ "&longitude=" + picture.longitude + "&user=" + User.username + "&dynPW=" + User.dynPW + "&androidAuthenticate=true";
 		String filefield = "uploadPic";
 
 		String resultString = "{}";

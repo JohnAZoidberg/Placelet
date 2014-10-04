@@ -55,7 +55,7 @@ public class BraceletFragment extends Fragment {
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                braceletActivity.switchFragment(1);
+                braceletActivity.switchFragments(1);
             }
         });
 		updateData();
