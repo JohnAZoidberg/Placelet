@@ -229,7 +229,7 @@ public class Webserver {
                 return false;
             }
         } catch (JSONException e) {
-            return false;
+            return true;
         }
         return true;
     }
