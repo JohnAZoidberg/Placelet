@@ -81,20 +81,7 @@ public class Webserver {
 		} catch (IOException e) {
             e.printStackTrace();
 		}
-		// Convert response to string
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"), 8);
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			is.close();
-			result = sb.toString();
-		} catch (Exception e) {
-			Log.e("log_tag", "Error converting result " + e.toString());
-			result = "{error: no_internet}";
-		}
+		result = convertStreamToString(is);
         double length_before = result.length();
         Log.e("stats", "Length of request before minifying: " + result.length());
         Log.e("debug", "Data from Webserver(PHP) before minifying: \n\"" + result + "\"");
@@ -202,24 +189,21 @@ public class Webserver {
 	}
 
 	private String convertStreamToString(InputStream is) {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-		StringBuilder sb = new StringBuilder();
-
-		String line = null;
-		try {
-			while ((line = reader.readLine()) != null) {
-				sb.append(line);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				is.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return sb.toString();
+		// Convert response to string
+        String result = "{error: no_internet}";
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"), 8);
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            is.close();
+            result = sb.toString();
+        } catch (Exception e) {
+            Log.e("log_tag", "Error converting result " + e.toString());
+        }
+        return result;
 	}
 
     public static boolean checkConnection(JSONObject result) {
