@@ -77,7 +77,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		getIntents();
 		adapter = new IOMessageAdapter(this, 0, messageList);
         list.setAdapter(adapter);
-		loadMessages(false);
+		loadMessages(true);
 	}
 
 	private void getIntents() {
