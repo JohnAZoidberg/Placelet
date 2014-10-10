@@ -105,7 +105,11 @@ public class CommunityFragment extends Fragment {
 		// display saved pics if it shouldn't reload and if there are pics saved
 		String savedPics = mainActivity.prefs.getString("communityPics", "null");
 		if (!savedPics.equals("null") && reload && displayed_pics == PIC_START) {
-			loadSavedPics(savedPics);
+            pictureList.clear();
+            String[] savedPicArray = savedPics.split("†");
+            for(String pics : savedPicArray) {
+                if (!pics.equals("null")) loadSavedPics(pics);
+            }
 		}
 		// load new pics from the internet
 		if (Util.notifyIfOffline(mainActivity)) {
@@ -156,6 +160,7 @@ public class CommunityFragment extends Fragment {
             } catch (JSONException e) {
                 Util.saveDate(mainActivity.prefs, "getCommunityPicturesLastUpdate", System.currentTimeMillis() / 1000L);
                 String jsonString = result.toString();
+                if(!reload) jsonString += "†" + mainActivity.prefs.getString("communityPics", "null");
                 Util.saveData(mainActivity.prefs, "communityPics", jsonString);
                 updateListView(result, reload);
             }
@@ -322,8 +327,9 @@ public class CommunityFragment extends Fragment {
 			jArray = new JSONObject(result);
 		} catch (JSONException ignored) {
 		}
-		if (jArray != null)
-			updateListView(jArray, true);
+		if (jArray != null) {
+            updateListView(jArray, false);
+        }
 	}
 
 	private void toggleLoading(boolean start) {
