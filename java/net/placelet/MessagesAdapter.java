@@ -49,12 +49,12 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
 	        element.setBackgroundColor(Color.WHITE);
 		}
 
+        viewHolder.imgView.setImageDrawable(null);
         if(message.seen > 0 && !message.recipient.equals(User.username)) viewHolder.imgView.setImageResource(R.drawable.tick);
 		String displayMessage = message.content.length() > 20 ? message.content.replaceAll("\n", " ").substring(0, 20).trim()  + "..." : message.content;
 		viewHolder.sender.setText(message.sender);
 		viewHolder.messageContent.setText(displayMessage);
 		viewHolder.date.setText(Util.timestampToTime(message.sent));
-        viewHolder.imgView.setImageDrawable(null);
 
 		return element;
 	}
