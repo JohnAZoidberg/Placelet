@@ -102,21 +102,25 @@ public class CommunityFragment extends Fragment {
 
     public void loadPictures(boolean reload) {
 		toggleLoading(true);
+        // load new pics from the internet
+        if (Util.notifyIfOffline(mainActivity)) {
+            Pictures pics = new Pictures(reload);
+            pics.execute();
+        } else {
+            toggleLoading(false);
+        }
+
 		// display saved pics if it shouldn't reload and if there are pics saved
 		String savedPics = mainActivity.prefs.getString("communityPics", "null");
 		if (!savedPics.equals("null") && reload && displayed_pics == PIC_START) {
             pictureList.clear();
             String[] savedPicArray = savedPics.split("†");
             for(String pics : savedPicArray) {
-                if (!pics.equals("null")) loadSavedPics(pics);
+                if (!pics.equals("null")) {
+                    System.out.println(pics);
+                    loadSavedPics(pics);
+                }
             }
-		}
-		// load new pics from the internet
-		if (Util.notifyIfOffline(mainActivity)) {
-			Pictures pics = new Pictures(reload);
-			pics.execute();
-		} else {
-			toggleLoading(false);
 		}
 
 	}
@@ -148,8 +152,9 @@ public class CommunityFragment extends Fragment {
 		protected void onPostExecute(JSONObject result) {
             if(!Webserver.checkConnection(result)) {
                 toggleLoading(false);
+                Util.alert("what the fuck", mainActivity);
                 if (!reload) {
-                    displayed_pics--;
+                    //displayed_pics--; TODO Check if necessary
                 }
             }
             // check if new content
@@ -167,8 +172,9 @@ public class CommunityFragment extends Fragment {
 		}
 	}
 
-	private void updateListView(JSONObject input, boolean reload) {
+	private int updateListView(JSONObject input, boolean reload) {
         if(reload) pictureList.clear();
+        int numberOfPics = 0;
         showNews(input);
         showUpdateDialog(input);
 		for (Iterator<?> iter = input.keys(); iter.hasNext();) {
@@ -187,6 +193,7 @@ public class CommunityFragment extends Fragment {
 					picture.id = Integer.parseInt(pictures.getString("id"));
 					picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
 					pictureList.add(picture);
+                    numberOfPics++;
 				} catch (JSONException ignored) {
 				}
 			} catch (JSONException ignored) {
@@ -195,6 +202,7 @@ public class CommunityFragment extends Fragment {
         Collections.sort(pictureList);
         adapter.notifyDataSetChanged();
 		toggleLoading(false);
+        return numberOfPics;
 	}
 
     private void showNews(JSONObject input) {
@@ -328,6 +336,7 @@ public class CommunityFragment extends Fragment {
 		} catch (JSONException ignored) {
 		}
 		if (jArray != null) {
+            displayed_pics += PIC_COUNT;
             updateListView(jArray, false);
         }
 	}
