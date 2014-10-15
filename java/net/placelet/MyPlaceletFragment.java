@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 public class MyPlaceletFragment extends Fragment {
@@ -166,7 +167,6 @@ public class MyPlaceletFragment extends Fragment {
                                 picture.country = row.getString("country");
                                 picture.id = Integer.parseInt(row.getString("id"));
                                 picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
-                                // TODO sort pics
                                 pictures.add(picture);
                             } else if (key.equals("ownBracelets")) {
                                 Picture picture = new Picture();
@@ -181,7 +181,6 @@ public class MyPlaceletFragment extends Fragment {
                                 picture.id = Integer.parseInt(row.getString("id"));
                                 picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
                                 bracelet.pictures.add(picture);
-                                // TODO sort pics
                                 bracelets.add(bracelet);
                             }
                         } catch (JSONException e) {
@@ -191,6 +190,8 @@ public class MyPlaceletFragment extends Fragment {
 			} catch (JSONException e) {
 			}
 		}
+        Collections.sort(pictures);
+        // If no pictures or bracelets add pseudo picture or bracelet to post/register new one
         if(bracelets.size() == 0) {
             Bracelet bracelet = new Bracelet("register_bracelet");
             bracelet.name = mainActivity.getString(R.string.new_bracelet);
