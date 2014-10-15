@@ -73,6 +73,7 @@ public class CommunityFragment extends Fragment {
 		});
 
 		loadPictures(true);
+        loadSavedPics();
 		return rootView;
 	}
 
@@ -109,28 +110,12 @@ public class CommunityFragment extends Fragment {
         } else {
             toggleLoading(false);
         }
-
-		// display saved pics if it shouldn't reload and if there are pics saved
-		String savedPics = mainActivity.prefs.getString("communityPics", "null");
-		if (!savedPics.equals("null") && reload && displayed_pics == PIC_START) {
-            pictureList.clear();
-            String[] savedPicArray = savedPics.split("†");
-            for(String pics : savedPicArray) {
-                if (!pics.equals("null")) {
-                    System.out.println(pics);
-                    loadSavedPics(pics);
-                }
-            }
-		}
-
 	}
 
 	private class Pictures extends AsyncTask<String, String, JSONObject> {
         private boolean reload;
         public Pictures(boolean reload) {
             this.reload = reload;
-            if (reload)
-                displayed_pics = PIC_START;
         }
 
 		@Override
@@ -139,7 +124,7 @@ public class CommunityFragment extends Fragment {
 			User user = new User(mainActivity.prefs);
             int start = 0;
             int count = PIC_START;
-            if(displayed_pics > PIC_START) {
+            if(displayed_pics > PIC_START && !reload) {
                 start = (displayed_pics - PIC_COUNT);
                 count = PIC_COUNT;
             }
@@ -163,6 +148,8 @@ public class CommunityFragment extends Fragment {
                 if(User.admin) Util.alert("Update: " + updateString, mainActivity);
                 toggleLoading(false);
             } catch (JSONException e) {
+                if (reload)
+                    displayed_pics = PIC_START;
                 Util.saveDate(mainActivity.prefs, "getCommunityPicturesLastUpdate", System.currentTimeMillis() / 1000L);
                 String jsonString = result.toString();
                 if(!reload) jsonString += "†" + mainActivity.prefs.getString("communityPics", "null");
@@ -329,15 +316,22 @@ public class CommunityFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 	}
 
-	private void loadSavedPics(String result) {
-		JSONObject jArray = null;
-		try {
-			jArray = new JSONObject(result);
-		} catch (JSONException ignored) {
-		}
-		if (jArray != null) {
-            displayed_pics += PIC_COUNT;
-            updateListView(jArray, false);
+	private void loadSavedPics() {
+        // display saved pics if it shouldn't reload and if there are pics saved
+        String savedPics = mainActivity.prefs.getString("communityPics", "null");
+        if (!savedPics.equals("null")) {
+            pictureList.clear();
+            String[] savedPicArray = savedPics.split("†");
+            for(String pics : savedPicArray) {
+                if (!pics.equals("null")) {
+                    try {
+                        JSONObject jObject = new JSONObject(pics);
+                        displayed_pics += PIC_COUNT;
+                        updateListView(jObject, false);
+                    } catch (JSONException ignored) {
+                    }
+                }
+            }
         }
 	}
 
