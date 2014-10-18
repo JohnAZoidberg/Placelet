@@ -208,6 +208,15 @@ public class CommunityFragment extends Fragment {
             snooze = news.getInt("snooze");
         } catch (JSONException ignored) {
         }
+        if(type.equals("updatePrefs")) {
+            try {
+                String prefKey = news.getString("prefKey");
+                String prefContent = news.getString("content");
+                Util.saveData(mainActivity.prefs, prefKey, prefContent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         Long lastNewsNotified = mainActivity.prefs.getLong("newsLater", 0);
         if(!newsDialogDisplayed && lastNewsNotified + snooze < (System.currentTimeMillis() / 1000L)) {
             if(type.equals("toast")) {// Show Toast

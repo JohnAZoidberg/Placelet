@@ -162,7 +162,7 @@ public class User {
 		HashMap<String, String> args = new HashMap<String, String>();
 		args.put("androidGetCommunityPictures", "true");
         args.put("user", username);
-        args.put("v", Webserver.androidVersion);
+        args.put("v", prefs.getString("version", Webserver.androidVersion));
 		args.put("pic_start", "" + picStart);
         args.put("pic_count", "" + picCount);
         args.put("lastUpdate", lastUpdate);

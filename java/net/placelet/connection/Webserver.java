@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Webserver {
-	public static final String androidVersion = "1.2.4";
+	public static final String androidVersion = "1.2.4"; // 4th digit is reserved for updates performed via downloaded data
     private static final boolean debug = true;
 	private String connectionURL = "http://placelet.de/android/android" + androidVersion + ".php";
 	HttpClient httpClient = new DefaultHttpClient();
