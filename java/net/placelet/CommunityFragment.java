@@ -24,6 +24,7 @@ import net.placelet.connection.User;
 import net.placelet.connection.Webserver;
 import net.placelet.data.Picture;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -141,10 +142,12 @@ public class CommunityFragment extends Fragment {
                 if (!reload) {
                     //displayed_pics--; TODO Check if necessary
                 }
+                return;
             }
             // check if new content
             try {
                 String updateString = result.getString("update");
+                showNews(result);
                 if(User.admin) Util.alert("Update: " + updateString, mainActivity);
                 toggleLoading(false);
             } catch (JSONException e) {
@@ -193,35 +196,42 @@ public class CommunityFragment extends Fragment {
 	}
 
     private void showNews(JSONObject input) {
-        JSONObject news = null;
-        String type = "";
-        String content = "";
+        if (newsDialogDisplayed) return;
+        JSONArray newss = null;
         int snooze = 3600;
         try {
-            news = input.getJSONObject("news");
-            type = news.getString("type");
-            content = news.getString("content");
+            newss = input.getJSONArray("news");
         } catch (JSONException ignored) {
             return;
         }
-        try {
-            snooze = news.getInt("snooze");
-        } catch (JSONException ignored) {
-        }
-        if(type.equals("updatePrefs")) {
+        for (int i = 0; i < newss.length(); i++) {
+            JSONObject news = null;
+            String type = "";
+            String content = "";
             try {
-                String prefKey = news.getString("prefKey");
-                String prefContent = news.getString("content");
-                Util.saveData(mainActivity.prefs, prefKey, prefContent);
-            } catch (JSONException e) {
-                e.printStackTrace();
+                news = (JSONObject) newss.getJSONObject(i);
+                type = news.getString("type");
+                content = news.getString("content");
+            } catch (JSONException ignored) {
+                break;
             }
-        }
-        Long lastNewsNotified = mainActivity.prefs.getLong("newsLater", 0);
-        if(!newsDialogDisplayed && lastNewsNotified + snooze < (System.currentTimeMillis() / 1000L)) {
-            if(type.equals("toast")) {// Show Toast
+            try {
+                snooze = news.getInt("snooze");
+            } catch (JSONException ignored) {
+            }
+            if (type.equals("updatePrefs")) {
+                try {
+                    String prefKey = news.getString("prefKey");
+                    String prefContent = news.getString("content");
+                    Util.saveData(mainActivity.prefs, prefKey, prefContent);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else if (type.equals("toast")) {// Show Toast
                 Util.alert(content, mainActivity);
-            }else if(type.equals("dialog")) {// Show Dialog
+            }
+            Long lastNewsNotified = mainActivity.prefs.getLong("newsLater", 0);
+            if (type.equals("dialog") && lastNewsNotified + snooze < (System.currentTimeMillis() / 1000L)) {// Show Dialog
                 String _action = "URL";
                 try {
                     _action = news.getString("action");
@@ -247,43 +257,43 @@ public class CommunityFragment extends Fragment {
                 } catch (JSONException ignored) {
                 }
 
-                if(content.equals("")) content = "http://placelet.de";
+                if (content.equals("")) content = "http://placelet.de";
                 final String destination = content;
 
 
                 final AlertDialog dialog = new AlertDialog.Builder(mainActivity)
-                    .setTitle(title)
-                    .setPositiveButton(positiveLabel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            if(action.equals("URL")) {
-                                Intent intent = new Intent(Intent.ACTION_VIEW);
-                                intent.setData(Uri.parse(destination));
-                                startActivity(intent);
-                            }else if(action.equals("Activity")){
-                                try {
-                                    Intent intent = new Intent(mainActivity, Class.forName("net.placelet." + destination));
+                        .setTitle(title)
+                        .setPositiveButton(positiveLabel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                                if (action.equals("URL")) {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                                    intent.setData(Uri.parse(destination));
                                     startActivity(intent);
-                                } catch (ClassNotFoundException e) {
-                                    e.printStackTrace();
+                                } else if (action.equals("Activity")) {
+                                    try {
+                                        Intent intent = new Intent(mainActivity, Class.forName("net.placelet." + destination));
+                                        startActivity(intent);
+                                    } catch (ClassNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
-                        }
-                    })
-                    .setNegativeButton(negativeLabel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            SharedPreferences.Editor editor = mainActivity.prefs.edit();
-                            editor.putLong("newsLater", System.currentTimeMillis() / 1000L);
-                            editor.apply();
-                            dialog.cancel();
-                        }
-                    }).create();
+                        })
+                        .setNegativeButton(negativeLabel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences.Editor editor = mainActivity.prefs.edit();
+                                editor.putLong("newsLater", System.currentTimeMillis() / 1000L);
+                                editor.apply();
+                                dialog.cancel();
+                            }
+                        }).create();
                 dialog.show();
+
             }
         }
-        newsDialogDisplayed = true;
     }
 
     private void showUpdateDialog(JSONObject input) {
