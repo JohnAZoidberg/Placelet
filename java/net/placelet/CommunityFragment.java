@@ -148,6 +148,7 @@ public class CommunityFragment extends Fragment {
             try {
                 String updateString = result.getString("update");
                 showNews(result);
+                showUpdateDialog(result);
                 if(User.admin) Util.alert("Update: " + updateString, mainActivity);
                 toggleLoading(false);
             } catch (JSONException e) {
@@ -213,7 +214,7 @@ public class CommunityFragment extends Fragment {
                 type = news.getString("type");
                 content = news.getString("content");
             } catch (JSONException ignored) {
-                break;
+                continue;
             }
             try {
                 snooze = news.getInt("snooze");
@@ -227,8 +228,11 @@ public class CommunityFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }else if (type.equals("toast")) {// Show Toast
+                continue;
+            }
+            if (type.equals("toast")) {// Show Toast
                 Util.alert(content, mainActivity);
+                continue;
             }
             Long lastNewsNotified = mainActivity.prefs.getLong("newsLater", 0);
             if (type.equals("dialog") && lastNewsNotified + snooze < (System.currentTimeMillis() / 1000L)) {// Show Dialog
@@ -291,9 +295,10 @@ public class CommunityFragment extends Fragment {
                             }
                         }).create();
                 dialog.show();
-
+                continue;
             }
         }
+        newsDialogDisplayed = true;
     }
 
     private void showUpdateDialog(JSONObject input) {
@@ -322,12 +327,13 @@ public class CommunityFragment extends Fragment {
                         SharedPreferences.Editor editor = mainActivity.prefs.edit();
                         editor.putLong("updateLater", System.currentTimeMillis() / 1000L);
                         editor.apply();
+                        
                         dialog.cancel();
                     }
                 }).create();
             dialog.show();
+            updateDialogDisplayed = true;
         }
-        updateDialogDisplayed = true;
     }
 
     @Override
