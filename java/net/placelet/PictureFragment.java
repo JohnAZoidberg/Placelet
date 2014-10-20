@@ -1,6 +1,5 @@
 package net.placelet;
 
-import net.placelet.data.Picture;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +17,8 @@ import android.widget.PopupWindow;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import net.placelet.data.Picture;
 
 public class PictureFragment extends Fragment {
 	private BraceletActivity braceletActivity;
@@ -66,38 +67,36 @@ public class PictureFragment extends Fragment {
 	}
 
 	private void showPopup(Picture picture) {
-		if (picture.loadImage) {
-			braceletActivity.setProgressBarIndeterminateVisibility(true);
-			LayoutInflater inflater = (LayoutInflater) braceletActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View popupView = inflater.inflate(R.layout.popup_lightbox, null, false);
-			final PopupWindow pw = new PopupWindow(popupView, Util.width, (int) (Util.height), true);
-			ImageView imgView = (ImageView) popupView.findViewById(R.id.imageView1);
-			// Display high res picture if preferred
-			String picUrl;
-			if (braceletActivity.settingsPrefs.getBoolean("pref_highdef_pics", false)) {
-				picUrl = "http://placelet.de/pictures/bracelets/pic-" + picture.id + "." + picture.fileext;
-			} else {
-				picUrl = "http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg";
-			}
-			Picasso.with(braceletActivity).load(picUrl).into(imgView, new Callback() {
-				@Override
-				public void onError() {
-					braceletActivity.setProgressBarIndeterminateVisibility(false);
-					pw.dismiss();
-				}
+        braceletActivity.setProgressBarIndeterminateVisibility(true);
+        LayoutInflater inflater = (LayoutInflater) braceletActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_lightbox, null, false);
+        final PopupWindow pw = new PopupWindow(popupView, Util.width, (int) (Util.height), true);
+        ImageView imgView = (ImageView) popupView.findViewById(R.id.imageView1);
+        // Display high res picture if preferred
+        String picUrl;
+        if (braceletActivity.settingsPrefs.getBoolean("pref_highdef_pics", false)) {
+            picUrl = "http://placelet.de/pictures/bracelets/pic-" + picture.id + "." + picture.fileext;
+        } else {
+            picUrl = "http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg";
+        }
+        Picasso.with(braceletActivity).load(picUrl).into(imgView, new Callback() {
+            @Override
+            public void onError() {
+                braceletActivity.setProgressBarIndeterminateVisibility(false);
+                pw.dismiss();
+            }
 
-				@Override
-				public void onSuccess() {
-					braceletActivity.setProgressBarIndeterminateVisibility(false);
-				}
-			});
-			imgView.setOnClickListener(new Button.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					pw.dismiss();
-				}
-			});
-			pw.showAtLocation(braceletActivity.findViewById(R.id.listView1), Gravity.CENTER, 0, 0);
-		}
+            @Override
+            public void onSuccess() {
+                braceletActivity.setProgressBarIndeterminateVisibility(false);
+            }
+        });
+        imgView.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pw.dismiss();
+            }
+        });
+        pw.showAtLocation(braceletActivity.findViewById(R.id.listView1), Gravity.CENTER, 0, 0);
 	}
 }

@@ -1,8 +1,5 @@
 package net.placelet;
 
-import java.util.List;
-
-import net.placelet.data.Picture;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -11,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import net.placelet.data.Picture;
+
+import java.util.List;
 
 public class CommunityAdapter extends ArrayAdapter<Picture> {
 	private Context context;
@@ -31,11 +32,7 @@ public class CommunityAdapter extends ArrayAdapter<Picture> {
 		// Load different layout if no pictures should be displayed
 		if (element == null) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			if (picture.loadImage) {
-				element = inflater.inflate(R.layout.community_element, null);
-			} else {
-				element = inflater.inflate(R.layout.community_nopic_element, null);
-			}
+            element = inflater.inflate(R.layout.community_element, null);
 			viewHolder = new ViewHolderItem();
 			viewHolder.title = (TextView) element.findViewById(R.id.pic_title);
 			viewHolder.location = (TextView) element.findViewById(R.id.pic_location);
@@ -55,9 +52,7 @@ public class CommunityAdapter extends ArrayAdapter<Picture> {
 		viewHolder.title.setText(picture.title);
 		viewHolder.location.setText(picture.city + ", " + picture.country);
 		// load image
-		if (picture.loadImage) {
-			Util.loadThumbnail(context, viewHolder.imgView, picture.id);
-		}
+		Util.loadThumbnail(context, viewHolder.imgView, picture.id);
 
 		return element;
 	}

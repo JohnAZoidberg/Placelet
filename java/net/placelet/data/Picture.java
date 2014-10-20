@@ -1,11 +1,11 @@
 package net.placelet.data;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import net.placelet.HTMLDecodable;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public class Picture implements Comparable<Picture>, HTMLDecodable {
 	public int id;
@@ -21,7 +21,6 @@ public class Picture implements Comparable<Picture>, HTMLDecodable {
 	public double longitude;
 	public double latitude;
 	public String uploader;
-	public boolean loadImage;
 
 	@Override
 	public int compareTo(Picture compareObject) {

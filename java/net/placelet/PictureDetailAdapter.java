@@ -30,11 +30,7 @@ public class PictureDetailAdapter extends ArrayAdapter<Picture> {
 		if (element == null) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			// Load different layout if no pictures should be displayed
-			if (picture.loadImage) {
-				element = inflater.inflate(R.layout.picture_detail_element, null);
-			} else {
-				element = inflater.inflate(R.layout.picture_detail_nopic_element, null);
-			}
+			element = inflater.inflate(R.layout.picture_detail_element, null);
 			viewHolder = new ViewHolderItem();
 			viewHolder.title = (TextView) element.findViewById(R.id.pic_title);
 			viewHolder.description = (TextView) element.findViewById(R.id.pic_description);
@@ -58,9 +54,7 @@ public class PictureDetailAdapter extends ArrayAdapter<Picture> {
 		}
 		viewHolder.date.setText(Util.timestampToDate(picture.date));
 		// load image
-		if (picture.loadImage) {
-			Util.loadThumbnail(context, viewHolder.imgView, picture.id);
-		}
+		Util.loadThumbnail(context, viewHolder.imgView, picture.id);
 
 		return element;
 	}

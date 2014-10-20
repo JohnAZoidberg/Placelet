@@ -55,9 +55,7 @@ public class BraceletAdapter extends ArrayAdapter<Bracelet> {
         Picture lastPic = bracelet.pictures.get(0);
         viewHolder.lastLocation.setText(lastPic.city + ", " + lastPic.country);
         viewHolder.distance.setText(bracelet.getDistance() + " km");
-        if (lastPic.loadImage) {
-            Util.loadThumbnail(context, viewHolder.thumbnail, lastPic.id);
-        }
+        Util.loadThumbnail(context, viewHolder.thumbnail, lastPic.id);
 
         return element;
     }

@@ -184,7 +184,6 @@ public class CommunityFragment extends Fragment {
 					picture.uploader = pictures.getString("user");
 					picture.date = Long.parseLong(pictures.getString("date"));
 					picture.id = Integer.parseInt(pictures.getString("id"));
-					picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
 					pictureList.add(picture);
                     numberOfPics++;
 				} catch (JSONException ignored) {

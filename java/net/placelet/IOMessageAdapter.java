@@ -32,11 +32,7 @@ public class IOMessageAdapter extends ArrayAdapter<Message> {
 		message.html_entity_decode();
 		if (element == null) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			if (message.loadImage) {
-				element = inflater.inflate(R.layout.io_message_element, null);
-			} else {
-				element = inflater.inflate(R.layout.message_element, null);
-			}
+            element = inflater.inflate(R.layout.io_message_element, null);
 			viewHolder = new ViewHolderItem();
 			viewHolder.sender = (TextView) element.findViewById(R.id.name);
 			viewHolder.messageContent = (TextView) element.findViewById(R.id.message);
@@ -51,9 +47,7 @@ public class IOMessageAdapter extends ArrayAdapter<Message> {
 		viewHolder.sender.setText(message.sender);
 		viewHolder.messageContent.setText(message.content);
 		viewHolder.date.setText(Util.timestampToTime(message.sent));
-		if (message.loadImage) {
-            Picasso.with(context).load("http://placelet.de/pictures/profiles/" + message.senderID + ".jpg").into(viewHolder.imgView);
-		}
+        Picasso.with(context).load("http://placelet.de/pictures/profiles/" + message.senderID + ".jpg").into(viewHolder.imgView);
 
 		return element;
 	}

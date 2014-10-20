@@ -166,7 +166,6 @@ public class MyPlaceletFragment extends Fragment {
                                 picture.city = row.getString("city");
                                 picture.country = row.getString("country");
                                 picture.id = Integer.parseInt(row.getString("id"));
-                                picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
                                 pictures.add(picture);
                             } else if (key.equals("ownBracelets")) {
                                 Picture picture = new Picture();
@@ -179,7 +178,6 @@ public class MyPlaceletFragment extends Fragment {
                                 picture.city = row.getString("city");
                                 picture.country = row.getString("country");
                                 picture.id = Integer.parseInt(row.getString("id"));
-                                picture.loadImage = mainActivity.settingsPrefs.getBoolean("pref_download_pics", true);
                                 bracelet.pictures.add(picture);
                                 bracelets.add(bracelet);
                             }
@@ -198,7 +196,6 @@ public class MyPlaceletFragment extends Fragment {
             Picture picture = new Picture();
             picture.city = mainActivity.getString(R.string.city);
             picture.country = mainActivity.getString(R.string.country);
-            picture.loadImage = true;
             bracelet.pictures.add(picture);
             bracelets.add(bracelet);
         }
@@ -208,7 +205,6 @@ public class MyPlaceletFragment extends Fragment {
             picture.title = mainActivity.getString(R.string.new_picture);
             picture.city = mainActivity.getString(R.string.city);
             picture.country = mainActivity.getString(R.string.country);
-            picture.loadImage = true;
             pictures.add(picture);
         }
         braceletAdapter.notifyDataSetChanged();

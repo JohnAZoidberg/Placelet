@@ -212,7 +212,6 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 							msg.content = messages.getString("message");
 							msg.sent = messages.getLong("sent");
                             msg.seen = messages.getLong("seen");
-							msg.loadImage = settingsPrefs.getBoolean("pref_download_pics", true);
 							msg.senderID = Integer.parseInt(messages.getJSONObject("sender").getString("id"));
 							msg.sender = messages.getJSONObject("sender").getString("name");
 							messageList.add(msg);

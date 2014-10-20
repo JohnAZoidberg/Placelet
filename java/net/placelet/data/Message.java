@@ -15,7 +15,6 @@ public class Message implements Comparable<Message>, HTMLDecodable {
 	public String content;
 	public String sender;
 	public String recipient;
-	public boolean loadImage;
 
 	@Override
 	public int compareTo(Message compareObject) {
