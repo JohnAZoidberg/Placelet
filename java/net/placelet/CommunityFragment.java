@@ -63,7 +63,7 @@ public class CommunityFragment extends Fragment {
 			}
 		});
         ScrollBox scrollBox = (ScrollBox) rootView.findViewById(R.id.scrollBox);
-        scrollBox.attachToListView(list);
+        scrollBox.attachToListView(list, new EndlessScrollListener());
 		adapter = new CommunityAdapter(mainActivity, 0, pictureList);
 		list.setAdapter(adapter);
 		swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);

@@ -107,16 +107,22 @@ public class ScrollBox extends RelativeLayout {
         }
     }
 
-    /**
-     * If need to use custom {@link android.widget.AbsListView.OnScrollListener},
-     * pass it to {@link #attachToListView(android.widget.AbsListView, net.placelet.ScrollBox.FabOnScrollListener)}
-     */
-    public void attachToListView(@NonNull AbsListView listView) {
-        attachToListView(listView, new FabOnScrollListener());
+    public void attachToListView(@NonNull AbsListView listView, @NonNull AbsListView.OnScrollListener onScrollListener) {
+        mListView = listView;
+        FabOnScrollListener onFabScrollListener = new FabOnScrollListener();
+        mOnScrollListener = onFabScrollListener;
+        onFabScrollListener.setScrollBox(this);
+        onFabScrollListener.setListView(listView);
+
+        CompositeScrollListener composite = new CompositeScrollListener();
+        composite.registerListener(onFabScrollListener);
+        composite.registerListener(onScrollListener);
+        mListView.setOnScrollListener(composite);
     }
 
-    public void attachToListView(@NonNull AbsListView listView, @NonNull FabOnScrollListener onScrollListener) {
+    public void attachToListView(@NonNull AbsListView listView) {
         mListView = listView;
+        FabOnScrollListener onScrollListener = new FabOnScrollListener();
         mOnScrollListener = onScrollListener;
         onScrollListener.setScrollBox(this);
         onScrollListener.setListView(listView);
