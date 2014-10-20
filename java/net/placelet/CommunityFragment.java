@@ -62,6 +62,8 @@ public class CommunityFragment extends Fragment {
 				NavigateActivities.switchActivity(mainActivity, BraceletActivity.class, false, "brid", pic.brid);
 			}
 		});
+        ScrollBox scrollBox = (ScrollBox) rootView.findViewById(R.id.scrollBox);
+        scrollBox.attachToListView(list);
 		adapter = new CommunityAdapter(mainActivity, 0, pictureList);
 		list.setAdapter(adapter);
 		swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
@@ -327,7 +329,7 @@ public class CommunityFragment extends Fragment {
                         SharedPreferences.Editor editor = mainActivity.prefs.edit();
                         editor.putLong("updateLater", System.currentTimeMillis() / 1000L);
                         editor.apply();
-                        
+
                         dialog.cancel();
                     }
                 }).create();

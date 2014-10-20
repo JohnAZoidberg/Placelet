@@ -7,7 +7,7 @@
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/relativeLayout1" >
+        android:layout_alignParentBottom="true">
 
         <ListView
             android:id="@+id/listView1"
@@ -20,8 +20,8 @@
         </ListView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout1"
+    <net.placelet.ScrollBox
+        android:id="@+id/scrollBox"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
@@ -55,6 +55,6 @@
             android:layout_marginRight="16dp"
             android:src="@android:drawable/ic_menu_gallery"
             android:adjustViewBounds="false"/>
-    </RelativeLayout>
+    </net.placelet.ScrollBox>
 
 </RelativeLayout>
