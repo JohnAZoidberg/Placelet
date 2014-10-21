@@ -34,7 +34,8 @@ import java.util.List;
 public class Webserver {
 	public static final String androidVersion = "1.2.4"; // 4th digit is reserved for updates performed via downloaded data
     private static final boolean debug = true;
-	private String connectionURL = "http://placelet.de/android/android" + androidVersion + ".php";
+    public static final String SENDER_ID = "649565121667";
+    private String connectionURL = "http://placelet.de/android/android" + androidVersion + ".php";
 	HttpClient httpClient = new DefaultHttpClient();
 	HttpPost httpPost = new HttpPost(connectionURL);
 
@@ -72,7 +73,7 @@ public class Webserver {
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
 			HttpResponse response = httpClient.execute(httpPost);
             HttpEntity entity = response.getEntity();
-            is = AndroidHttpClient.getUngzippedContent(response.getEntity());
+            is = AndroidHttpClient.getUngzippedContent(entity);
             //is = entity.getContent(); // Use for debugging if a PHP error causes IOException
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

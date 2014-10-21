@@ -2,8 +2,6 @@ package net.placelet.connection;
 
 import android.content.SharedPreferences;
 
-import com.pushbots.push.Pushbots;
-
 import net.placelet.Util;
 import net.placelet.data.Picture;
 
@@ -55,7 +53,7 @@ public class User {
 	}
 
 	public int login(String user, String password) {
-		String deviceToken = Pushbots.getInstance().getSharedPrefs().getRegistrationID();
+		String deviceToken = prefs.getString("gcmID", "");
 		SharedPreferences.Editor editor = prefs.edit();
 		JSONObject result;
 		Webserver server = new Webserver();

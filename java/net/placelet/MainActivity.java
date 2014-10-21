@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -17,7 +18,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import net.placelet.connection.User;
+import net.placelet.connection.Webserver;
+
+import java.io.IOException;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
     private ViewPager viewPager;
@@ -30,6 +36,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public Display display;
     public int currentTabId = 0;
     private static boolean trial = false;
+    GoogleCloudMessaging gcm;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,6 +65,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             if (!User.getStatus()) {
                 NavigateActivities.switchActivity(this, LoginActivity.class, false);
             }
+        }
+        // Register Device
+        gcm = GoogleCloudMessaging.getInstance(this);
+        String regID = prefs.getString("gcmID", "");
+        if (regID.isEmpty()) {
+            registerInBackground();
         }
     }
 
@@ -173,5 +186,26 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     public void switchFragments(int number) {
         actionBar.setSelectedNavigationItem(number);
+    }
+
+
+
+
+    private void registerInBackground() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                String regid = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(MainActivity.this);
+                    }
+                    regid = gcm.register(Webserver.SENDER_ID);
+                    Util.saveData(prefs, "gcmID", regid);
+                } catch (IOException ignored) {
+                }
+                return null;
+            }
+        }.execute(null, null, null);
     }
 }
