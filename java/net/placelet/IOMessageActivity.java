@@ -77,6 +77,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		getIntents();
 		adapter = new IOMessageAdapter(this, 0, messageList);
         list.setAdapter(adapter);
+        loadSavedMessages();
 		loadMessages(true);
 	}
 
@@ -158,10 +159,6 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 	private void loadMessages(boolean reload) {
         toggleLoading(true, false);
-		String savedMessages = prefs.getString("IOmessages-" + recipient, "null");
-		if (!savedMessages.equals("null") && !reload) {
-			loadSavedMessages(savedMessages);
-		}
 		if (Util.notifyIfOffline(this)) {
 			Messages login = new Messages();
 			login.execute();
@@ -251,14 +248,15 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 	}
 
-	private void loadSavedMessages(String result) {
+	private void loadSavedMessages() {
+        String savedMessages = prefs.getString("IOmessages-" + recipient, "null");
+        if (savedMessages.equals("null")) return;
 		JSONObject jArray = null;
 		try {
-			jArray = new JSONObject(result);
+			jArray = new JSONObject(savedMessages);
+            updateListView(jArray);
 		} catch (JSONException ignored) {
 		}
-		if (jArray != null)
-			updateListView(jArray);
 	}
 
 	private void toggleLoading(boolean loading, boolean disableButton) {
