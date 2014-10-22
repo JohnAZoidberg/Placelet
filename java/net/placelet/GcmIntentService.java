@@ -51,11 +51,9 @@ public class GcmIntentService extends IntentService {
         NotificationCompat.Style style = null;
 
         NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.ic_launcher)
             .setDefaults(Notification.DEFAULT_SOUND)
-            .setContentIntent(contentIntent)
             .setAutoCancel(true)
             .setVibrate(new long[]{100, 200, 100, 200, 100, 500});
 
@@ -73,7 +71,7 @@ public class GcmIntentService extends IntentService {
             title = "Neues Bild";
             String picid = extras.getString("picid");
             content = "Auf " + extras.getString("braceName") + " von " + extras.getString("uploader");
-
+            intent.putExtra("PicturePush", extras.getString("brid"));
 
             try {
                 style = new NotificationCompat.BigPictureStyle()
@@ -86,9 +84,12 @@ public class GcmIntentService extends IntentService {
             title = "Kommentar";
             if(!extras.getString("commenter").equals("false")) title += " von " + extras.getString("commenter");
             content = extras.getString("comment");
+            intent.putExtra("PicturePush", extras.getString("brid"));
             style = new NotificationCompat.BigTextStyle().bigText(content);
         }
+        PendingIntent contentIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder
+            .setContentIntent(contentIntent)
             .setContentTitle(title)
             .setStyle(style)
             .setContentText(content);

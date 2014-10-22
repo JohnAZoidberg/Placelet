@@ -160,8 +160,18 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             // switch to chat with specific user
             switchToMessage(intent.getStringExtra("MessagePush"));
         }
+        if (intent.hasExtra("PicturePush")) {
+            // switch to chat with specific user
+            switchToBracelet(intent.getStringExtra("PicturePush"));
+        }
         super.onStart();
         active = true;
+    }
+
+    private void switchToBracelet(String brid) {
+        Intent intent = new Intent(this, BraceletActivity.class);
+        intent.putExtra("brid", brid);
+        startActivity(intent);
     }
 
     private void switchToMessage(String sender) {
