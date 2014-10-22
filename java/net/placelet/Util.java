@@ -11,6 +11,8 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.text.InputType;
 import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,11 +20,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import net.placelet.connection.User;
+import net.placelet.data.Picture;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -222,6 +227,40 @@ public class Util {
             }
         });
         dialog.show();
+    }
+
+    public static void showPopup(Picture picture, SharedPreferences prefs, final Activity context) {
+        context.setProgressBarIndeterminateVisibility(true);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_lightbox, null, false);
+        final PopupWindow pw = new PopupWindow(popupView, Util.width, (int) (Util.height), true);
+        ImageView imgView = (ImageView) popupView.findViewById(R.id.imageView1);
+        // Display high res picture if preferred
+        String picUrl;
+        if (prefs.getBoolean("pref_highdef_pics", false)) {
+            picUrl = "http://placelet.de/pictures/bracelets/pic-" + picture.id + "." + picture.fileext;
+        } else {
+            picUrl = "http://placelet.de/pictures/bracelets/thumb-" + picture.id + ".jpg";
+        }
+        Picasso.with(context).load(picUrl).into(imgView, new Callback() {
+            @Override
+            public void onError() {
+                context.setProgressBarIndeterminateVisibility(false);
+                pw.dismiss();
+            }
+
+            @Override
+            public void onSuccess() {
+                context.setProgressBarIndeterminateVisibility(false);
+            }
+        });
+        imgView.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pw.dismiss();
+            }
+        });
+        pw.showAtLocation(context.getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);
     }
 
     private static class RegisterBracelet extends AsyncTask<String, String, Integer> {
