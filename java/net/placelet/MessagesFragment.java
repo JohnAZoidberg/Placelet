@@ -101,7 +101,7 @@ public class MessagesFragment extends Fragment {
 		@Override
 		protected void onPostExecute(JSONObject result) {
 			try {
-				if (result.getString("error").equals("no_internet")) {
+				if (result.getString("error").equals("no_internet")) {// todo remove the internet part
 					swipeLayout.setRefreshing(false);
 					return;
 				}
