@@ -183,14 +183,6 @@ public class Util {
         editor.apply();
     }
 
-    public static boolean stringContains(String haystack, String[] needles) {
-        haystack = haystack.toLowerCase();
-        for(String needle : needles) {
-            if(haystack.contains(needle.toLowerCase())) return true;
-        }
-        return false;
-    }
-
     public static void displayRegisterDialog(final Context context, final SharedPreferences prefs) {
         final EditText input = new EditText(context);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -299,5 +291,16 @@ public class Util {
                     Util.alert(context.getString(R.string.server_problem), context);
             }
         }
+    }
+
+    public static boolean stringContains(String haystack, String needle) {
+        return haystack.toLowerCase().contains(needle.toLowerCase());
+    }
+
+    public static boolean stringContains(String haystack, String[] needles) {
+        for(String needle : needles) {
+            if(stringContains(haystack, needle)) return true;
+        }
+        return false;
     }
 }

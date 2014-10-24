@@ -70,7 +70,7 @@ public class PictureDetailAdapter extends BaseExpandableListAdapter {
 	}
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         View element;
         Comment comment = getChild(groupPosition, childPosition);
             if(!isLastChild) {
@@ -87,12 +87,13 @@ public class PictureDetailAdapter extends BaseExpandableListAdapter {
                     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     element = inflater.inflate(R.layout.post_comment_footer, null);
                     final EditText commentInput = (EditText) element.findViewById(R.id.commentInput);
-                    Button sendComment = (Button) element.findViewById(R.id.send_comment);
+                    final Button sendComment = (Button) element.findViewById(R.id.send_comment);
 
                     sendComment.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Util.alert(commentInput.getText().toString(), context);
+                            sendComment.setEnabled(false);
+                            ((BraceletActivity) context).postComment((communityList.size() - groupPosition), commentInput.getText().toString(), sendComment);
                         }
                     });
                 //element.setFocusableInTouchMode(true);

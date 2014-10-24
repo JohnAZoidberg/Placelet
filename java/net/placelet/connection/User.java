@@ -215,11 +215,12 @@ public class User {
 	
 	// returns true if logged in and false if logged out
 	public static boolean getStatus() {
-		if (User.username.equals(User.NOT_LOGGED_IN)) {
+		/*if (User.username.equals(User.NOT_LOGGED_IN)) {
 			return false;
 		}else {
 			return true;
-		}
+		}*/
+        return true;
 	}
 
 	public JSONObject getBraceletData(String brid) {
@@ -287,5 +288,23 @@ public class User {
         } catch (JSONException e) {
             return -1;
         }
+    }
+
+    public JSONObject comment(String brid, int picid, String content) {
+        String lastUpdate = "" + prefs.getLong("getBraceletDataLastUpdate-" + brid, 0);
+        JSONObject result = null;
+        Webserver server = new Webserver();
+        HashMap<String, String> args = new HashMap<String, String>();
+        args.put("androidAuthenticate", "true");
+        args.put("user", username);
+        args.put("dynPW", dynPW);
+
+        args.put("androidPostComment", "true");
+        args.put("braceID", brid);
+        args.put("picid", picid + "");
+        args.put("comment", content);
+        args.put("lastUpdate", lastUpdate);
+        result = server.postRequest(args);
+        return result;
     }
 }

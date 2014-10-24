@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.Button;
 
 import net.placelet.connection.User;
 import net.placelet.data.Bracelet;
@@ -106,6 +107,63 @@ public class BraceletActivity extends FragmentActivity {
         }
     }
 
+    public void postComment(int picid, String content, Button sendComment) {
+        if(checkCommentContent(content)) {
+            Commenting comm = new Commenting(picid, content, sendComment);
+            comm.execute(picid);
+        }else {
+            Util.alert("Invalid Comment", this);
+            sendComment.setEnabled(true);
+        }
+    }
+
+    private boolean checkCommentContent(String content) {
+        // if it contains the blockwords and doesn't contain "placelet" it's false
+        return !(!Util.stringContains(content, "placelet") && Util.stringContains(content, new String[]{"http", "www", ".com", ".de", ".net"}));
+    }
+
+    private class Commenting extends AsyncTask<Integer, Void, JSONObject> {
+        private String content;
+        private int picid;
+        private Button sendComment;
+
+        public Commenting(int picid, String content, Button sendComment) {
+            this.picid = picid;
+            this.content = content;
+            this.sendComment = sendComment;
+        }
+
+        @Override
+        protected JSONObject doInBackground(Integer... params) {
+            User user = new User(prefs);
+            return user.comment(bracelet.brid, picid, content);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            sendComment.setEnabled(true);
+            // check if connected to the internet
+            try {
+                if (result.getString("error").equals("no_internet")) {
+                    //toggleLoading(false);
+                    return;
+                }
+            } catch (JSONException ignored) {
+            }
+            // check if new content
+            try {
+                String updateString = result.getString("update");
+                if(User.admin) Util.alert("Update: " + updateString, BraceletActivity.this);
+                toggleLoading(false);
+            } catch (JSONException e) {
+                Util.saveDate(prefs, "getBraceletDataLastUpdate-" + bracelet.brid, System.currentTimeMillis() / 1000L);
+                String jsonString = result.toString();
+                Util.saveData(prefs, "braceletData-" + bracelet.brid, jsonString);
+                updateBracelet(result);
+            }
+        }
+    }
+
     private class Subscription extends AsyncTask<String, String, Boolean> {
         private Context context;
         public Subscription (Context context) {
@@ -119,7 +177,6 @@ public class BraceletActivity extends FragmentActivity {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            User user = new User(prefs);
             if(result) {
                 if (bracelet.subscribed) {
                     bracelet.subscribed = false;
