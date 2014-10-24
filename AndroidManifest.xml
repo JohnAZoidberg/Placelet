@@ -88,7 +88,8 @@
         </activity>
         <activity
             android:name="net.placelet.BraceletActivity"
-            android:label="@string/title_activity_bracelet" >
+            android:label="@string/title_activity_bracelet"
+            android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.placelet.MainActivity" />

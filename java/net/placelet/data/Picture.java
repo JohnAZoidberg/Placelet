@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 public class Picture implements Comparable<Picture>, HTMLDecodable {
 	public int id;
@@ -21,6 +22,8 @@ public class Picture implements Comparable<Picture>, HTMLDecodable {
 	public double longitude;
 	public double latitude;
 	public String uploader;
+
+    public ArrayList<Comment> comments = new ArrayList<Comment>();
 
 	@Override
 	public int compareTo(Picture compareObject) {
@@ -50,6 +53,11 @@ public class Picture implements Comparable<Picture>, HTMLDecodable {
 			state = StringEscapeUtils.unescapeHtml4(state);
 		if (uploader != null)
 			uploader = StringEscapeUtils.unescapeHtml4(uploader);
+        if (comments != null && comments.size() > 0) {
+            for (Comment comment : comments) {
+                comment.html_entity_decode();
+            }
+        }
 	}
 
 	@Override
@@ -98,5 +106,10 @@ public class Picture implements Comparable<Picture>, HTMLDecodable {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
+        if (comments != null && comments.size() > 0) {
+            for (Comment comment : comments) {
+                comment.urlencode();
+            }
+        }
 	}
 }

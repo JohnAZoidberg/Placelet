@@ -18,9 +18,20 @@ public class PictureFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		braceletActivity = (BraceletActivity) getActivity();
 		View rootView = inflater.inflate(R.layout.fragment_picture, container, false);
-		// initiate listview
 		list = (ExpandableListView) rootView.findViewById(R.id.listView1);
-		//list.setClickable(true);
+        // collapses previous group if new one is expanded
+        list.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            private int prevPosition = -1;
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if(prevPosition != -1 && prevPosition != groupPosition) {
+                    list.collapseGroup(prevPosition);
+                }
+                prevPosition = groupPosition;
+            }
+        });
+        adapter = new PictureDetailAdapter(braceletActivity, 0, braceletActivity.bracelet.pictures);
+        list.setAdapter(adapter);
 		
 		swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
 		swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
@@ -36,8 +47,6 @@ public class PictureFragment extends Fragment {
 	}
 
 	public void updateData() {
-		adapter = new PictureDetailAdapter(braceletActivity, 0, braceletActivity.bracelet.pictures);
-		list.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		braceletActivity.setProgressBarIndeterminateVisibility(false);
 	}

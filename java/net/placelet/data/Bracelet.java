@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Bracelet implements HTMLDecodable {
 	public String name = null;
@@ -78,6 +79,11 @@ public class Bracelet implements HTMLDecodable {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
+        if (pictures != null && pictures.size() > 0) {
+            for (Picture picture : pictures) {
+                picture.urlencode();
+            }
+        }
 	}
 	
 	public boolean isFilled() {
@@ -99,5 +105,12 @@ public class Bracelet implements HTMLDecodable {
 
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public void sort() {
+        Collections.sort(pictures);
+        for(Picture picture : pictures) {
+            Collections.sort(picture.comments);
+        }
     }
 }

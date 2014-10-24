@@ -18,12 +18,12 @@ import android.view.Window;
 
 import net.placelet.connection.User;
 import net.placelet.data.Bracelet;
+import net.placelet.data.Comment;
 import net.placelet.data.Picture;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collections;
 import java.util.Iterator;
 
 public class BraceletActivity extends FragmentActivity {
@@ -243,12 +243,36 @@ public class BraceletActivity extends FragmentActivity {
 				picture.fileext = pictures.getString("fileext");
 				picture.latitude = pictures.getDouble("latitude");
 				picture.longitude = pictures.getDouble("longitude");
+
+                JSONObject comments;
+                int i = 1;
+                boolean commentExists = true;
+                do {
+                    try {
+                        comments = pictures.getJSONObject(i + "");
+                        Comment comment = new Comment();
+                        comment.user = comments.getString("user");
+                        comment.user = comment.user.equals("null") ? "Anonym" : comment.user;
+                        comment.content = comments.getString("comment");
+                        comment.date = comments.getLong("date");
+                        picture.comments.add(comment);
+                    } catch (JSONException e) {
+                        commentExists = false;
+                    }
+                    i++;
+                }while(commentExists);
+                Comment comment = new Comment();
+                comment.user = "JohnZoidberg";
+                comment.content = "Testkommentar";
+                comment.date = 5315315;
+                picture.comments.add(comment);
+                //picture.comments.add(new Comment());
 				bracelet.pictures.add(picture);
 			} catch (JSONException ignored) {
 			}
 		}
         invalidateOptionsMenu();
-		Collections.sort(bracelet.pictures);
+		bracelet.sort();
 		bracelet.html_entity_decode();
 		if(pictureFragment != null) {
 			pictureFragment.updateData();

@@ -5,9 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.placelet.data.Comment;
 import net.placelet.data.Picture;
 
 import java.util.List;
@@ -25,13 +28,13 @@ public class PictureDetailAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int position, boolean isExpanded, View convertView, ViewGroup parent) {
 		View element = convertView;
-		ViewHolderItem viewHolder;
+		PictureViewHolderItem viewHolder;
 		final Picture picture = communityList.get(position);
 		if (element == null) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			// Load different layout if no pictures should be displayed
 			element = inflater.inflate(R.layout.picture_detail_element, null);
-			viewHolder = new ViewHolderItem();
+			viewHolder = new PictureViewHolderItem();
 			viewHolder.title = (TextView) element.findViewById(R.id.pic_title);
 			viewHolder.description = (TextView) element.findViewById(R.id.pic_description);
 			viewHolder.location = (TextView) element.findViewById(R.id.pic_location);
@@ -41,7 +44,7 @@ public class PictureDetailAdapter extends BaseExpandableListAdapter {
 			
 			element.setTag(viewHolder);
 		}else {
-			viewHolder = (ViewHolderItem) element.getTag();
+			viewHolder = (PictureViewHolderItem) element.getTag();
 		}
 
 		viewHolder.title.setText(picture.title);
@@ -68,18 +71,32 @@ public class PictureDetailAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        View element = convertView;
-        ViewHolderItem viewHolder;
-        String childText = (String) getChild(groupPosition, childPosition);
+        View element;
+        Comment comment = getChild(groupPosition, childPosition);
+            if(!isLastChild) {
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                element = inflater.inflate(R.layout.comment_element, null);
+                TextView commentUser = (TextView) element.findViewById(R.id.username);
+                TextView commentView = (TextView) element.findViewById(R.id.comment);
+                TextView commentDate = (TextView) element.findViewById(R.id.date);
 
-        if (element == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            element = inflater.inflate(R.layout.listview_header, null);
-        }
+                commentUser.setText(comment.user);
+                commentDate.setText(Util.timestampToDate(comment.date));
+                commentView.setText(comment.content);
+            }else {
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    element = inflater.inflate(R.layout.post_comment_footer, null);
+                    final EditText commentInput = (EditText) element.findViewById(R.id.commentInput);
+                    Button sendComment = (Button) element.findViewById(R.id.send_comment);
 
-        TextView txtListChild = (TextView) element.findViewById(R.id.list_header);
-
-        txtListChild.setText(childText);
+                    sendComment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Util.alert(commentInput.getText().toString(), context);
+                        }
+                    });
+                //element.setFocusableInTouchMode(true);
+            }
         return element;
     }
 
@@ -90,13 +107,12 @@ public class PictureDetailAdapter extends BaseExpandableListAdapter {
 
     @Override
     public long getGroupId(int groupPosition) {
-        return groupPosition;
+        return communityList.get(groupPosition).hashCode();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        //return this._listDataChild.get(this._listDataHeader.get(groupPosition)).size();
-        return 5;
+        return communityList.get(groupPosition).comments.size();
     }
 
     @Override
@@ -105,9 +121,8 @@ public class PictureDetailAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getChild(int groupPosition, int childPosititon) {
-        //return this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(childPosititon);
-        return groupPosition + " - " + childPosititon;
+    public Comment getChild(int groupPosition, int childPosititon) {
+        return communityList.get(groupPosition).comments.get(childPosititon);
     }
 
     @Override
@@ -125,13 +140,13 @@ public class PictureDetailAdapter extends BaseExpandableListAdapter {
         return true;
     }
 	
-	static class ViewHolderItem {
-		TextView title;
-		TextView description;
-		TextView location;
-		TextView user;
-		TextView date;
-		ImageView imgView;
-	}
+	static class PictureViewHolderItem {
+        TextView title;
+        TextView description;
+        TextView location;
+        TextView user;
+        TextView date;
+        ImageView imgView;
+    }
 
 }
