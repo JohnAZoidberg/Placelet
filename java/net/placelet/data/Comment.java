@@ -15,7 +15,7 @@ public class Comment implements Comparable<Comment>, HTMLDecodable {
 
     @Override
     public int compareTo(Comment compareObject) {
-        if (this.date > compareObject.date)
+        if (this.date < compareObject.date)
             return -1;
         else if (this.date == compareObject.date)
             return 0;

@@ -73,31 +73,30 @@ public class PictureDetailAdapter extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         View element;
         Comment comment = getChild(groupPosition, childPosition);
-            if(!isLastChild) {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                element = inflater.inflate(R.layout.comment_element, null);
-                TextView commentUser = (TextView) element.findViewById(R.id.username);
-                TextView commentView = (TextView) element.findViewById(R.id.comment);
-                TextView commentDate = (TextView) element.findViewById(R.id.date);
+        if(!isLastChild) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            element = inflater.inflate(R.layout.comment_element, null);
+            TextView commentUser = (TextView) element.findViewById(R.id.username);
+            TextView commentView = (TextView) element.findViewById(R.id.comment);
+            TextView commentDate = (TextView) element.findViewById(R.id.date);
 
-                commentUser.setText(comment.user);
-                commentDate.setText(Util.timestampToDate(comment.date));
-                commentView.setText(comment.content);
-            }else {
-                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    element = inflater.inflate(R.layout.post_comment_footer, null);
-                    final EditText commentInput = (EditText) element.findViewById(R.id.commentInput);
-                    final Button sendComment = (Button) element.findViewById(R.id.send_comment);
+            commentUser.setText(comment.user);
+            commentDate.setText(Util.timestampToTime(comment.date));
+            commentView.setText(comment.content);
+        }else {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            element = inflater.inflate(R.layout.post_comment_footer, null);
+            final EditText commentInput = (EditText) element.findViewById(R.id.commentInput);
+            final Button sendComment = (Button) element.findViewById(R.id.send_comment);
 
-                    sendComment.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            sendComment.setEnabled(false);
-                            ((BraceletActivity) context).postComment((communityList.size() - groupPosition), commentInput.getText().toString(), sendComment);
-                        }
-                    });
-                //element.setFocusableInTouchMode(true);
-            }
+            sendComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sendComment.setEnabled(false);
+                    ((BraceletActivity) context).postComment((communityList.size() - groupPosition), commentInput.getText().toString(), sendComment);
+                }
+            });
+        }
         return element;
     }
 

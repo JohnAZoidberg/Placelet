@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:groupIndicator="@null"
+            android:childDivider="@android:color/transparent"
             android:layout_alignParentTop="true" />
     </android.support.v4.widget.SwipeRefreshLayout>
 

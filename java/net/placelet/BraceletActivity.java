@@ -112,14 +112,14 @@ public class BraceletActivity extends FragmentActivity {
             Commenting comm = new Commenting(picid, content, sendComment);
             comm.execute(picid);
         }else {
-            Util.alert("Invalid Comment", this);
+            Util.alert("No links or empty comments!", this);
             sendComment.setEnabled(true);
         }
     }
 
     private boolean checkCommentContent(String content) {
-        // if it contains the blockwords and doesn't contain "placelet" it's false
-        return !(!Util.stringContains(content, "placelet") && Util.stringContains(content, new String[]{"http", "www", ".com", ".de", ".net"}));
+        // if it contains the blockwords and doesn't contain "placelet" OR is empty it's false
+        return !content.isEmpty() && !(!Util.stringContains(content, "placelet") && Util.stringContains(content, new String[]{"http", "www", ".com", ".de", ".net"}));
     }
 
     private class Commenting extends AsyncTask<Integer, Void, JSONObject> {
@@ -321,9 +321,8 @@ public class BraceletActivity extends FragmentActivity {
                 Comment comment = new Comment();
                 comment.user = "JohnZoidberg";
                 comment.content = "Testkommentar";
-                comment.date = 5315315;
+                comment.date = Integer.MAX_VALUE;
                 picture.comments.add(comment);
-                //picture.comments.add(new Comment());
 				bracelet.pictures.add(picture);
 			} catch (JSONException ignored) {
 			}
