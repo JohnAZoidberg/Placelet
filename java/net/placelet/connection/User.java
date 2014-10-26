@@ -68,7 +68,7 @@ public class User {
 				int userid = result.getInt("userid");
 				String dynamicPW = result.getString("dynPW");
 				// boolean firstLogin = result.getBoolean("firstLogin");
-				boolean status= result.getBoolean("admin");
+				boolean status = result.getBoolean("admin");
 
 				username = user;
 				dynPW = dynamicPW;

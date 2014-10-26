@@ -53,6 +53,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         User.username = prefs.getString("username", User.NOT_LOGGED_IN);
         User.dynPW = prefs.getString("dynPW", User.NOT_LOGGED_IN);
+        User.admin = prefs.getBoolean("admin", false);
         initializeFragments();
         Util.display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
