@@ -18,6 +18,7 @@ import android.view.Window;
 import android.widget.Button;
 
 import net.placelet.connection.User;
+import net.placelet.connection.Webserver;
 import net.placelet.data.Bracelet;
 import net.placelet.data.Comment;
 import net.placelet.data.Picture;
@@ -236,12 +237,9 @@ public class BraceletActivity extends FragmentActivity {
 		@Override
 		protected void onPostExecute(JSONObject result) {
 			// check if connected to the internet
-			try {
-				if (result.getString("error").equals("no_internet")) {
-					//toggleLoading(false);
-					return;
-				}
-			} catch (JSONException ignored) {
+            if(!Webserver.checkResult(result)) {
+                toggleLoading(false);
+                return;
 			}
             // check if new content
             try {

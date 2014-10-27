@@ -84,13 +84,13 @@ public class Webserver {
 		}
 		result = convertStreamToString(is);
         double length_before = result.length();
-        Log.e("stats", "Length of request before minifying: " + result.length());
-        Log.e("debug", "Data from Webserver(PHP) before minifying: \n\"" + result + "\"");
+        Log.d("stats", "Length of request before minifying: " + result.length());
+        Log.d("debug", "Data from Webserver(PHP) before minifying: \n\"" + result + "\"");
         result = deminify_json(result);
         double length_after = result.length();
-        Log.e("debug", "Data from Webserver(PHP): \n\"" + result + "\"");
-        Log.e("stats", "Length of request: " + result.length());
-        Log.e("stats", "Saving: " + (length_after / length_before));
+        Log.d("debug", "Data from Webserver(PHP): \n\"" + result + "\"");
+        Log.d("stats", "Length of request: " + result.length());
+        Log.d("stats", "Saving: " + (length_after / length_before));
 		return result;
 	}
 
@@ -174,13 +174,13 @@ public class Webserver {
 			outputStream.close();
 
             double length_before = result.length();
-            Log.e("stats", "Length of request before minifying: " + result.length());
-            Log.e("debug", "Data from Webserver(PHP) before minifying: \n\"" + result + "\"");
+            Log.d("stats", "Length of request before minifying: " + result.length());
+            Log.d("debug", "Data from Webserver(PHP) before minifying: \n\"" + result + "\"");
             result = deminify_json(result);
             double length_after = result.length();
-            Log.e("debug", "Data from Webserver(PHP): \n\"" + result + "\"");
-            Log.e("stats", "Length of request: " + result.length());
-            Log.e("stats", "Saving: " + (length_after / length_before));
+            Log.d("debug", "Data from Webserver(PHP): \n\"" + result + "\"");
+            Log.d("stats", "Length of request: " + result.length());
+            Log.d("stats", "Saving: " + (length_after / length_before));
 			return result;
 		} catch (Exception e) {
 			Log.e("MultipartRequest", "Multipart Form Upload Error");
@@ -207,16 +207,14 @@ public class Webserver {
         return result;
 	}
 
-    public static boolean checkConnection(JSONObject result) {
+    public static boolean checkResult(JSONObject result) {
         // check if connected to the internet
         try {
-            if (result.getString("error").equals("no_internet")) {
-                return false;
-            }
+            result.getString("error");
         } catch (JSONException e) {
             return true;
         }
-        return true;
+        return false;
     }
 
     private String deminify_json(String json) {

@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import net.placelet.connection.User;
+import net.placelet.connection.Webserver;
 import net.placelet.data.Message;
 
 import org.json.JSONException;
@@ -100,12 +101,9 @@ public class MessagesFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
-			try {
-				if (result.getString("error").equals("no_internet")) {// todo remove the internet part
+            if(!Webserver.checkResult(result)) {
 					swipeLayout.setRefreshing(false);
 					return;
-				}
-			} catch (JSONException ignored) {
 			}
             // check if new content
             try {

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.placelet.connection.User;
+import net.placelet.connection.Webserver;
 import net.placelet.data.Message;
 
 import org.json.JSONException;
@@ -113,15 +114,12 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		@Override
 		protected void onPostExecute(JSONObject result) {
 			// check if connected to the internet
-			try {
-				if (result.getString("error").equals("no_internet")) {
+            if(!Webserver.checkResult(result)) {
 					setProgressBarIndeterminateVisibility(false);
 					if (!recipientVerified) {
 						displayErrorAtMessageFragment(getString(R.string.user_notextisting));
 					}
 					return;
-				}
-			} catch (JSONException ignored) {
 			}
 			Boolean exists = false;
 			try {

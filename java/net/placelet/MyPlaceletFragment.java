@@ -12,6 +12,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import net.placelet.connection.User;
+import net.placelet.connection.Webserver;
 import net.placelet.data.Bracelet;
 import net.placelet.data.Picture;
 
@@ -99,12 +100,9 @@ public class MyPlaceletFragment extends Fragment {
 		@Override
 		protected void onPostExecute(JSONObject result) {
 			// check if connected to the internet
-			try {
-				if (result.getString("error").equals("no_internet")) {
-					swipeLayout.setRefreshing(false);
-					return;
-				}
-			} catch (JSONException ignored) {
+            if(!Webserver.checkResult(result)) {
+                swipeLayout.setRefreshing(false);
+                return;
 			}
             // check if new content
             try {

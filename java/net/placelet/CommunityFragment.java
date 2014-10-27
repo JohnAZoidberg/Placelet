@@ -138,7 +138,7 @@ public class CommunityFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
-            if(!Webserver.checkConnection(result)) {
+            if(!Webserver.checkResult(result)) {
                 toggleLoading(false);
                 Util.alert("what the fuck", mainActivity);
                 if (!reload) {
