@@ -28,7 +28,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class Webserver {
@@ -62,13 +61,11 @@ public class Webserver {
 		InputStream is = null;
 		String result = "";
 		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(args.size());
-		Iterator<String> iter = args.keySet().iterator();
 
-		while (iter.hasNext()) {
-			String key = (String) iter.next();
-			String val = (String) args.get(key);
-			nameValuePair.add(new BasicNameValuePair(key, val));
-		}
+        for (String key : args.keySet()) {
+            String val = args.get(key);
+            nameValuePair.add(new BasicNameValuePair(key, val));
+        }
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
 			HttpResponse response = httpClient.execute(httpPost);

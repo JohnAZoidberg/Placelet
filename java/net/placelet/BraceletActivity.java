@@ -272,7 +272,7 @@ public class BraceletActivity extends FragmentActivity {
 	}
 
 	public void updateBracelet(JSONObject result) {
-        bracelet = new Bracelet(bracelet.brid);
+        //bracelet = new Bracelet(bracelet.brid);
 		try {
 			bracelet.owner = result.getString("owner");
 			bracelet.name = result.getString("name");
