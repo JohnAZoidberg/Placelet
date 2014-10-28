@@ -205,6 +205,7 @@ public class MyPlaceletFragment extends Fragment {
             picture.country = mainActivity.getString(R.string.country);
             pictures.add(picture);
         }
+        setupAdapters();
         braceletAdapter.notifyDataSetChanged();
         pictureAdapter.notifyDataSetChanged();
         swipeLayout.setRefreshing(false);
