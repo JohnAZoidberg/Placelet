@@ -62,7 +62,8 @@ public class PictureDetailAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View view) {
                 BraceletActivity braceletActivity = (BraceletActivity) context;
-                Util.showPopup(picture, braceletActivity.settingsPrefs, braceletActivity);
+                //Util.showPopup(picture, braceletActivity.settingsPrefs, braceletActivity);
+                NavigateActivities.switchActivity(context, PictureViewerActivity.class, false, "picid", "" + picture.id);
             }
         });
 
