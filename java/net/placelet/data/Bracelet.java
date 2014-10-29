@@ -113,4 +113,19 @@ public class Bracelet implements HTMLDecodable {
             Collections.sort(picture.comments);
         }
     }
+
+    public void clear() {
+        name = null;
+        owner = null;
+        brid = null;
+        date = -1;
+        distance = 0;
+
+        picAnz = -1;
+        lastCity = null;
+        lastCountry = null;
+
+        pictures.clear();
+        subscribed = false;
+    }
 }

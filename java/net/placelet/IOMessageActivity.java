@@ -158,8 +158,8 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 	private void loadMessages(boolean reload) {
         toggleLoading(true, false);
 		if (Util.notifyIfOffline(this)) {
-			Messages login = new Messages();
-			login.execute();
+			Messages messages = new Messages();
+			messages.execute();
 		} else {
             toggleLoading(false, false);
 		}

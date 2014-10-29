@@ -156,6 +156,8 @@ public class BraceletActivity extends FragmentActivity {
                 String updateString = result.getString("update");
                 if(User.admin) Util.alert("Update: " + updateString, BraceletActivity.this);
                 toggleLoading(false);
+                bracelet.subscribed = result.getBoolean("subscribed");
+                invalidateOptionsMenu();
             } catch (JSONException e) {
                 Util.saveDate(prefs, "getBraceletDataLastUpdate-" + bracelet.brid, System.currentTimeMillis() / 1000L);
                 String jsonString = result.toString();
@@ -273,6 +275,7 @@ public class BraceletActivity extends FragmentActivity {
 
 	public void updateBracelet(JSONObject result) {
         //bracelet = new Bracelet(bracelet.brid);
+        bracelet.clear();
 		try {
 			bracelet.owner = result.getString("owner");
 			bracelet.name = result.getString("name");
