@@ -117,7 +117,6 @@ public class Bracelet implements HTMLDecodable {
     public void clear() {
         name = null;
         owner = null;
-        brid = null;
         date = -1;
         distance = 0;
 

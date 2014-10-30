@@ -140,7 +140,7 @@ public class CommunityFragment extends Fragment {
 		protected void onPostExecute(JSONObject result) {
             if(!Webserver.checkResult(result)) {
                 toggleLoading(false);
-                Util.alert("what the fuck", mainActivity);
+                Util.alert("Internet Error", mainActivity);
                 if (!reload) {
                     //displayed_pics--; TODO Check if necessary
                 }
