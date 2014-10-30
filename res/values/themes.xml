@@ -10,8 +10,8 @@
 
     <!-- ActionBar styles -->
     <style name="PlaceletLogoActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/logo_green</item>
-        <item name="android:backgroundStacked">@color/logo_dark_green</item>
+        <item name="android:background">@color/logo_dark_green</item>
+        <item name="android:backgroundStacked">@color/logo_darker_green</item>
         <item name="android:icon">@android:color/transparent</item>
     </style>
 
