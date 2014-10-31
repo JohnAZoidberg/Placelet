@@ -194,6 +194,8 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 	private void updateListView(JSONObject input) {
         messageList.clear();
+        if(footer != null)
+            list.removeFooterView(footer);
 		for (Iterator<?> iter = input.keys(); iter.hasNext();) {
 			String key = (String) iter.next();
 			try {
@@ -220,18 +222,16 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 		Collections.sort(messageList);
 		Collections.reverse(messageList);
-        messageList = mergeMessages(messageList);
-		adapter.notifyDataSetChanged();
         Message lastMessage = new Message();
         if(messageList.size() > 0) lastMessage = messageList.get(messageList.size() - 1);
-        if(footer != null)
-            list.removeFooterView(footer);
         if(lastMessage.seen > 0 && lastMessage.sender.equals(User.username)) {
             footer = (RelativeLayout) getLayoutInflater().inflate(R.layout.seen_footer, null);
             TextView footer_seen = (TextView) footer.findViewById(R.id.textView);
             footer_seen.append(" " + Util.timestampToTime(lastMessage.seen));
             list.addFooterView(footer);
         }
+        messageList = mergeMessages(messageList);
+		adapter.notifyDataSetChanged();
 		toggleLoading(false, true);
 	}
 
