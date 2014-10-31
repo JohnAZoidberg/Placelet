@@ -1,7 +1,6 @@
 package net.placelet;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,11 +42,12 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
 		}else {
             viewHolder = (ViewHolderItem) element.getTag();
         }
-		if (position % 2 == 1) {
-	        element.setBackgroundColor(context.getResources().getColor(R.color.light_grey));
-		}else {
-	        element.setBackgroundColor(Color.WHITE);
-		}
+
+        if (position % 2 == 1) {
+            element.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.light_grey_element));
+        }else {
+            element.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.white_element));
+        }
 
         viewHolder.imgView.setImageDrawable(null);
         if(message.seen > 0 && !message.recipient.equals(User.username)) viewHolder.imgView.setImageResource(R.drawable.tick);

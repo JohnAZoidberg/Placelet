@@ -1,7 +1,6 @@
 package net.placelet;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,9 +45,9 @@ public class BraceletAdapter extends ArrayAdapter<Bracelet> {
         }
 
         if (position % 2 == 1) {
-            element.setBackgroundColor(context.getResources().getColor(R.color.light_grey));
+            element.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.light_grey_element));
         }else {
-            element.setBackgroundColor(Color.WHITE);
+            element.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.white_element));
         }
 
         viewHolder.name.setText(bracelet.name);
