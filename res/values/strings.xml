@@ -134,5 +134,7 @@
     <string name="new_pic">New Picture</string>
     <string name="comment">Comment</string>
     <string name="write_comment">Write comment…</string>
+    <string name="add">Add</string>
+    <string name="add_user">Add User</string>
 
 </resources>

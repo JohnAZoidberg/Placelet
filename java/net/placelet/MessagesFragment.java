@@ -1,20 +1,24 @@
 package net.placelet;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.KeyEvent;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import com.melnykov.fab.FloatingActionButton;
 
 import net.placelet.connection.User;
 import net.placelet.connection.Webserver;
@@ -30,7 +34,6 @@ import java.util.List;
 
 public class MessagesFragment extends Fragment {
 	private SharedPreferences prefs;
-	private EditText selectUser;
 	private MainActivity mainActivity;
 	private MessagesAdapter adapter;
 	private List<Message> messageList = new ArrayList<Message>();
@@ -51,20 +54,51 @@ public class MessagesFragment extends Fragment {
 				switchToIOMessage(msg, true);
 			}
 		});
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.attachToListView(list);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final EditText input = new EditText(mainActivity);
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                final AlertDialog dialog = new AlertDialog.Builder(mainActivity)
+                        .setTitle(getString(R.string.add_user))
+                        .setView(input)
+                        .setPositiveButton(getString(R.string.add), null)
+                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        }).create();
+
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+                    @Override
+                    public void onShow(DialogInterface d) {
+
+                        Button b = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                        b.setOnClickListener(new View.OnClickListener() {
+
+                            @Override
+                            public void onClick(View view) {
+                                String username = input.getText().toString();
+                                if (true) {
+                                    Message msg = new Message();
+                                    msg.sender = username;
+                                    switchToIOMessage(msg, false);
+                                } else
+                                    Util.alert(getString(R.string.wrong_brid_format), mainActivity);
+                            }
+                        });
+                    }
+                });
+                dialog.show();
+            }
+        });
 		adapter = new MessagesAdapter(mainActivity, 0, messageList);
-		selectUser = (EditText) rootView.findViewById(R.id.editText1);
-		selectUser.setOnKeyListener(new OnKeyListener() {
-			public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
-				// If the keyevent is a key-down event on the "enter" button
-				if ((keyevent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-					Message msg = new Message();
-					msg.sender = selectUser.getText().toString();
-					switchToIOMessage(msg, false);
-					return true;
-				}
-				return false;
-			}
-		});
+
 		swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
 		swipeLayout.setColorScheme(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
 		swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

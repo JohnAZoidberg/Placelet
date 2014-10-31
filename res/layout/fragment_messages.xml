@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -8,32 +9,30 @@
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/editText1" >
+        >
 
         <ListView
             android:id="@+id/messagesList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/editText1"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             style="@style/noDivider" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <EditText
-        android:id="@+id/editText1"
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_add"
+        fab:fab_colorNormal="#673ab7"
+        fab:fab_colorPressed="#4527a0"
+        fab:fab_colorRipple="#4527a0"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:ems="10"
-        android:hint="@string/username"
-        android:inputType="textPersonName"
-        android:layout_margin="8dp">
-
-        <requestFocus />
-    </EditText>
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"/>
 
 </RelativeLayout>

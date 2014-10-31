@@ -124,5 +124,7 @@
     <string name="new_pic">Neues Bild</string>
     <string name="comment">Kommentar</string>
     <string name="write_comment">Kommentar schreiben…</string>
+    <string name="add">Hinzufügen</string>
+    <string name="add_user">Benutzer hinzufügen</string>
 
 </resources>
