@@ -18,6 +18,13 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class PictureViewerActivity extends Activity {
     ImageView mImageView;
     PhotoViewAttacher mAttacher;
+    SlideOut textView;
+    boolean hidden = true;
+
+    int picid = -1;
+    String username = "";
+    String braceName = "";
+    String title = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,11 +45,21 @@ public class PictureViewerActivity extends Activity {
 
         // Set the Drawable displayed
         final Intent intent = getIntent();
-        if (intent.hasExtra("picid")) {
-            Picasso.with(this).load("http://placelet.de/pictures/bracelets/thumb-" + Integer.parseInt(intent.getStringExtra("picid")) + ".jpg").into(mImageView, new Callback() {
+        if(intent.hasExtra("username")) {
+            username = intent.getStringExtra("username");
+        }
+        if(intent.hasExtra("braceName")) {
+            braceName = intent.getStringExtra("braceName");
+        }
+        if(intent.hasExtra("title")) {
+            title = intent.getStringExtra("title");
+        }
+        if(intent.hasExtra("picid")) {
+            picid = Integer.parseInt(intent.getStringExtra("picid"));
+            Picasso.with(this).load("http://placelet.de/pictures/bracelets/thumb-" + picid + ".jpg").into(mImageView, new Callback() {
                 @Override
                 public void onSuccess() {
-                    Picasso.with(PictureViewerActivity.this).load("http://placelet.de/pictures/bracelets/pic-" + Integer.parseInt(intent.getStringExtra("picid")) + ".jpg").into(mImageView, new Callback() {
+                    Picasso.with(PictureViewerActivity.this).load("http://placelet.de/pictures/bracelets/thumb-" + Integer.parseInt(intent.getStringExtra("picid")) + ".jpg").into(mImageView, new Callback() {
                         @Override
                         public void onSuccess() {
                             // Attach a PhotoViewAttacher, which takes care of all of the zooming functionality.
@@ -68,6 +85,14 @@ public class PictureViewerActivity extends Activity {
                 }
             });
         }
+        textView = (SlideOut) findViewById(R.id.textView);
+        textView.setText(
+            title + "\n"
+            + username + ", " + braceName
+        );
+        textView.toggle(false, true, false);
+        //textView.toggle(true, false, true);
+        //textView.toggle(false, false, true);
     }
 
     @Override
@@ -86,8 +111,7 @@ public class PictureViewerActivity extends Activity {
         // getSystemUiVisibility() gives us that bitfield.
         int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
         int newUiOptions = uiOptions;
-        boolean isImmersiveModeEnabled =
-                ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
+        boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
 
         // Navigation bar hiding:  Backwards compatible to ICS.
         if (Build.VERSION.SDK_INT >= 14) {
@@ -112,5 +136,8 @@ public class PictureViewerActivity extends Activity {
         }
 
         getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
+
+        textView.toggle(hidden, true, false);
+        hidden = !hidden;
     }
 }

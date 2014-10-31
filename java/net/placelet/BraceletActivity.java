@@ -291,6 +291,7 @@ public class BraceletActivity extends FragmentActivity {
 			try {
 				JSONObject pictures = result.getJSONObject(key);
 				Picture picture = new Picture();
+                picture.braceName = bracelet.name;
 				picture.title = pictures.getString("title");
 				picture.description = pictures.getString("description");
 				picture.city = pictures.getString("city");

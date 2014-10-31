@@ -13,6 +13,7 @@ import android.widget.TextView;
 import net.placelet.data.Comment;
 import net.placelet.data.Picture;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class PictureDetailAdapter extends BaseExpandableListAdapter {
@@ -63,7 +64,12 @@ public class PictureDetailAdapter extends BaseExpandableListAdapter {
             public void onClick(View view) {
                 BraceletActivity braceletActivity = (BraceletActivity) context;
                 //Util.showPopup(picture, braceletActivity.settingsPrefs, braceletActivity);
-                NavigateActivities.switchActivity(context, PictureViewerActivity.class, false, "picid", "" + picture.id);
+                HashMap<String, String> braceletData = new HashMap<String, String>();
+                braceletData.put("picid", "" + picture.id);
+                braceletData.put("username", picture.uploader);
+                braceletData.put("braceName", picture.braceName);
+                braceletData.put("title", picture.title);
+                NavigateActivities.switchActivity(context, PictureViewerActivity.class, false, braceletData);
             }
         });
 
