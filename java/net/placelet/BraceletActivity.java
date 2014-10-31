@@ -6,16 +6,27 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ExpandableListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import net.placelet.connection.User;
 import net.placelet.connection.Webserver;
@@ -29,51 +40,78 @@ import org.json.JSONObject;
 import java.util.Iterator;
 
 public class BraceletActivity extends FragmentActivity {
-	private ViewPager mPager;
-	private PagerAdapter mPagerAdapter;
-	private static final int NUM_PAGES = 2;
+    public Bracelet bracelet;
+    public SharedPreferences prefs;
+    public SharedPreferences settingsPrefs;
+    private boolean reloadHidden = false;
 
     private static final int SUBSCRIBE_BUTTON = 1;
 
-	public SharedPreferences prefs;
-	public SharedPreferences settingsPrefs;
+    private PictureDetailAdapter adapter;
+    private ExpandableListView list;
+    public SwipeRefreshLayout swipeLayout;
 
-	private BraceletFragment braceletFragment;
-	private PictureFragment pictureFragment;
+    private TextView headerView;
+    private TextView startEndView;
+    private TextView distanceView;
+    private TextView showMapView;
 
-	public Bracelet bracelet;
+    private SupportMapFragment mapFragment;
+    private GoogleMap googleMap = null;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setContentView(R.layout.activity_bracelet);
+    private boolean showMap = false;
 
-		// Instantiate a ViewPager and a PagerAdapter.
-		mPager = (ViewPager) findViewById(R.id.pager);
-		mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-		mPager.setAdapter(mPagerAdapter);
-		// initiate ActionBar
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setTitle(R.string.app_name);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        setContentView(R.layout.activity_bracelet);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setTitle(R.string.app_name);
+        prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
+        settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+        googleMap = mapFragment.getMap();
+        if(googleMap == null) Util.alert("null", this);
 
-		prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
-		settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Intent intent = getIntent();
+        String brid = intent.getStringExtra("brid");
+        bracelet = new Bracelet(brid);
 
-		Intent intent = getIntent();
-        if (intent.hasExtra("fragment")) {
-            // switch to specific fragment
-            int fragmentNr = intent.getIntExtra("fragment", 0);
-            switchFragments(fragmentNr);
-        }
-		String brid = intent.getStringExtra("brid");
-		bracelet = new Bracelet(brid);
-		loadPictures(false);
-	}
+        list = (ExpandableListView) findViewById(R.id.listView1);
+        // collapses previous group if new one is expanded
+        list.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            private int prevPosition = -1;
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if(prevPosition != -1 && prevPosition != groupPosition) {
+                    list.collapseGroup(prevPosition);
+                }
+                prevPosition = groupPosition;
+            }
+        });
+        adapter = new PictureDetailAdapter(this, 0, bracelet.pictures);
+        list.setAdapter(adapter);
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		Util.inflateActionBar(this, menu, true);
+        headerView = (TextView) findViewById(R.id.braceletHeader);
+        distanceView = (TextView) findViewById(R.id.braceletDistance);
+        startEndView = (TextView) findViewById(R.id.startEnd);
+        showMapView = (TextView) findViewById(R.id.showMapView);
+
+        RelativeLayout headerLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
+        headerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleVisibility();
+            }
+        });
+        toggleVisibility();
+        loadPictures(false);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Util.inflateActionBar(this, menu, reloadHidden);
         menu.add(Menu.NONE, SUBSCRIBE_BUTTON, 0, getString(R.string.subscribe)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         if(bracelet != null) {
             MenuItem bedMenuItem = menu.findItem(SUBSCRIBE_BUTTON);
@@ -84,22 +122,22 @@ public class BraceletActivity extends FragmentActivity {
             }
         }
         invalidateOptionsMenu();
-		return super.onCreateOptionsMenu(menu);
-	}
+        return super.onCreateOptionsMenu(menu);
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Reload
-		switch (item.getItemId()) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Reload
+        switch (item.getItemId()) {
             case R.id.action_reload:
-			    loadPictures(true);
+                loadPictures(true);
                 break;
             case SUBSCRIBE_BUTTON:
                 toggleSubscribe();
                 break;
-		}
-		return NavigateActivities.activitySwitchMenu(item, this);
-	}
+        }
+        return NavigateActivities.activitySwitchMenu(item, this);
+    }
 
     private void toggleSubscribe() {
         if(Util.notifyIfOffline(this)) {
@@ -194,55 +232,21 @@ public class BraceletActivity extends FragmentActivity {
         }
     }
 
-    @Override
-	public void onBackPressed() {
-		if (mPager.getCurrentItem() == 0) {
-			// If the user is currently looking at the first step, allow the system to handle the
-			// Back button. This calls finish() on this activity and pops the back stack.
-			super.onBackPressed();
-		} else {
-			// Otherwise, select the previous step.
-			mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-		}
-	}
+    private class BraceletData extends AsyncTask<String, String, JSONObject> {
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            User user = new User(prefs);
+            JSONObject content = user.getBraceletData(bracelet.brid);
+            return content;
+        }
 
-	private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-		public ScreenSlidePagerAdapter(FragmentManager fm) {
-			super(fm);
-		}
-
-		@Override
-		public Fragment getItem(int position) {
-			if (position == 0) {
-				braceletFragment = new BraceletFragment();
-				return braceletFragment;
-			} else {
-				pictureFragment = new PictureFragment();
-				return pictureFragment;
-			}
-		}
-
-		@Override
-		public int getCount() {
-			return NUM_PAGES;
-		}
-	}
-
-	private class BraceletData extends AsyncTask<String, String, JSONObject> {
-		@Override
-		protected JSONObject doInBackground(String... params) {
-			User user = new User(prefs);
-			JSONObject content = user.getBraceletData(bracelet.brid);
-			return content;
-		}
-
-		@Override
-		protected void onPostExecute(JSONObject result) {
-			// check if connected to the internet
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            // check if connected to the internet
             if(!Webserver.checkResult(result)) {
                 toggleLoading(false);
                 return;
-			}
+            }
             // check if new content
             try {
                 String updateString = result.getString("update");
@@ -254,54 +258,54 @@ public class BraceletActivity extends FragmentActivity {
                 Util.saveData(prefs, "braceletData-" + bracelet.brid, jsonString);
                 updateBracelet(result);
             }
-		}
-	}
+        }
+    }
 
-	public void loadPictures(boolean reload) {
-		toggleLoading(true);
-		// display saved pics if it shouldn't reload and if there are pics saved
-		String savedBracelet = prefs.getString("braceletData-" + bracelet.brid, "null");
-		if (!savedBracelet.equals("null") && !reload) {
-			loadSavedBracelet(savedBracelet);
-		}
-		// load new pics from the internet
-		if (Util.notifyIfOffline(this)) {
-			BraceletData pics = new BraceletData();
-			pics.execute();
-		}else {
-			toggleLoading(false);
-		}
-	}
+    public void loadPictures(boolean reload) {
+        toggleLoading(true);
+        // display saved pics if it shouldn't reload and if there are pics saved
+        String savedBracelet = prefs.getString("braceletData-" + bracelet.brid, "null");
+        if (!savedBracelet.equals("null") && !reload) {
+            loadSavedBracelet(savedBracelet);
+        }
+        // load new pics from the internet
+        if (Util.notifyIfOffline(this)) {
+            BraceletData pics = new BraceletData();
+            pics.execute();
+        }else {
+            toggleLoading(false);
+        }
+    }
 
-	public void updateBracelet(JSONObject result) {
+    public void updateBracelet(JSONObject result) {
         //bracelet = new Bracelet(bracelet.brid);
         bracelet.clear();
-		try {
-			bracelet.owner = result.getString("owner");
-			bracelet.name = result.getString("name");
-			bracelet.date = result.getLong("date");
-			bracelet.picAnz = result.getInt("pic_anz");
-			bracelet.lastCity = result.getString("lastcity");
-			bracelet.lastCountry = result.getString("lastcountry");
+        try {
+            bracelet.owner = result.getString("owner");
+            bracelet.name = result.getString("name");
+            bracelet.date = result.getLong("date");
+            bracelet.picAnz = result.getInt("pic_anz");
+            bracelet.lastCity = result.getString("lastcity");
+            bracelet.lastCountry = result.getString("lastcountry");
             bracelet.subscribed = result.getBoolean("subscribed");
-		} catch (JSONException ignored) {
-		}
-		for (Iterator<?> iter = result.keys(); iter.hasNext();) {
-			String key = (String) iter.next();
-			try {
-				JSONObject pictures = result.getJSONObject(key);
-				Picture picture = new Picture();
+        } catch (JSONException ignored) {
+        }
+        for (Iterator<?> iter = result.keys(); iter.hasNext();) {
+            String key = (String) iter.next();
+            try {
+                JSONObject pictures = result.getJSONObject(key);
+                Picture picture = new Picture();
                 picture.braceName = bracelet.name;
-				picture.title = pictures.getString("title");
-				picture.description = pictures.getString("description");
-				picture.city = pictures.getString("city");
-				picture.country = pictures.getString("country");
-				picture.uploader = pictures.getString("user");
-				picture.date = pictures.getLong("date");
-				picture.id = pictures.getInt("id");
-				picture.fileext = pictures.getString("fileext");
-				picture.latitude = pictures.getDouble("latitude");
-				picture.longitude = pictures.getDouble("longitude");
+                picture.title = pictures.getString("title");
+                picture.description = pictures.getString("description");
+                picture.city = pictures.getString("city");
+                picture.country = pictures.getString("country");
+                picture.uploader = pictures.getString("user");
+                picture.date = pictures.getLong("date");
+                picture.id = pictures.getInt("id");
+                picture.fileext = pictures.getString("fileext");
+                picture.latitude = pictures.getDouble("latitude");
+                picture.longitude = pictures.getDouble("longitude");
 
                 JSONObject comments;
                 int i = 1;
@@ -325,42 +329,114 @@ public class BraceletActivity extends FragmentActivity {
                 comment.content = "Testkommentar";
                 comment.date = Integer.MAX_VALUE;
                 picture.comments.add(comment);
-				bracelet.pictures.add(picture);
-			} catch (JSONException ignored) {
-			}
-		}
+                bracelet.pictures.add(picture);
+            } catch (JSONException ignored) {
+            }
+        }
         invalidateOptionsMenu();
-		bracelet.sort();
-		bracelet.html_entity_decode();
-		if(pictureFragment != null) {
-			pictureFragment.updateData();
-		}
-		if(braceletFragment != null) {
-			braceletFragment.updateData();
-		}
-		toggleLoading(false);
-	}
+        bracelet.sort();
+        bracelet.html_entity_decode();
+        updateData();
+        toggleLoading(false);
+    }
 
-	public void loadSavedBracelet(String result) {
-		JSONObject jArray = null;
-		try {
-			jArray = new JSONObject(result);
-			updateBracelet(jArray);
-		} catch (JSONException ignored) {
-		}
-	}
+    public void loadSavedBracelet(String result) {
+        JSONObject jArray = null;
+        try {
+            jArray = new JSONObject(result);
+            updateBracelet(jArray);
+        } catch (JSONException ignored) {
+        }
+    }
 
-	private void toggleLoading(boolean start) {
-		if (start) {
-			//setProgressBarIndeterminateVisibility(true);
-			if(pictureFragment!= null && pictureFragment.swipeLayout != null) pictureFragment.swipeLayout.setRefreshing(true);
-		} else {
-			//setProgressBarIndeterminateVisibility(false);
-			if(pictureFragment!= null && pictureFragment.swipeLayout != null) pictureFragment.swipeLayout.setRefreshing(false);
-		}
-	}
+    private void toggleLoading(boolean start) {
+        if (start) {
+            setProgressBarIndeterminateVisibility(true);
+            reloadHidden = true;
+        } else {
+            setProgressBarIndeterminateVisibility(false);
+            reloadHidden = false;
+        }
+        invalidateOptionsMenu();
+    }
 
-    public void switchFragments(int number) {
-        mPager.setCurrentItem(number);
+    private void initializeMap() {
+        if (googleMap == null) {
+            try {
+                SupportMapFragment fragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+                googleMap = fragment.getMap();
+                // check if map is created successfully or not
+                if (googleMap == null) {
+                    Util.alert("Sorry! unable to create maps", this);
+                    System.out.println("nope");
+                } else {
+                    googleMap.getUiSettings().setRotateGesturesEnabled(false);
+                }
+
+            } catch (Exception e) {
+                System.out.println("caught");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void putMarkers() {
+        if(googleMap == null) initializeMap();
+        if(googleMap == null) return;
+        PolylineOptions rectOptions = new PolylineOptions();
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        boolean firstMarker = true;
+        for (Iterator<Picture> i = bracelet.pictures.iterator(); i.hasNext(); ) {
+            Picture picture = i.next();
+            LatLng latLng = new LatLng(picture.latitude, picture.longitude);
+            MarkerOptions marker = new MarkerOptions().position(latLng).title(picture.title);
+            if(firstMarker) {
+                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                firstMarker = false;
+            }
+            if (!i.hasNext()) {
+                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            }
+            googleMap.addMarker(marker);
+
+            rectOptions.add(latLng);
+            googleMap.addPolyline(rectOptions);
+
+            builder.include(latLng);
+        }
+        LatLngBounds bounds = builder.build();// TODO sometimes error: no included points
+
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 25, 25, 5);
+        googleMap.moveCamera(cu);
+    }
+
+    public void updateData() {
+        if (bracelet.isFilled()) {
+            headerView.setText(bracelet.name + " " + getString(R.string.by) + " " + bracelet.owner);
+            distanceView.setText(bracelet.getDistance() + " km");
+            String firstLocation = bracelet.pictures.get(bracelet.pictures.size() - 1).city + ", " + bracelet.pictures.get(bracelet.pictures.size() - 1).country;
+            String lastLocation = bracelet.pictures.get(0).city + ", " + bracelet.pictures.get(0).country;
+            String text = "<font color='blue'>" + firstLocation + "</font> -->&nbsp;<font color='green'>" + lastLocation + "</font>";
+            startEndView.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
+            putMarkers();
+
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    public void toggleVisibility() {
+        if (showMap) {
+            distanceView.setVisibility(View.GONE);
+            mapFragment.getView().setVisibility(View.GONE);
+            list.setVisibility(View.VISIBLE);
+            showMap = false;
+            showMapView.setText("Karte anzeigen");
+        }else {
+            distanceView.setVisibility(View.VISIBLE);
+            mapFragment.getView().setVisibility(View.VISIBLE);
+            list.setVisibility(View.GONE);
+            showMap = true;
+            showMapView.setText("Bilder anzeigen");
+        }
     }
 }
