@@ -120,5 +120,9 @@
     <string name="send_email">Email schicken</string>
     <string name="developer">Entwickler</string>
     <string name="version">Version</string>
+    <string name="invalid_comment">Keine Links oder leere Kommentare!</string>
+    <string name="new_pic">Neues Bild</string>
+    <string name="comment">Kommentar</string>
+    <string name="write_comment">Kommentar schreiben…</string>
 
 </resources>

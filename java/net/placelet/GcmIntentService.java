@@ -24,7 +24,6 @@ public class GcmIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        System.out.println("yeah" + intent.toString());
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         String messageType = gcm.getMessageType(intent);
@@ -68,9 +67,9 @@ public class GcmIntentService extends IntentService {
                 e.printStackTrace();
             }
         }else if(type.equals("pic")) {
-            title = "Neues Bild";
+            title = getString(R.string.new_pic);
             String picid = extras.getString("picid");
-            content = "Auf " + extras.getString("braceName") + " von " + extras.getString("uploader");
+            content = extras.getString("braceName") + " " + getString(R.string.by) + " " + extras.getString("uploader");
             intent.putExtra("PicturePush", extras.getString("brid"));
 
             try {
@@ -81,8 +80,8 @@ public class GcmIntentService extends IntentService {
                 style = new NotificationCompat.BigTextStyle().bigText(content);
             }
         }else if(type.equals("comment")) {
-            title = "Kommentar";
-            if(!extras.getString("commenter").equals("false")) title += " von " + extras.getString("commenter");
+            title = getString(R.string.comment);
+            if(!extras.getString("commenter").equals("false")) title += " " + getString(R.string.by) + " " + extras.getString("commenter");
             content = extras.getString("comment");
             intent.putExtra("PicturePush", extras.getString("brid"));
             style = new NotificationCompat.BigTextStyle().bigText(content);

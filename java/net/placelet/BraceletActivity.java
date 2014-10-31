@@ -113,7 +113,7 @@ public class BraceletActivity extends FragmentActivity {
             Commenting comm = new Commenting(picid, content, sendComment);
             comm.execute(picid);
         }else {
-            Util.alert("No links or empty comments!", this);
+            Util.alert(getString(R.string.invalid_comment), this);
             sendComment.setEnabled(true);
         }
     }

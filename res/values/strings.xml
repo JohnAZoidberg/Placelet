@@ -130,5 +130,9 @@
     <string name="developer">Developer</string>
     <string name="dev_contact" translatable="false">Daniel Schäfer, ds@struckmeierfliesen.de</string>
     <string name="version">Version</string>
+    <string name="invalid_comment">No links or empty comments!</string>
+    <string name="new_pic">New Picture</string>
+    <string name="comment">Comment</string>
+    <string name="write_comment">Write comment…</string>
 
 </resources>
