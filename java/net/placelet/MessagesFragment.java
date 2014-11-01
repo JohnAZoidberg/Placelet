@@ -52,7 +52,7 @@ public class MessagesFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Message msg = (Message) list.getItemAtPosition(position);
-				switchToIOMessage(msg, true);
+				switchToIOMessage(msg.sender, true);
 			}
 		});
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
@@ -85,12 +85,15 @@ public class MessagesFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 String username = input.getText().toString();
-                                if (!username.equals("") || !StringUtils.isAlphanumeric(username)) {
-                                    Message msg = new Message();
-                                    msg.sender = username;
-                                    switchToIOMessage(msg, false);
-                                } else
+                                if (username.equals("") || !StringUtils.isAlphanumeric(username)) {
                                     Util.alert(getString(R.string.invalid_username), mainActivity);
+                                } else if(username.length() < 4) {
+                                    Util.alert(getString(R.string.username_too_short), mainActivity);
+                                }else if(username.length() > 15) {
+                                    Util.alert(getString(R.string.username_too_long), mainActivity);
+                                }else {
+                                    switchToIOMessage(username, false);
+                                }
                             }
                         });
                     }
@@ -113,9 +116,9 @@ public class MessagesFragment extends Fragment {
 		return rootView;
 	}
 
-	private void switchToIOMessage(Message msg, boolean verified) {
+	private void switchToIOMessage(String sender, boolean verified) {
 		Intent intent = new Intent(mainActivity, IOMessageActivity.class);
-		intent.putExtra("recipient", msg.sender);
+		intent.putExtra("recipient", sender);
 		intent.putExtra("recipientVerified", verified);
 		startActivity(intent);
 

@@ -13,12 +13,11 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import net.placelet.connection.User;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.validator.EmailValidator;
+import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.HashMap;
 
@@ -129,10 +128,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 		return NavigateActivities.activitySwitchMenu(item, this);
 	}
 
-	public void alert(String string) {
-		Toast.makeText(this, string, Toast.LENGTH_LONG).show();
-	}
-
 	private void switchToMainActivity() {
 		HashMap<String, String> extras = new HashMap<String, String>();
 		extras.put("stay", "true");
@@ -140,14 +135,24 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
 	private void login() {
-		if (Util.notifyIfOffline(this)) {
-			EditText usernameField = (EditText) findViewById(R.id.usernameField);
-			EditText passwordField = (EditText) findViewById(R.id.passwordField);
-			String username = usernameField.getText().toString();
-			String pasword = passwordField.getText().toString();
-			Login login = new Login();
-			login.execute(username, pasword, null);
-		}
+        if (Util.notifyIfOffline(this)) {
+            EditText usernameField = (EditText) findViewById(R.id.usernameField);
+            EditText passwordField = (EditText) findViewById(R.id.passwordField);
+            String username = usernameField.getText().toString();
+            String password = passwordField.getText().toString();
+            if(username.length() < 4) {
+                handleRegisterError(5);
+            }else if(username.length() > 15) {
+                handleRegisterError(6);
+            }else if(password.length() < 6) {
+                handleRegisterError(7);
+            }else if(password.length() > 30) {
+                handleRegisterError(8);
+            }else {
+                Login login = new Login();
+                login.execute(username, password, null);
+            }
+        }
 	}
 
 	private void register() {
@@ -168,7 +173,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 handleRegisterError(6);
             }else if(password.length() < 6) {
                 handleRegisterError(7);
-            }else if(username.length() > 30) {
+            }else if(password.length() > 30) {
                 handleRegisterError(8);
             }else if(!EmailValidator.getInstance().isValid(email)) {
                 handleRegisterError(9);
@@ -184,59 +189,59 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private void handleRegisterError(int error) {
 		switch (error) {
 			case 0:
-				alert(getString(R.string.noinput));
+				Util.alert(getString(R.string.noinput), this);
 				break;
 			case 1:
-				alert(getString(R.string.register_success));
+				Util.alert(getString(R.string.register_success), this);
 				break;
 			case 2:
-				alert(getString(R.string.different_pws));
+				Util.alert(getString(R.string.different_pws), this);
 				break;
 			case 3:
-				alert(getString(R.string.name_exists));
+				Util.alert(getString(R.string.name_exists), this);
 				break;
 			case 4:
-				alert(getString(R.string.email_exists));
+				Util.alert(getString(R.string.email_exists), this);
 				break;
 			case 5:
-				alert(getString(R.string.username_too_short));
+				Util.alert(getString(R.string.username_too_short), this);
 				break;
 			case 6:
-				alert(getString(R.string.username_too_long));
+				Util.alert(getString(R.string.username_too_long), this);
 				break;
 			case 7:
-				alert(getString(R.string.password_too_short));
+				Util.alert(getString(R.string.password_too_short), this);
 				break;
 			case 8:
-				alert(getString(R.string.password_too_long));
+				Util.alert(getString(R.string.password_too_long), this);
 				break;
 			case 9:
-				alert(getString(R.string.invalid_email));
+				Util.alert(getString(R.string.invalid_email), this);
 				break;
             case 10:
-                alert(getString(R.string.invalid_username));
+                Util.alert(getString(R.string.invalid_username), this);
                 break;
 			default:
-				alert(error + "");
+				Util.alert(error + "", this);
 		}
 	}
 
 	public void handleLoginError(Integer result) {
 		switch (result) {
 			case 0:
-				alert(getString(R.string.account_notextisting));
+				Util.alert(getString(R.string.account_notextisting), this);
 				break;
 			case 1:
-				alert(getString(R.string.wrong_pasword));
+				Util.alert(getString(R.string.wrong_pasword), this);
 				break;
 			case 2:
-				alert(getString(R.string.account_not_verified));
+				Util.alert(getString(R.string.account_not_verified), this);
 				break;
 			case User.SUCCESS:
 				switchToMainActivity();
 				break;
 			default:
-				alert(result.toString());
+				Util.alert(result.toString(), this);
 		}
 	}
 }

@@ -72,7 +72,7 @@ public class BraceletActivity extends FragmentActivity {
         settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
         googleMap = mapFragment.getMap();
-        if(googleMap == null) Util.alert("null", this);
+        if(googleMap != null) googleMap.getUiSettings().setRotateGesturesEnabled(false);
 
         Intent intent = getIntent();
         String brid = intent.getStringExtra("brid");
