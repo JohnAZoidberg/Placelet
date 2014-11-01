@@ -179,7 +179,7 @@ public class MessagesFragment extends Fragment {
 				JSONObject chat = input.getJSONObject(key);
 				Message msg = new Message();
 				try {
-					if (msg == null || msg.sent < Long.valueOf(chat.getString("sent"))) {
+					if (msg.sent < chat.getLong("sent")) {
 						msg.content = chat.getString("message");
                         msg.recipient = chat.getJSONObject("recipient").getString("name");
 						msg.sent = chat.getLong("sent");
