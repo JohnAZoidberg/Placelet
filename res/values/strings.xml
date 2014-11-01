@@ -136,5 +136,6 @@
     <string name="write_comment">Write comment…</string>
     <string name="add">Add</string>
     <string name="add_user">Add User</string>
+    <string name="invalid_username">Only numbers and characters!</string>
 
 </resources>

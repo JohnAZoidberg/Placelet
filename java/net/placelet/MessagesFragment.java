@@ -24,6 +24,7 @@ import net.placelet.connection.User;
 import net.placelet.connection.Webserver;
 import net.placelet.data.Message;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -84,12 +85,12 @@ public class MessagesFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 String username = input.getText().toString();
-                                if (true) {
+                                if (!username.equals("") || !StringUtils.isAlphanumeric(username)) {
                                     Message msg = new Message();
                                     msg.sender = username;
                                     switchToIOMessage(msg, false);
                                 } else
-                                    Util.alert(getString(R.string.wrong_brid_format), mainActivity);
+                                    Util.alert(getString(R.string.invalid_username), mainActivity);
                             }
                         });
                     }

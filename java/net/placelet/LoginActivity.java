@@ -17,6 +17,9 @@ import android.widget.Toast;
 
 import net.placelet.connection.User;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.EmailValidator;
+
 import java.util.HashMap;
 
 public class LoginActivity extends Activity implements OnClickListener {
@@ -157,11 +160,23 @@ public class LoginActivity extends Activity implements OnClickListener {
 			String password = passwordField.getText().toString();
 			String repeatPassword = repeatPwField.getText().toString();
 			String email = emailField.getText().toString();
-			if (password.equals(repeatPassword)) {
-				Login login = new Login();
-				login.execute(username, password, email);
-			} else {
-				handleRegisterError(2);
+			if (!password.equals(repeatPassword)) {
+                handleRegisterError(2);
+            }else if(username.length() < 4) {
+                handleRegisterError(5);
+			}else if(username.length() > 15) {
+                handleRegisterError(6);
+            }else if(password.length() < 6) {
+                handleRegisterError(7);
+            }else if(username.length() > 30) {
+                handleRegisterError(8);
+            }else if(!EmailValidator.getInstance().isValid(email)) {
+                handleRegisterError(9);
+            }else if(!StringUtils.isAlphanumeric(username)) {
+                handleRegisterError(10);
+            } else {
+                Login login = new Login();
+                login.execute(username, password, email);
 			}
 		}
 	}
@@ -198,6 +213,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 			case 9:
 				alert(getString(R.string.invalid_email));
 				break;
+            case 10:
+                alert(getString(R.string.invalid_username));
+                break;
 			default:
 				alert(error + "");
 		}
