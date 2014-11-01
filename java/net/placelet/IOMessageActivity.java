@@ -224,7 +224,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		Collections.reverse(messageList);
         Message lastMessage = new Message();
         if(messageList.size() > 0) lastMessage = messageList.get(messageList.size() - 1);
-        if(lastMessage.seen > 0 && lastMessage.sender.equals(User.username)) {
+        if(lastMessage.seen > 0 && lastMessage.sender.toLowerCase().equals(User.username.toLowerCase())) {
             footer = (RelativeLayout) getLayoutInflater().inflate(R.layout.seen_footer, null);
             TextView footer_seen = (TextView) footer.findViewById(R.id.textView);
             footer_seen.append(" " + Util.timestampToTime(lastMessage.seen));

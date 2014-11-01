@@ -50,7 +50,7 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
         }
 
         viewHolder.imgView.setImageDrawable(null);
-        if(message.seen > 0 && !message.recipient.equals(User.username)) viewHolder.imgView.setImageResource(R.drawable.tick);
+        if(message.seen > 0 && !message.recipient.toLowerCase().equals(User.username.toLowerCase())) viewHolder.imgView.setImageResource(R.drawable.tick);
 		String displayMessage = message.content.length() > 20 ? message.content.replaceAll("\n", " ").substring(0, 20).trim()  + "..." : message.content;
 		viewHolder.sender.setText(message.sender);
 		viewHolder.messageContent.setText(displayMessage);
