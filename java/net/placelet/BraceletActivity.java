@@ -1,32 +1,22 @@
 package net.placelet;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.Html;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ExpandableListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import net.placelet.connection.User;
 import net.placelet.connection.Webserver;
@@ -40,78 +30,81 @@ import org.json.JSONObject;
 import java.util.Iterator;
 
 public class BraceletActivity extends FragmentActivity {
-    public Bracelet bracelet;
-    public SharedPreferences prefs;
-    public SharedPreferences settingsPrefs;
-    private boolean reloadHidden = false;
+    private ViewPager mPager;
+    private PagerAdapter mPagerAdapter;
+    private static final int NUM_PAGES = 2;
 
     private static final int SUBSCRIBE_BUTTON = 1;
 
-    private PictureDetailAdapter adapter;
-    private ExpandableListView list;
-    public SwipeRefreshLayout swipeLayout;
+    public SharedPreferences prefs;
+    public SharedPreferences settingsPrefs;
 
-    private TextView headerView;
-    private TextView startEndView;
-    private TextView distanceView;
-    private TextView showMapView;
+    private MapFragment braceletFragment;
+    private PictureFragment pictureFragment;
 
-    private SupportMapFragment mapFragment;
-    private GoogleMap googleMap = null;
-
-    private boolean showMap = false;
+    public Bracelet bracelet;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_bracelet);
+
+        // Instantiate a ViewPager and a PagerAdapter.
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+        // initiate ActionBar
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setTitle(R.string.app_name);
+        final ActionBar actionBar = getActionBar();
+
+        // Specify that tabs should be displayed in the action bar.
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // Create a tab listener that is called when the user changes tabs.
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            @Override
+            public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
+                mPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
+
+            }
+
+            @Override
+            public void onTabReselected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
+
+            }
+        };
+
+        // Add 3 tabs, specifying the tab's text and TabListener
+        for (int i = 0; i < NUM_PAGES; i++) {
+            actionBar.addTab(
+                    actionBar.newTab()
+                            .setText("Tab " + (i + 1))
+                            .setTabListener(tabListener));
+        }
+
         prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
         settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
-        googleMap = mapFragment.getMap();
-        if(googleMap != null) googleMap.getUiSettings().setRotateGesturesEnabled(false);
 
         Intent intent = getIntent();
+        if (intent.hasExtra("fragment")) {
+            // switch to specific fragment
+            int fragmentNr = intent.getIntExtra("fragment", 0);
+            switchFragments(fragmentNr);
+        }
         String brid = intent.getStringExtra("brid");
         bracelet = new Bracelet(brid);
-
-        list = (ExpandableListView) findViewById(R.id.listView1);
-        // collapses previous group if new one is expanded
-        list.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            private int prevPosition = -1;
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                if(prevPosition != -1 && prevPosition != groupPosition) {
-                    list.collapseGroup(prevPosition);
-                }
-                prevPosition = groupPosition;
-            }
-        });
-        adapter = new PictureDetailAdapter(this, 0, bracelet.pictures);
-        list.setAdapter(adapter);
-
-        headerView = (TextView) findViewById(R.id.braceletHeader);
-        distanceView = (TextView) findViewById(R.id.braceletDistance);
-        startEndView = (TextView) findViewById(R.id.startEnd);
-        showMapView = (TextView) findViewById(R.id.showMapView);
-
-        RelativeLayout headerLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
-        headerLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleVisibility();
-            }
-        });
-        toggleVisibility();
         loadPictures(false);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Util.inflateActionBar(this, menu, reloadHidden);
+        Util.inflateActionBar(this, menu, true);
         menu.add(Menu.NONE, SUBSCRIBE_BUTTON, 0, getString(R.string.subscribe)).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         if(bracelet != null) {
             MenuItem bedMenuItem = menu.findItem(SUBSCRIBE_BUTTON);
@@ -232,6 +225,40 @@ public class BraceletActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mPager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        } else {
+            // Otherwise, select the previous step.
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
+    }
+
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                braceletFragment = new MapFragment();
+                return braceletFragment;
+            } else {
+                pictureFragment = new PictureFragment();
+                return pictureFragment;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
+    }
+
     private class BraceletData extends AsyncTask<String, String, JSONObject> {
         @Override
         protected JSONObject doInBackground(String... params) {
@@ -336,7 +363,12 @@ public class BraceletActivity extends FragmentActivity {
         invalidateOptionsMenu();
         bracelet.sort();
         bracelet.html_entity_decode();
-        updateData();
+        if(pictureFragment != null) {
+            pictureFragment.updateData();
+        }
+        if(braceletFragment != null) {
+            braceletFragment.updateData();
+        }
         toggleLoading(false);
     }
 
@@ -351,92 +383,13 @@ public class BraceletActivity extends FragmentActivity {
 
     private void toggleLoading(boolean start) {
         if (start) {
-            setProgressBarIndeterminateVisibility(true);
-            reloadHidden = true;
+            //setProgressBarIndeterminateVisibility(true);
         } else {
-            setProgressBarIndeterminateVisibility(false);
-            reloadHidden = false;
-        }
-        invalidateOptionsMenu();
-    }
-
-    private void initializeMap() {
-        if (googleMap == null) {
-            try {
-                SupportMapFragment fragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
-                googleMap = fragment.getMap();
-                // check if map is created successfully or not
-                if (googleMap == null) {
-                    Util.alert("Sorry! unable to create maps", this);
-                    System.out.println("nope");
-                } else {
-                    googleMap.getUiSettings().setRotateGesturesEnabled(false);
-                }
-
-            } catch (Exception e) {
-                System.out.println("caught");
-                e.printStackTrace();
-            }
+            //setProgressBarIndeterminateVisibility(false);
         }
     }
 
-    private void putMarkers() {
-        if(googleMap == null) initializeMap();
-        if(googleMap == null) return;
-        PolylineOptions rectOptions = new PolylineOptions();
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        boolean firstMarker = true;
-        for (Iterator<Picture> i = bracelet.pictures.iterator(); i.hasNext(); ) {
-            Picture picture = i.next();
-            LatLng latLng = new LatLng(picture.latitude, picture.longitude);
-            MarkerOptions marker = new MarkerOptions().position(latLng).title(picture.title);
-            if(firstMarker) {
-                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                firstMarker = false;
-            }
-            if (!i.hasNext()) {
-                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-            }
-            googleMap.addMarker(marker);
-
-            rectOptions.add(latLng);
-            googleMap.addPolyline(rectOptions);
-
-            builder.include(latLng);
-        }
-        LatLngBounds bounds = builder.build();// TODO sometimes error: no included points
-
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 25, 25, 5);
-        googleMap.moveCamera(cu);
-    }
-
-    public void updateData() {
-        if (bracelet.isFilled()) {
-            headerView.setText(bracelet.name + " " + getString(R.string.by) + " " + bracelet.owner);
-            distanceView.setText(bracelet.getDistance() + " km");
-            String firstLocation = bracelet.pictures.get(bracelet.pictures.size() - 1).city + ", " + bracelet.pictures.get(bracelet.pictures.size() - 1).country;
-            String lastLocation = bracelet.pictures.get(0).city + ", " + bracelet.pictures.get(0).country;
-            String text = "<font color='blue'>" + firstLocation + "</font> -->&nbsp;<font color='green'>" + lastLocation + "</font>";
-            startEndView.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
-            putMarkers();
-
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    public void toggleVisibility() {
-        if (showMap) {
-            distanceView.setVisibility(View.GONE);
-            mapFragment.getView().setVisibility(View.GONE);
-            list.setVisibility(View.VISIBLE);
-            showMap = false;
-            showMapView.setText("Karte anzeigen");
-        }else {
-            distanceView.setVisibility(View.VISIBLE);
-            mapFragment.getView().setVisibility(View.VISIBLE);
-            list.setVisibility(View.GONE);
-            showMap = true;
-            showMapView.setText("Bilder anzeigen");
-        }
+    public void switchFragments(int number) {
+        mPager.setCurrentItem(number);
     }
 }
