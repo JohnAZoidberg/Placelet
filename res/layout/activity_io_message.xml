@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@android:color/white" >
 
     <Button
         android:id="@+id/button1"
@@ -37,7 +38,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:stackFromBottom="true"
-        android:layout_below="@+id/username" />
+        android:layout_below="@+id/username"
+        style="@style/noDivider"/>
 
     <TextView
         android:id="@+id/username"
@@ -49,6 +51,8 @@
         android:gravity="center_horizontal"
         android:text="@string/username"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold"
+        android:textSize="15sp"/>
 
 </RelativeLayout>
