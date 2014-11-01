@@ -1,5 +1,6 @@
 package net.placelet;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -49,25 +48,23 @@ public class BraceletActivity extends FragmentActivity {
 
     private PictureDetailAdapter adapter;
     private ExpandableListView list;
-    public SwipeRefreshLayout swipeLayout;
 
     private TextView headerView;
     private TextView startEndView;
     private TextView distanceView;
-    private TextView showMapView;
 
     private SupportMapFragment mapFragment;
     private GoogleMap googleMap = null;
-
-    private boolean showMap = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_bracelet);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setTitle(R.string.app_name);
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.app_name);
+
         prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
         settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
@@ -96,16 +93,41 @@ public class BraceletActivity extends FragmentActivity {
         headerView = (TextView) findViewById(R.id.braceletHeader);
         distanceView = (TextView) findViewById(R.id.braceletDistance);
         startEndView = (TextView) findViewById(R.id.startEnd);
-        showMapView = (TextView) findViewById(R.id.showMapView);
 
-        RelativeLayout headerLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
-        headerLayout.setOnClickListener(new View.OnClickListener() {
+        // Specify that tabs should be displayed in the action bar.
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // Create a tab listener that is called when the user changes tabs.
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             @Override
-            public void onClick(View view) {
-                toggleVisibility();
+            public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        toggleVisibility(true);
+                        break;
+                    case 1:
+                        toggleVisibility(false);
+                }
             }
-        });
-        toggleVisibility();
+
+            @Override
+            public void onTabUnselected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
+
+            }
+
+            @Override
+            public void onTabReselected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
+
+            }
+        };
+        actionBar.addTab(
+                actionBar.newTab()
+                        .setText("Map")
+                        .setTabListener(tabListener));
+        actionBar.addTab(
+                actionBar.newTab()
+                        .setText("Pictures")
+                        .setTabListener(tabListener));
         loadPictures(false);
     }
 
@@ -424,19 +446,15 @@ public class BraceletActivity extends FragmentActivity {
         }
     }
 
-    public void toggleVisibility() {
+    public void toggleVisibility(boolean showMap) {
         if (showMap) {
-            distanceView.setVisibility(View.GONE);
-            mapFragment.getView().setVisibility(View.GONE);
-            list.setVisibility(View.VISIBLE);
-            showMap = false;
-            showMapView.setText("Karte anzeigen");
-        }else {
             distanceView.setVisibility(View.VISIBLE);
             mapFragment.getView().setVisibility(View.VISIBLE);
             list.setVisibility(View.GONE);
-            showMap = true;
-            showMapView.setText("Bilder anzeigen");
+        }else {
+            distanceView.setVisibility(View.GONE);
+            mapFragment.getView().setVisibility(View.GONE);
+            list.setVisibility(View.VISIBLE);
         }
     }
 }

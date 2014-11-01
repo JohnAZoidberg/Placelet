@@ -27,26 +27,7 @@
             android:layout_centerHorizontal="true"
             android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Karte Anzeigen"
-            android:id="@+id/showMapView"
-            android:layout_below="@+id/startEnd"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
     </RelativeLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00000 km"
-        android:id="@+id/braceletDistance"
-        android:layout_alignTop="@+id/map"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"/>
 
     <fragment
         android:id="@+id/map"
@@ -59,6 +40,17 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/relativeLayout"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00000 km"
+        android:id="@+id/braceletDistance"
+        android:layout_alignTop="@+id/map"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"/>
+
     <ExpandableListView
         android:id="@+id/listView1"
         android:layout_width="match_parent"
@@ -66,6 +58,7 @@
         android:layout_alignParentLeft="true"
         android:groupIndicator="@null"
         android:childDivider="@android:color/transparent"
-        android:layout_below="@+id/relativeLayout"/>
+        android:layout_below="@+id/relativeLayout"
+        android:visibility="gone"/>
 
 </RelativeLayout>
