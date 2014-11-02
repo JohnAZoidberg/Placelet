@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class IOMessageActivity extends Activity implements OnClickListener {
 
@@ -87,6 +88,22 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 		if (intent.hasExtra("recipient")) {
 			recipient = intent.getStringExtra("recipient");
 			recipientDisplay.setText(recipient);
+
+            SharedPreferences.Editor editor = prefs.edit();
+            Set<String> notifications = prefs.getStringSet("notifMessages", null);
+            if(notifications != null) {
+                ArrayList<String> notifsToRemove = new ArrayList<String>();
+                for(String notif : notifications) {
+                    if(notif.toLowerCase().startsWith(recipient.toLowerCase())) {
+                        notifsToRemove.add(notif);
+                    }
+                }
+                for(String notif : notifsToRemove) {
+                    notifications.remove(notif);
+                }
+            }
+            editor.putStringSet("notifMessages", notifications);
+            editor.apply();
 		}
 		if (intent.hasExtra("recipientVerified")) {
 			recipientVerified = intent.getBooleanExtra("recipientVerified", false);

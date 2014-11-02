@@ -6,13 +6,18 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.squareup.picasso.Picasso;
 
+import net.placelet.connection.User;
+
 import java.io.IOException;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
@@ -43,11 +48,14 @@ public class GcmIntentService extends IntentService {
     }
 
     private void handleNotification(Bundle extras) {
+        SharedPreferences prefs = getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
         String title = "Placelet";
         String content = "";
         Intent intent = new Intent(this, MainActivity.class);
         String type = extras.getString("type");
         NotificationCompat.Style style = null;
+        int id = (int) System.currentTimeMillis();
 
         NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
@@ -57,15 +65,38 @@ public class GcmIntentService extends IntentService {
             .setVibrate(new long[]{100, 200, 100, 200, 100, 500});
 
         if(type.equals("message")) {
-            title = extras.getString("sender");
-            content = extras.getString("content");
-            intent.putExtra("MessagePush", title);
-            style = new NotificationCompat.BigTextStyle().bigText(content);
-            try {
-                mBuilder.setLargeIcon(Picasso.with(this).load("http://placelet.de/pictures/profiles/" + extras.getString("senderID") + ".jpg").get());
-            } catch (IOException e) {
-                e.printStackTrace();
+            id = -1;
+            String sender = extras.getString("sender");
+            String messageContent = extras.getString("content");
+
+            Set<String> messageSet =  prefs.getStringSet("notifMessages", null);
+            if(messageSet == null || messageSet.size() == 0) {
+                title = sender;
+                content = messageContent;
+                intent.putExtra("MessagePush", title);
+                style = new NotificationCompat.BigTextStyle().bigText(content);
+                try {
+                    mBuilder.setLargeIcon(Picasso.with(this).load("http://placelet.de/pictures/profiles/" + extras.getString("senderID") + ".jpg").get());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                messageSet = new LinkedHashSet<String>();
+                messageSet.add(sender + messageContent);
+            }else {
+                messageSet.add(sender + messageContent);
+                intent.putExtra("MessagePush", User.NOT_LOGGED_IN);
+                title = "Placelet";
+                content = messageSet.size() + " neue Nachricht" + (messageSet.size() == 1 ? "" : "en");
+                NotificationCompat.InboxStyle testStyle = new NotificationCompat.InboxStyle();
+                for(String message : messageSet) {
+                    testStyle.addLine(message);
+                }
+                testStyle.setSummaryText(content);
+                style = testStyle;
             }
+            editor.putStringSet("notifMessages", messageSet);
+            editor.apply();
         }else if(type.equals("pic")) {
             title = getString(R.string.new_pic);
             String picid = extras.getString("picid");
@@ -92,6 +123,6 @@ public class GcmIntentService extends IntentService {
             .setContentTitle(title)
             .setStyle(style)
             .setContentText(content);
-        mNotificationManager.notify((int) System.currentTimeMillis(), mBuilder.build());
+        mNotificationManager.notify(id, mBuilder.build());
     }
 }

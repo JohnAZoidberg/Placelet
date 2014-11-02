@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,6 +60,8 @@ public class BraceletActivity extends FragmentActivity {
 
     private RelativeLayout relativeLayout;
 
+    private boolean firstActivity = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +79,7 @@ public class BraceletActivity extends FragmentActivity {
 
         Intent intent = getIntent();
         String brid = intent.getStringExtra("brid");
+        if(intent.hasExtra("notification")) firstActivity = true;
         bracelet = new Bracelet(brid);
 
         list = (ExpandableListView) findViewById(R.id.listView1);
@@ -161,7 +165,7 @@ public class BraceletActivity extends FragmentActivity {
                 toggleSubscribe();
                 return true;
             case android.R.id.home:
-                super.onBackPressed();
+                onBackPressed();
                 return true;
         }
         return NavigateActivities.activitySwitchMenu(item, this);
@@ -409,7 +413,6 @@ public class BraceletActivity extends FragmentActivity {
             String firstLocation = bracelet.pictures.get(bracelet.pictures.size() - 1).city + ", " + bracelet.pictures.get(bracelet.pictures.size() - 1).country;
             String lastLocation = bracelet.pictures.get(0).city + ", " + bracelet.pictures.get(0).country;
             startEndView.setText(Html.fromHtml("<font color='#1038B2'>" + firstLocation + "</font><br><font color='#AA00FF'>" + lastLocation + "</font>"), TextView.BufferType.SPANNABLE);
-            //lastLocationView.setText(Html.fromHtml("<font color='#AA00FF'>" + lastLocation + "</font>"), TextView.BufferType.SPANNABLE);
             putMarkers();
 
             adapter.notifyDataSetChanged();
@@ -449,5 +452,11 @@ public class BraceletActivity extends FragmentActivity {
             Util.saveData(prefs, "braceletData-" + bracelet.brid, jsonString);
             updateBracelet(result);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(firstActivity) NavUtils.navigateUpFromSameTask(this);
+        else super.onBackPressed();
     }
 }
