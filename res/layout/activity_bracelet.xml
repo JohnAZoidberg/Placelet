@@ -21,16 +21,26 @@
             android:layout_alignParentStart="true"/>
 
         <TextView
-            android:id="@+id/startEnd"
+            android:id="@+id/startText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#666666"
-            android:text="Start:\nEnd:"
+            android:text="@string/start_end_colon"
             android:textStyle="bold"
             android:layout_marginTop="4dp"
             android:layout_below="@+id/braceletHeader"
             android:layout_alignLeft="@+id/braceletHeader"
             android:layout_alignStart="@+id/braceletHeader"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:id="@+id/startEndView"
+            android:layout_alignTop="@+id/startText"
+            android:layout_toRightOf="@+id/startText"
+            android:layout_toEndOf="@+id/startText"
+            android:layout_marginLeft="4dp"/>
 
     </RelativeLayout>
 

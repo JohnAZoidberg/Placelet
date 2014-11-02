@@ -51,8 +51,8 @@ public class BraceletActivity extends FragmentActivity {
     private ExpandableListView list;
 
     private TextView headerView;
-    private TextView startEndView;
     private TextView distanceView;
+    private TextView startEndView;
 
     private SupportMapFragment mapFragment;
     private GoogleMap googleMap = null;
@@ -95,7 +95,7 @@ public class BraceletActivity extends FragmentActivity {
 
         headerView = (TextView) findViewById(R.id.braceletHeader);
         distanceView = (TextView) findViewById(R.id.braceletDistance);
-        startEndView = (TextView) findViewById(R.id.startEnd);
+        startEndView = (TextView) findViewById(R.id.startEndView);
         relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
         // Specify that tabs should be displayed in the action bar.
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -156,10 +156,13 @@ public class BraceletActivity extends FragmentActivity {
         switch (item.getItemId()) {
             case R.id.action_reload:
                 loadPictures(true);
-                break;
+                return true;
             case SUBSCRIBE_BUTTON:
                 toggleSubscribe();
-                break;
+                return true;
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
         }
         return NavigateActivities.activitySwitchMenu(item, this);
     }
@@ -206,27 +209,7 @@ public class BraceletActivity extends FragmentActivity {
         @Override
         protected void onPostExecute(JSONObject result) {
             sendComment.setEnabled(true);
-            // check if connected to the internet
-            try {
-                if (result.getString("error").equals("no_internet")) {
-                    //toggleLoading(false);
-                    return;
-                }
-            } catch (JSONException ignored) {
-            }
-            // check if new content
-            try {
-                String updateString = result.getString("update");
-                if(User.admin) Util.alert("Update: " + updateString, BraceletActivity.this);
-                toggleLoading(false);
-                bracelet.subscribed = result.getBoolean("subscribed");
-                invalidateOptionsMenu();
-            } catch (JSONException e) {
-                Util.saveDate(prefs, "getBraceletDataLastUpdate-" + bracelet.brid, System.currentTimeMillis() / 1000L);
-                String jsonString = result.toString();
-                Util.saveData(prefs, "braceletData-" + bracelet.brid, jsonString);
-                updateBracelet(result);
-            }
+            handleResult(result);
         }
     }
 
@@ -247,12 +230,11 @@ public class BraceletActivity extends FragmentActivity {
                 if (bracelet.subscribed) {
                     bracelet.subscribed = false;
                     Util.alert(getString(R.string.unsubscribed), context);
-                    invalidateOptionsMenu();
                 } else {
                     bracelet.subscribed = true;
                     Util.alert(getString(R.string.subscribed), context);
-                    invalidateOptionsMenu();
                 }
+                invalidateOptionsMenu();
             }
         }
     }
@@ -267,24 +249,7 @@ public class BraceletActivity extends FragmentActivity {
 
         @Override
         protected void onPostExecute(JSONObject result) {
-            // check if connected to the internet
-            if(!Webserver.checkResult(result)) {
-                toggleLoading(false);
-                return;
-            }
-            // check if new content
-            try {
-                String updateString = result.getString("update");
-                if(User.admin) Util.alert("Update: " + updateString, BraceletActivity.this);
-                bracelet.subscribed = result.getBoolean("subscribed");
-                invalidateOptionsMenu();
-                toggleLoading(false);
-            } catch (JSONException e) {
-                Util.saveDate(prefs, "getBraceletDataLastUpdate-" + bracelet.brid, System.currentTimeMillis() / 1000L);
-                String jsonString = result.toString();
-                Util.saveData(prefs, "braceletData-" + bracelet.brid, jsonString);
-                updateBracelet(result);
-            }
+            handleResult(result);
         }
     }
 
@@ -439,12 +404,12 @@ public class BraceletActivity extends FragmentActivity {
 
     public void updateData() {
         if (bracelet.isFilled()) {
-            headerView.setText(Html.fromHtml(bracelet.name + " <font color='#666666'>" + getString(R.string.by) + "</font> " + bracelet.owner), TextView.BufferType.SPANNABLE);
+            headerView.setText(Html.fromHtml(bracelet.name + " <font color='#666666' >" + getString(R.string.by) + "</font> " + bracelet.owner), TextView.BufferType.SPANNABLE);
             distanceView.setText(bracelet.getDistance() + " km");
             String firstLocation = bracelet.pictures.get(bracelet.pictures.size() - 1).city + ", " + bracelet.pictures.get(bracelet.pictures.size() - 1).country;
             String lastLocation = bracelet.pictures.get(0).city + ", " + bracelet.pictures.get(0).country;
-            String text = "Start: <font color='#1038B2'>" + firstLocation + "</font><br>End: <font color='#AA00FF'>" + lastLocation + "</font>";
-            startEndView.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
+            startEndView.setText(Html.fromHtml("<font color='#1038B2'>" + firstLocation + "</font><br><font color='#AA00FF'>" + lastLocation + "</font>"), TextView.BufferType.SPANNABLE);
+            //lastLocationView.setText(Html.fromHtml("<font color='#AA00FF'>" + lastLocation + "</font>"), TextView.BufferType.SPANNABLE);
             putMarkers();
 
             adapter.notifyDataSetChanged();
@@ -462,6 +427,27 @@ public class BraceletActivity extends FragmentActivity {
             relativeLayout.setVisibility(View.GONE);
             mapFragment.getView().setVisibility(View.GONE);
             list.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void handleResult(JSONObject result) {
+        // check if connected to the internet
+        if(!Webserver.checkResult(result)) {
+            toggleLoading(false);
+            return;
+        }
+        // check if new content
+        try {
+            String updateString = result.getString("update");
+            if(User.admin) Util.alert("Update: " + updateString, BraceletActivity.this);
+            bracelet.subscribed = result.getBoolean("subscribed");
+            invalidateOptionsMenu();
+            toggleLoading(false);
+        } catch (JSONException e) {
+            Util.saveDate(prefs, "getBraceletDataLastUpdate-" + bracelet.brid, System.currentTimeMillis() / 1000L);
+            String jsonString = result.toString();
+            Util.saveData(prefs, "braceletData-" + bracelet.brid, jsonString);
+            updateBracelet(result);
         }
     }
 }

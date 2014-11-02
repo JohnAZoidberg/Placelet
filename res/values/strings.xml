@@ -137,5 +137,6 @@
     <string name="add">Add</string>
     <string name="add_user">Add User</string>
     <string name="invalid_username">Only numbers and characters!</string>
+    <string name="start_end_colon">Start:\nEnde:</string>
 
 </resources>
