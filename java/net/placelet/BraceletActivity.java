@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -56,6 +57,8 @@ public class BraceletActivity extends FragmentActivity {
     private SupportMapFragment mapFragment;
     private GoogleMap googleMap = null;
 
+    private RelativeLayout relativeLayout;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +96,7 @@ public class BraceletActivity extends FragmentActivity {
         headerView = (TextView) findViewById(R.id.braceletHeader);
         distanceView = (TextView) findViewById(R.id.braceletDistance);
         startEndView = (TextView) findViewById(R.id.startEnd);
-
+        relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
         // Specify that tabs should be displayed in the action bar.
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -273,6 +276,8 @@ public class BraceletActivity extends FragmentActivity {
             try {
                 String updateString = result.getString("update");
                 if(User.admin) Util.alert("Update: " + updateString, BraceletActivity.this);
+                bracelet.subscribed = result.getBoolean("subscribed");
+                invalidateOptionsMenu();
                 toggleLoading(false);
             } catch (JSONException e) {
                 Util.saveDate(prefs, "getBraceletDataLastUpdate-" + bracelet.brid, System.currentTimeMillis() / 1000L);
@@ -413,11 +418,11 @@ public class BraceletActivity extends FragmentActivity {
             LatLng latLng = new LatLng(picture.latitude, picture.longitude);
             MarkerOptions marker = new MarkerOptions().position(latLng).title(picture.title);
             if(firstMarker) {
-                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                 firstMarker = false;
             }
             if (!i.hasNext()) {
-                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                marker.icon(BitmapDescriptorFactory.defaultMarker(280f));
             }
             googleMap.addMarker(marker);
 
@@ -434,11 +439,11 @@ public class BraceletActivity extends FragmentActivity {
 
     public void updateData() {
         if (bracelet.isFilled()) {
-            headerView.setText(bracelet.name + " " + getString(R.string.by) + " " + bracelet.owner);
+            headerView.setText(Html.fromHtml(bracelet.name + " <font color='#666666'>" + getString(R.string.by) + "</font> " + bracelet.owner), TextView.BufferType.SPANNABLE);
             distanceView.setText(bracelet.getDistance() + " km");
             String firstLocation = bracelet.pictures.get(bracelet.pictures.size() - 1).city + ", " + bracelet.pictures.get(bracelet.pictures.size() - 1).country;
             String lastLocation = bracelet.pictures.get(0).city + ", " + bracelet.pictures.get(0).country;
-            String text = "<font color='blue'>" + firstLocation + "</font> -->&nbsp;<font color='green'>" + lastLocation + "</font>";
+            String text = "Start: <font color='#1038B2'>" + firstLocation + "</font><br>End: <font color='#AA00FF'>" + lastLocation + "</font>";
             startEndView.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
             putMarkers();
 
@@ -449,10 +454,12 @@ public class BraceletActivity extends FragmentActivity {
     public void toggleVisibility(boolean showMap) {
         if (showMap) {
             distanceView.setVisibility(View.VISIBLE);
+            relativeLayout.setVisibility(View.VISIBLE);
             mapFragment.getView().setVisibility(View.VISIBLE);
             list.setVisibility(View.GONE);
         }else {
             distanceView.setVisibility(View.GONE);
+            relativeLayout.setVisibility(View.GONE);
             mapFragment.getView().setVisibility(View.GONE);
             list.setVisibility(View.VISIBLE);
         }
