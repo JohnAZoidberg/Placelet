@@ -63,7 +63,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // Switch to LoginActivity on first creation
         if (!trial) {
             trial = true;
-            if (!User.getStatus()) {
+            if (User.username.equals(User.NOT_LOGGED_IN)) {
                 NavigateActivities.switchActivity(this, LoginActivity.class, false);
             }
         }
