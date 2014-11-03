@@ -82,7 +82,7 @@ public class BraceletActivity extends FragmentActivity {
         if(intent.hasExtra("notification")) firstActivity = true;
         bracelet = new Bracelet(brid);
 
-        list = (ExpandableListView) findViewById(R.id.listView1);
+        list = (ExpandableListView) findViewById(R.id.expandableListView1);
         // collapses previous group if new one is expanded
         list.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             private int prevPosition = -1;
@@ -389,8 +389,9 @@ public class BraceletActivity extends FragmentActivity {
             if(firstMarker) {
                 marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                 firstMarker = false;
-            }
-            if (!i.hasNext()) {
+            }else if (!i.hasNext()) {
+                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            }else {
                 marker.icon(BitmapDescriptorFactory.defaultMarker(280f));
             }
             googleMap.addMarker(marker);
@@ -412,7 +413,7 @@ public class BraceletActivity extends FragmentActivity {
             distanceView.setText(bracelet.getDistance() + " km");
             String firstLocation = bracelet.pictures.get(bracelet.pictures.size() - 1).city + ", " + bracelet.pictures.get(bracelet.pictures.size() - 1).country;
             String lastLocation = bracelet.pictures.get(0).city + ", " + bracelet.pictures.get(0).country;
-            startEndView.setText(Html.fromHtml("<font color='#1038B2'>" + firstLocation + "</font><br><font color='#AA00FF'>" + lastLocation + "</font>"), TextView.BufferType.SPANNABLE);
+            startEndView.setText(Html.fromHtml("<font color='#1038B2'>" + firstLocation + "</font><br><font color='#D91D00'>" + lastLocation + "</font>"), TextView.BufferType.SPANNABLE);
             putMarkers();
 
             adapter.notifyDataSetChanged();

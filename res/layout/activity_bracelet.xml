@@ -67,7 +67,7 @@
         android:layout_marginTop="8dp"/>
 
     <ExpandableListView
-        android:id="@+id/listView1"
+        android:id="@+id/expandableListView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
