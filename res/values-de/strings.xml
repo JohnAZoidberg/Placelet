@@ -128,5 +128,6 @@
     <string name="add_user">Benutzer hinzufügen</string>
     <string name="invalid_username">Nur Zahlen oder Buchstaben!</string>
     <string name="start_end_colon">Start:\nEnde:</string>
+    <string name="no_msg_yourself">Du kannst dir selbst keine Nachrichten schicken!</string>
 
 </resources>

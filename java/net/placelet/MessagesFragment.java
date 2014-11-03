@@ -91,6 +91,8 @@ public class MessagesFragment extends Fragment {
                                     Util.alert(getString(R.string.username_too_short), mainActivity);
                                 }else if(username.length() > 15) {
                                     Util.alert(getString(R.string.username_too_long), mainActivity);
+                                }else if(username.toLowerCase().equals(User.username.toLowerCase())) {
+                                    Util.alert(mainActivity.getString(R.string.no_msg_yourself), mainActivity);
                                 }else {
                                     switchToIOMessage(username, false);
                                 }
