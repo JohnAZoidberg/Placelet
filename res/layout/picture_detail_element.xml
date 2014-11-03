@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
     android:padding="16dp"
-    android:background="@drawable/whiter_element">
+    android:background="@drawable/whiter_element_divider">
     
 
     <TextView

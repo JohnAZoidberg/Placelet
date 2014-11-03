@@ -74,6 +74,7 @@
         android:layout_alignParentTop="true"
         android:groupIndicator="@null"
         android:childDivider="@android:color/transparent"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        style="@style/noDivider"/>
 
 </RelativeLayout>

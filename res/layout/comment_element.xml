@@ -7,7 +7,7 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
                 android:paddingRight="28dp"
-                android:background="@drawable/bottom_top">
+                android:background="@drawable/border_top">
 
     <TextView
         android:layout_width="wrap_content"
