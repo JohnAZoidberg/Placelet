@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_version" translatable="false">1.2.4</string>
+	<string name="app_version" translatable="false">1.3.0</string>
     <string name="app_name" translatable="false">Placelet</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -102,7 +102,7 @@
     <string name="title_activity_about" translatable="false">AboutActivity</string>
     <string name="title_activity_options" translatable="false">OptionsActivity</string>
     <string name="title_activity_bracelet" translatable="false">BraceletActivity</string>
-    <string name="own_pics">Own Picture</string>
+    <string name="own_pics">Own Pictures</string>
     <string name="own_bracelets">Own Bracelets</string>
     <string name="by">by</string>
     <string name="seen">Seen</string>
@@ -138,5 +138,8 @@
     <string name="add_user">Add User</string>
     <string name="invalid_username">Only numbers and characters!</string>
     <string name="start_end_colon">Start:\nEnde:</string>
+    <string name="no_msg_yourself">You cannot send messages to yourself!</string>
+    <string name="map">Map</string>
+    <string name="pictures">Pictures</string>
 
 </resources>

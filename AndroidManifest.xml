@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.placelet"
-    android:versionCode="124"
+    android:versionCode="130"
     android:versionName="@string/app_version" >
 
     <!-- Change Version here, in the string resources and in the Webserver Class -->
