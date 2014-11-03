@@ -129,11 +129,11 @@ public class BraceletActivity extends FragmentActivity {
         };
         actionBar.addTab(
                 actionBar.newTab()
-                        .setText("Map")
+                        .setText(getString(R.string.map))
                         .setTabListener(tabListener));
         actionBar.addTab(
                 actionBar.newTab()
-                        .setText("Pictures")
+                        .setText(getString(R.string.pictures))
                         .setTabListener(tabListener));
         loadPictures(false);
     }

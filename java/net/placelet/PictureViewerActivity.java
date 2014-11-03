@@ -56,25 +56,15 @@ public class PictureViewerActivity extends Activity {
         }
         if(intent.hasExtra("picid")) {
             picid = Integer.parseInt(intent.getStringExtra("picid"));
-            Picasso.with(this).load("http://placelet.de/pictures/bracelets/thumb-" + picid + ".jpg").into(mImageView, new Callback() {
+            Picasso.with(PictureViewerActivity.this).load("http://placelet.de/pictures/bracelets/thumb-" + Integer.parseInt(intent.getStringExtra("picid")) + ".jpg").into(mImageView, new Callback() {
                 @Override
                 public void onSuccess() {
-                    Picasso.with(PictureViewerActivity.this).load("http://placelet.de/pictures/bracelets/thumb-" + Integer.parseInt(intent.getStringExtra("picid")) + ".jpg").into(mImageView, new Callback() {
+                    // Attach a PhotoViewAttacher, which takes care of all of the zooming functionality.
+                    mAttacher = new PhotoViewAttacher(mImageView);
+                    mAttacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
                         @Override
-                        public void onSuccess() {
-                            // Attach a PhotoViewAttacher, which takes care of all of the zooming functionality.
-                            mAttacher = new PhotoViewAttacher(mImageView);
-                            mAttacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
-                                @Override
-                                public void onViewTap(View view, float v, float v2) {
-                                    toggleHideyBar();
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onError() {
-
+                        public void onViewTap(View view, float v, float v2) {
+                            toggleHideyBar();
                         }
                     });
                 }
