@@ -91,7 +91,13 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 			recipientDisplay.setText(recipient);
 
             SharedPreferences.Editor editor = prefs.edit();
-            Set<String> notifications = prefs.getStringSet("notifMessages", null);
+
+            Set<String> notifications = null;
+            try {
+                notifications = prefs.getStringSet("notifMessages", null);
+            }catch (Exception ignored) {
+
+            }
             if(notifications != null) {
                 ArrayList<String> notifsToRemove = new ArrayList<String>();
                 for(String notif : notifications) {
