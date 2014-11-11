@@ -1,7 +1,6 @@
 package net.placelet;
 
 import android.content.Context;
-import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
@@ -14,10 +13,6 @@ import android.widget.RelativeLayout;
 public class ScrollBox extends RelativeLayout {
     private static final int TRANSLATE_DURATION_MILLIS = 200;
     private FabOnScrollListener mOnScrollListener;
-
-    @IntDef({TYPE_NORMAL, TYPE_MINI})
-    public @interface TYPE {
-    }
 
     public static final int TYPE_NORMAL = 0;
     public static final int TYPE_MINI = 1;
@@ -35,11 +30,13 @@ public class ScrollBox extends RelativeLayout {
     public ScrollBox(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
+        setOnClickListener(null);
     }
 
     public ScrollBox(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
+        setOnClickListener(null);
     }
 
     private void init(Context context, AttributeSet attributeSet) {
