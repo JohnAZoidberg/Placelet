@@ -256,6 +256,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
         }
         messageList = mergeMessages(messageList);
 		adapter.notifyDataSetChanged();
+        list.setSelection(list.getCount() - 1);
 		toggleLoading(false, true);
 	}
 
