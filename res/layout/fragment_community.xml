@@ -27,32 +27,39 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:background="@android:color/darker_gray" >
+        android:background="#e6557616" >
 
         <ImageView
             android:id="@+id/cameraIcon"
+            android:minWidth="48dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="center"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
             android:src="@android:drawable/ic_menu_camera" />
 
         <ImageView
             android:id="@+id/newBraceletIcon"
+            android:minWidth="48dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
             android:src="@android:drawable/ic_menu_add" />
 
         <ImageView
             android:id="@+id/galleryIcon"
+            android:minWidth="48dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
             android:src="@android:drawable/ic_menu_gallery"
             android:adjustViewBounds="false"/>
     </net.placelet.ScrollBox>

@@ -85,7 +85,7 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 
 	private void getIntents() {
 		Intent intent = getIntent();
-		if (intent.hasExtra("recipient")) {
+        if (intent.hasExtra("recipient")) {
 			recipient = intent.getStringExtra("recipient");
             if(recipient.toLowerCase().equals(User.username.toLowerCase())) displayErrorAtMessageFragment(getString(R.string.no_msg_yourself));
 			recipientDisplay.setText(recipient);

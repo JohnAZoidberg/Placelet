@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -77,10 +78,7 @@ public class BraceletActivity extends FragmentActivity {
         googleMap = mapFragment.getMap();
         if(googleMap != null) googleMap.getUiSettings().setRotateGesturesEnabled(false);
 
-        Intent intent = getIntent();
-        String brid = intent.getStringExtra("brid");
-        if(intent.hasExtra("notification")) firstActivity = true;
-        bracelet = new Bracelet(brid);
+        handleIntent();
 
         list = (ExpandableListView) findViewById(R.id.expandableListView1);
         // collapses previous group if new one is expanded
@@ -136,6 +134,18 @@ public class BraceletActivity extends FragmentActivity {
                         .setText(getString(R.string.pictures))
                         .setTabListener(tabListener));
         loadPictures(false);
+    }
+
+    private void handleIntent() {
+        Intent intent = getIntent();
+        String brid = intent.getStringExtra("brid");
+        if(intent.hasExtra("notification")) firstActivity = true;
+        bracelet = new Bracelet(brid);
+
+        Uri data = intent.getData();
+        if(data != null) {
+            Util.alert(data.getPath(), this);
+        }
     }
 
     @Override

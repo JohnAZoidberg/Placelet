@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -152,6 +153,20 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     protected void onStart() {
         Intent intent = getIntent();
+        Uri data = intent.getData();
+        if(data != null) {
+            Util.alert(data.getPath(), this);
+            if(data.getPath().equals("/nachrichten")) {
+                String recipientParam = data.getQueryParameter("msg");
+                if(recipientParam != null) {
+                    String recipient = recipientParam;
+                    switchToMessage(recipient);
+                    Util.alert(recipient, this);
+                }else {
+                    switchFragments(1);
+                }
+            }
+        }
         if (intent.hasExtra("fragment")) {
             // switch to specific fragment
             int fragmentNr = Integer.valueOf(intent.getStringExtra("fragment"));
