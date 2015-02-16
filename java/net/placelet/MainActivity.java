@@ -55,17 +55,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         User.username = prefs.getString("username", User.NOT_LOGGED_IN);
         User.dynPW = prefs.getString("dynPW", User.NOT_LOGGED_IN);
         User.admin = prefs.getBoolean("admin", false);
-        initializeFragments();
-        Util.display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        Util.display.getSize(size);
-        Util.width = size.x;
-        Util.height = size.y;
         // Switch to LoginActivity on first creation
         if (!trial) {
             trial = true;
             if (User.username.equals(User.NOT_LOGGED_IN)) {
                 NavigateActivities.switchActivity(this, LoginActivity.class, false);
+                finish();
             }
         }
         // Register Device
@@ -74,6 +69,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         if (regID.isEmpty()) {
             registerInBackground();
         }
+        initializeFragments();
+        Util.display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        Util.display.getSize(size);
+        Util.width = size.x;
+        Util.height = size.y;
     }
 
     private void initializeFragments() {
