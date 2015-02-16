@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.placelet"
     android:versionCode="130"
-    android:versionName="@string/app_version" >
+    android:versionName="@string/app_version"
+    android:installLocation="auto" >
 
     <!-- Change Version here, in the string resources and in the Webserver Class -->
     <supports-screens
