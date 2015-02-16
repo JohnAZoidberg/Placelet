@@ -44,7 +44,7 @@
     <string name="coords_captured">Position captured.</string>
     <string name="load_more">Load more</string>
     <string name="activate_gps">Please activate GPS.\nIf you have already done so, please wait.</string>
-    <string name="download_pictures">Download pictures</string>
+    <string name="download_pictures">Show pictures</string>
     <string name="download_pictures_summary">Download pictures from the internet.</string>
     <string name="highdef_pictures">HD Pictures in popups</string>
     <string name="highdef_pictures_summary">Download high definition pictures and display them in the popups.</string>
@@ -116,7 +116,6 @@
     <string name="registered_exclamation"> registered!</string>
     <string name="bracelet_registered_to_you">Bracelet already registered to you!</string>
     <string name="bracelet_registered_someone">Bracelet registered to someone else!</string>
-    <string name="bracelet_notextisting">Bracelet does not exist!</string>
     <string name="please_update">Please Update App</string>
     <string name="update">Update</string>
     <string name="remind_later">Remind me later</string>
@@ -131,13 +130,12 @@
     <string name="dev_contact" translatable="false">Daniel Schäfer, ds@struckmeierfliesen.de</string>
     <string name="version">Version</string>
     <string name="invalid_comment">No links or empty comments!</string>
-    <string name="new_pic">New Picture</string>
     <string name="comment">Comment</string>
     <string name="write_comment">Write comment…</string>
     <string name="add">Add</string>
     <string name="add_user">Add User</string>
     <string name="invalid_username">Only numbers and characters!</string>
-    <string name="start_end_colon">Start:\nEnde:</string>
+    <string name="start_end_colon">Start:\nEnd:</string>
     <string name="no_msg_yourself">You cannot send messages to yourself!</string>
     <string name="map">Map</string>
     <string name="pictures">Pictures</string>

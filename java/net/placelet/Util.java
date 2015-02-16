@@ -276,7 +276,7 @@ public class Util {
         protected void onPostExecute(Integer result) {
             switch(result) {
                 case 0:
-                    Util.alert(context.getString(R.string.bracelet_notextisting), context);
+                    Util.alert(context.getString(R.string.bracelet_not_existing), context);
                     break;
                 case 1:
                     Util.alert(brid + " " + context.getString(R.string.registered_exclamation), context);

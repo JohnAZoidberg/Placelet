@@ -109,7 +109,6 @@
     <string name="registered_exclamation"> registriert!</string>
     <string name="bracelet_registered_to_you">Armband schon auf dich registriert!</string>
     <string name="bracelet_registered_someone">Armband auf jemand anderen registriert!</string>
-    <string name="bracelet_notextisting">Armband existiert nicht!</string>
     <string name="please_update">Bitte App aktualisieren</string>
     <string name="update">Update</string>
     <string name="remind_later">Später erinnern</string>
@@ -121,7 +120,6 @@
     <string name="developer">Entwickler</string>
     <string name="version">Version</string>
     <string name="invalid_comment">Keine Links oder leere Kommentare!</string>
-    <string name="new_pic">Neues Bild</string>
     <string name="comment">Kommentar</string>
     <string name="write_comment">Kommentar schreiben…</string>
     <string name="add">Hinzufügen</string>

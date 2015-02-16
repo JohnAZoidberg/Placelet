@@ -98,7 +98,7 @@ public class GcmIntentService extends IntentService {
             editor.putStringSet("notifMessages", messageSet);
             editor.apply();
         }else if(type.equals("pic")) {
-            title = getString(R.string.new_pic);
+            title = getString(R.string.new_picture);
             String picid = extras.getString("picid");
             content = extras.getString("braceName") + " " + getString(R.string.by) + " " + extras.getString("uploader");
             intent.putExtra("PicturePush", extras.getString("brid"));
