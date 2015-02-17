@@ -132,6 +132,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		HashMap<String, String> extras = new HashMap<String, String>();
 		extras.put("stay", "true");
 		NavigateActivities.switchActivity(this, MainActivity.class, false, extras);
+        finish();
 	}
 
 	private void login() {
