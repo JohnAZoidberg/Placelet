@@ -55,7 +55,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
-            android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
+            android:src="@null" />
 
         <TextView
             android:id="@+id/pic_description"

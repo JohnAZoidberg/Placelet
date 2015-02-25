@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/abc_ab_bottom_solid_light_holo" />
+            android:src="@null" />
 
         <TextView
             android:id="@+id/name"
