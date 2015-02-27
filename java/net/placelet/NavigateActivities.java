@@ -1,5 +1,6 @@
 package net.placelet;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ public class NavigateActivities {
 					extras.put("logout", "true");
 				}
 				switchActivity(context, LoginActivity.class, false, extras);
+                ((Activity) context).finish();
 				break;
 			case android.R.id.home:
 				switchActivity(context, MainActivity.class, false);

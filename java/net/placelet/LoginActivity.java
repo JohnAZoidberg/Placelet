@@ -1,11 +1,11 @@
 package net.placelet;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +21,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.HashMap;
 
-public class LoginActivity extends Activity implements OnClickListener {
+public class LoginActivity extends ActionBarActivity implements OnClickListener {
 
 	private SharedPreferences prefs;
 	private boolean showRegister = false;
@@ -36,7 +36,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_login);
 		prefs = getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
 	}
@@ -129,7 +129,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
 	private void switchToMainActivity() {
-		HashMap<String, String> extras = new HashMap<String, String>();
+		HashMap<String, String> extras = new HashMap<>();
 		extras.put("stay", "true");
 		NavigateActivities.switchActivity(this, MainActivity.class, false, extras);
         finish();

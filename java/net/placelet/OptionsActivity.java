@@ -1,6 +1,5 @@
 package net.placelet;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,10 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class OptionsActivity extends Activity {
+public class OptionsActivity extends ActionBarActivity {
     private static OptionsActivity activity;
     private static SharedPreferences prefs;
 
@@ -19,8 +19,8 @@ public class OptionsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
-		getActionBar().setTitle(R.string.options);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle(R.string.options);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         activity = this;
         prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
 	}

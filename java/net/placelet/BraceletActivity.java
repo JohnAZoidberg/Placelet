@@ -1,6 +1,7 @@
 package net.placelet;
 
-import android.app.ActionBar;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,8 +9,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +42,7 @@ import org.json.JSONObject;
 
 import java.util.Iterator;
 
-public class BraceletActivity extends FragmentActivity {
+public class BraceletActivity extends ActionBarActivity {
     public Bracelet bracelet;
     public SharedPreferences prefs;
     public SharedPreferences settingsPrefs;
@@ -66,9 +67,9 @@ public class BraceletActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_bracelet);
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.app_name);
 
@@ -104,8 +105,9 @@ public class BraceletActivity extends FragmentActivity {
 
         // Create a tab listener that is called when the user changes tabs.
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+
             @Override
-            public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
                 switch (tab.getPosition()) {
                     case 0:
                         toggleVisibility(true);
@@ -116,12 +118,12 @@ public class BraceletActivity extends FragmentActivity {
             }
 
             @Override
-            public void onTabUnselected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 
             }
 
             @Override
-            public void onTabReselected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 
             }
         };

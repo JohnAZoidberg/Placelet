@@ -1,12 +1,14 @@
 package net.placelet;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -15,7 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class PictureViewerActivity extends Activity {
+public class PictureViewerActivity extends ActionBarActivity implements GestureDetector.OnGestureListener {
     ImageView mImageView;
     PhotoViewAttacher mAttacher;
     SlideOut textView;
@@ -29,15 +31,15 @@ public class PictureViewerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActionBar().setBackgroundDrawable(new ColorDrawable(0xff557616));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xff557616));
         setContentView(R.layout.activity_picture_viewer);
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE
         );
 
         // Any implementation of ImageView can be used!
@@ -77,8 +79,8 @@ public class PictureViewerActivity extends Activity {
         }
         textView = (SlideOut) findViewById(R.id.textView);
         textView.setText(
-            title + "\n"
-            + username + ", " + braceName
+                title + "\n"
+                        + username + ", " + braceName
         );
         textView.toggle(false, true, false);
         //textView.toggle(true, false, true);
@@ -129,5 +131,40 @@ public class PictureViewerActivity extends Activity {
 
         textView.toggle(hidden, true, false);
         hidden = !hidden;
+    }
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float v, float v2) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float v, float v2) {
+        if(motionEvent.getEdgeFlags() == MotionEvent.EDGE_TOP) {
+            hidden = true;
+            toggleHideyBar();
+            textView.toggle(hidden, true, false);
+        }
+        return true;
     }
 }

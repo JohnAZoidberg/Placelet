@@ -1,6 +1,5 @@
 package net.placelet;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,7 +37,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class UploadActivity extends Activity implements OnClickListener, LocationListener {
+public class UploadActivity extends ActionBarActivity implements OnClickListener, LocationListener {
 
 	private SharedPreferences prefs;
 	private ImageView ivImage;
@@ -66,15 +66,15 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_upload);
 		prefs = getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		// Set Action-Bar title
 		if (User.getStatus()) {
-			getActionBar().setTitle(User.username);
+			getSupportActionBar().setTitle(User.username);
 		} else {
-			getActionBar().setTitle(R.string.app_name);
+			getSupportActionBar().setTitle(R.string.app_name);
 		}
 		idField = (EditText) findViewById(R.id.uploadID);
 		descField = (EditText) findViewById(R.id.uploadDescription);
@@ -187,7 +187,6 @@ public class UploadActivity extends Activity implements OnClickListener, Locatio
 		String[] proj = { MediaStore.Images.Media.DATA };
 		Cursor cursor = getContentResolver().query(uri, proj, null, null, null);
 		if (cursor.moveToFirst()) {
-			;
 			int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 			res = cursor.getString(column_index);
 		}

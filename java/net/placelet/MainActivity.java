@@ -1,8 +1,5 @@
 package net.placelet;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,8 +9,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,10 +24,10 @@ import net.placelet.connection.Webserver;
 
 import java.io.IOException;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
-    private ActionBar actionBar;
+    private android.support.v7.app.ActionBar actionBar;
     public SharedPreferences prefs;
     public SharedPreferences settingsPrefs;
     static public boolean active = false;
@@ -47,8 +45,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
         prefs = this.getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
         settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -69,7 +67,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         if (regID.isEmpty()) {
             registerInBackground();
         }
-        initializeFragments();
         Util.display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         Util.display.getSize(size);
@@ -80,13 +77,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private void initializeFragments() {
         // Initialization
         viewPager = (ViewPager) findViewById(R.id.pager);
-        actionBar = getActionBar();
+        actionBar = getSupportActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
         viewPager.setAdapter(mAdapter);
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         // Add Tabs
+        actionBar.removeAllTabs();
         actionBar.addTab(actionBar.newTab().setIcon(R.drawable.globe).setTabListener(this));
         // Set Action-Bar title
         if (User.getStatus()) {
@@ -137,22 +135,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-    }
-
-    @Override
-    public void onTabSelected(Tab tab, FragmentTransaction ft) {
-        // on tab selected show respected fragment view
-        currentTabId = tab.getPosition();
-        viewPager.setCurrentItem(currentTabId);
-    }
-
-    @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-    }
-
-    @Override
     protected void onStart() {
+        initializeFragments();
         Intent intent = getIntent();
         Uri data = intent.getData();
         if(data != null) {
@@ -239,5 +223,21 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 return null;
             }
         }.execute(null, null, null);
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
+        currentTabId = tab.getPosition();
+        viewPager.setCurrentItem(currentTabId);
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
+
     }
 }

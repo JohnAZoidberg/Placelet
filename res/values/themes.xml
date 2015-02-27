@@ -2,10 +2,12 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- the theme applied to the application or activity -->
-    <style name="PlaceletLogoActionBarTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+    <style name="PlaceletLogoActionBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/PlaceletLogoActionBar</item>
         <!-- <item name="android:actionBarTabStyle">@style/MyActionBarTabs</item> -->
         <item name="android:actionBarDivider">@android:color/white</item>
+        <item name="colorPrimary">@color/logo_dark_green</item>
+        <item name="colorPrimaryDark">@color/logo_darker_green</item>
     </style>
 
     <!-- ActionBar styles -->

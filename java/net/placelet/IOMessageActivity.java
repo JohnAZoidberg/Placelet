@@ -1,12 +1,12 @@
 package net.placelet;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class IOMessageActivity extends Activity implements OnClickListener {
+public class IOMessageActivity extends ActionBarActivity implements OnClickListener {
 
 	private SharedPreferences prefs;
 	private SharedPreferences settingsPrefs;
@@ -64,13 +64,13 @@ public class IOMessageActivity extends Activity implements OnClickListener {
 			extras.put("fragment", "1");
 			NavigateActivities.switchActivity(this, MainActivity.class, false, extras);
 		}
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_io_message);
 		prefs = getSharedPreferences("net.placelet", Context.MODE_PRIVATE);
 		settingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		// set up Action Bar
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setTitle(User.username);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle(User.username);
 		b = (Button) findViewById(R.id.button1);
 		b.setOnClickListener(this);
 		list = (ListView) findViewById(R.id.messagesList);
