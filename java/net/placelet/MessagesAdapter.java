@@ -44,9 +44,9 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
         }
 
         if (position % 2 == 1) {
-            element.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.light_grey_element));
+            element.setBackgroundDrawable(context.getResources().getDrawable(R.color.light_grey));
         }else {
-            element.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.white_element));
+            element.setBackgroundDrawable(context.getResources().getDrawable(R.color.white));
         }
 
         viewHolder.imgView.setImageDrawable(null);

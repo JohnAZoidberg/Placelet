@@ -3,25 +3,9 @@
 
     <!-- the theme applied to the application or activity -->
     <style name="PlaceletLogoActionBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/PlaceletLogoActionBar</item>
-        <!-- <item name="android:actionBarTabStyle">@style/MyActionBarTabs</item> -->
         <item name="android:actionBarDivider">@android:color/white</item>
         <item name="colorPrimary">@color/logo_dark_green</item>
         <item name="colorPrimaryDark">@color/logo_darker_green</item>
-    </style>
-
-    <!-- ActionBar styles -->
-    <style name="PlaceletLogoActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/logo_dark_green</item>
-        <item name="android:backgroundStacked">@color/logo_darker_green</item>
-        <item name="android:icon">@android:color/transparent</item>
-    </style>
-
-    <!-- ActionBar tabs styles -->
-    <style name="MyActionBarTabs" parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
-
-        <!-- tab indicator -->
-        <item name="android:background">@drawable/actionbar_tab_indicator</item>
     </style>
 
 </resources>

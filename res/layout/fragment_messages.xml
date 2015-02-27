@@ -18,6 +18,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:listSelector="@drawable/dark_ripple"
+            android:drawSelectorOnTop="true"
             style="@style/noDivider" />
     </android.support.v4.widget.SwipeRefreshLayout>
 

@@ -75,6 +75,8 @@
         android:groupIndicator="@null"
         android:childDivider="@android:color/transparent"
         android:visibility="gone"
+        android:listSelector="@drawable/light_ripple"
+        android:drawSelectorOnTop="true"
         style="@style/noDivider"/>
 
 </RelativeLayout>
